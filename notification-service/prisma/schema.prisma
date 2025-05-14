@@ -1,0 +1,53 @@
+// Basic Prisma schema for Notification Service
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Notification entity
+model Notification {
+  id          Int       @id @default(autoincrement())
+  userId      Int       @map("user_id")
+  title       String    @db.VarChar(255)
+  message     String    @db.Text
+  type        String    @db.VarChar(50)  // email, push, sms
+  status      String    @default("pending") @db.VarChar(50) // pending, sent, failed
+  sentAt      DateTime? @map("sent_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  metadata    Json?     // Additional data for the notification
+
+  @@map("notifications")
+}
+
+// NotificationTemplate entity
+model NotificationTemplate {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(100)
+  type        String   @db.VarChar(50) // email, push, sms
+  subject     String?  @db.VarChar(255)
+  content     String   @db.Text
+  variables   Json     // variables that can be replaced in the template
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("notification_templates")
+}
+
+// UserNotificationPreference entity
+model UserNotificationPreference {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  emailEnabled Boolean @default(true) @map("email_enabled")
+  pushEnabled  Boolean @default(true) @map("push_enabled")
+  smsEnabled   Boolean @default(true) @map("sms_enabled")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([userId])
+  @@map("user_notification_preferences")
+}

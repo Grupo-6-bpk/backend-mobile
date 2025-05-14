@@ -1,0 +1,36 @@
+{
+  "name": "notification-service",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "swagger": "node src/swagger",
+    "swagger:watch": "node --watch src/swagger",
+    "start": "node src/server",
+    "start:watch": "node --watch src/server",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate:create": "prisma migrate dev --create-only",
+    "prisma:migrate": "prisma migrate deploy",
+    "prisma:studio": "prisma studio"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.7.0",
+    "amqplib": "0.10.7",
+    "compression": "1.8.0",
+    "cors": "2.8.5",
+    "crypto": "1.0.1",
+    "dotenv": "16.4.7",
+    "express": "4.21.2",
+    "express-prometheus-middleware": "1.2.0",
+    "helmet": "8.0.0",
+    "http-status": "2.1.0",
+    "jsonwebtoken": "9.0.2",
+    "morgan": "1.10.0",
+    "swagger-ui-express": "5.0.1",
+    "uuid": "~11.1.0",
+    "yup": "1.6.1"
+  },
+  "devDependencies": {
+    "prisma": "^6.7.0",
+    "swagger-autogen": "2.23.7"
+  }
+}
