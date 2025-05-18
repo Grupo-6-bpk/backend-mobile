@@ -17,6 +17,11 @@ const doc = {
       description: "Development server"
     }
   ],
+  security: [
+    {
+      bearerAuth: []
+    }
+  ],
   components: {
     schemas: {
       InternalServerError: {
@@ -192,23 +197,22 @@ const doc = {
         phone: "(11) 98765-4321",
         street: "Main Avenue",
         number: 123,
-        renavam: "12345678901",
-        plate: "ABC1234",
+        renavam: "12345678901",        plate: "ABC1234",
         fuelConsumption: 12.5,
         driverId: 1
       }
-    }
-  },
-    securitySchemes:{
+    },
+    securitySchemes: {
       bearerAuth: {
         type: "http",
         scheme: "bearer",
-      bearerFormat: "JWT"
+        bearerFormat: "JWT"
+      }
     }
   }
 };
 
-const endpointsFiles = ["./infraestructure/routes/routes.js"];
+const endpointsFiles = ["./infrastructure/http/routes/routes.js"];
 const outputFile = "./infrastructure/config/swagger.json";
 
 swaggerAutogen({ openapi: "3.0.0" })(outputFile, endpointsFiles, doc)

@@ -1,10 +1,10 @@
 import prisma from "../../infrastructure/config/prismaClient.js";
 
 export const login = async (req, res, next) => {
-  /*
-  #swagger.tags = ["Login"]
-  */
-
+  // #swagger.tags = ['Login']
+  // #swagger.description = 'Authenticate user with email and password'
+  // #swagger.parameters['body'] = { in: 'body', description: 'User credentials', required: true, schema: { email: 'user@example.com', password: 'password' } }
+  
   req.user = await prisma.user.findFirst({
     where: {
       email: req.body.email,
@@ -149,14 +149,11 @@ export const editUser = async (req, res, next) => {
 }
 
 export const deleteUser = async (req, res, next) => {
-  /*
-  #swagger.tags = ["Users"]
-  #swagger.responses[204]
-  #swagger.responses[404] = {
-    description: "User not found"
-  }
-  */
-
+  // #swagger.tags = ['Users']
+  // #swagger.description = 'Delete a user by ID'
+  // #swagger.responses[204] = { description: 'User deleted successfully' }
+  // #swagger.responses[404] = { description: 'User not found' }
+  
   try {
     const userExists = await prisma.user.findUnique({
       where: { id: Number(req.params.id) || 0 }

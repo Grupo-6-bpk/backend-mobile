@@ -32,7 +32,7 @@
     "yup": "1.6.1"
   },
   "devDependencies": {
-    "prisma": "^6.7.0",
+    "prisma": "^6.8.2",
     "swagger-autogen": "2.23.7"
   }
 }

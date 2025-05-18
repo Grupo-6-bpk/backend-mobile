@@ -1,5 +1,7 @@
 import jsonwebtoken from "jsonwebtoken";
 
+
+
 export const generate = (req, res, next) => {
   if (!req.user) {
     res.unauthorized();

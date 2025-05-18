@@ -7,8 +7,8 @@ import dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
 import swaggerFile from "./infrastructure/config/swagger.json" with { type: "json" };
 
-import responseHandler from "./presentation/middlewares/responseHandler.js";
-import routes from "./infrastructure/routes/routes.js";
+import responseHandler from "./infrastructure/http/middlewares/responseHandler.js";
+import routes from "./infrastructure/http/routes/routes.js";
 
 dotenv.config();
 

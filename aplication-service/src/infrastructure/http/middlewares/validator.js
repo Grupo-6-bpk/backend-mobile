@@ -7,11 +7,7 @@ const config = {
 
 export default (schema) => (req, res, next) => {
   try {
-    schema.validateSync({
-      body: req.body,
-      params: req.params,
-      query: req.query
-    }, config);
+    schema.validateSync(req.body, config);
     next();
   } catch (err) {
     const errors = err.inner?.map(e => e.message) || [err.message];
