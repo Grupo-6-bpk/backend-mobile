@@ -439,5 +439,12 @@
         "scheme": "bearer"
       }
     }
-  }
+  },
+  "ignore": [
+    "/login/*",
+    "{{*",
+    "*}}}",
+    "/login/{{*",
+    "/api/users/{{*"
+  ]
 }

@@ -3,9 +3,6 @@ import yup from "yup";
 export default yup
   .object()
   .shape({
-    body: yup
-      .object()
-      .shape({
         name: yup
           .string()
           .min(2, "Nome deve ter pelo menos 2 caracteres")
@@ -48,26 +45,6 @@ export default yup
           .string()
           .max(45, "CEP deve ter no máximo 45 caracteres"),
         verified: yup
-          .boolean()
-      }),
-    params: yup
-      .object()
-      .shape({
-        id: yup
-          .number()
-          .integer("ID deve ser um número inteiro")
-          .positive("ID deve ser um número positivo")
-      }),
-    query: yup
-      .object()
-      .shape({
-        _page: yup
-          .number()
-          .integer("Página deve ser um número inteiro")
-          .positive("Página deve ser um número positivo"),
-        _limit: yup
-          .number()
-          .integer("Limite deve ser um número inteiro")
-          .positive("Limite deve ser um número positivo")
-      })
-  });
+          .boolean()  
+  }).noUnknown(false); 
+

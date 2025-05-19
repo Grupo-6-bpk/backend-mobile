@@ -159,10 +159,12 @@ export const editUser = async (req, res, next) => {
 }
 
 export const deleteUser = async (req, res, next) => {
-  // #swagger.tags = ['Users']
-  // #swagger.description = 'Delete a user by ID'
-  // #swagger.responses[204] = { description: 'User deleted successfully' }
-  // #swagger.responses[404] = { description: 'User not found' }
+  /*
+  #swagger.tags = ['Users']
+  #swagger.description = 'Delete a user by ID'
+  #swagger.responses[204] = { description: 'User deleted successfully' }
+  #swagger.responses[404] = { description: 'User not found' }
+  */
   
   try {
     const userExists = await prisma.user.findUnique({
