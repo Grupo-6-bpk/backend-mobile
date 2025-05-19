@@ -1,18 +1,28 @@
 import prisma from "../../infrastructure/config/prismaClient.js";
 
-export const login = async (req, res, next) => {
-  // #swagger.tags = ['Login']
-  // #swagger.description = 'Authenticate user with email and password'
-  // #swagger.parameters['body'] = { in: 'body', description: 'User credentials', required: true, schema: { email: 'user@example.com', password: 'password' } }
-  
-  req.user = await prisma.user.findFirst({
-    where: {
-      email: req.body.email,
-      password: req.body.password,
-    },
-  });
 
-  next();
+export const login = async (req, res, next) => {
+  /*
+  #swagger.tags = ["Login"]
+  */
+  try {
+    const user = await prisma.user.findFirst({
+      where: {
+        email: req.body.email,
+        password: req.body.password,
+      },
+    });
+
+    if (!user) {
+      return res.unauthorized();
+    }
+
+    req.user = user;
+    next();
+  } catch (error) {
+    console.error("Login error:", error);
+    return res.internalServerError();
+  }
 }
 
 export const showUser = async (req, res, next) => {

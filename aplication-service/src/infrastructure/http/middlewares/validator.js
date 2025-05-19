@@ -7,16 +7,18 @@ const config = {
 
 export default (schema) => (req, res, next) => {
   try {
+    console.log('Validating request body:', JSON.stringify(req.body));
     schema.validateSync(req.body, config);
     next();
   } catch (err) {
-    const errors = err.inner?.map(e => e.message) || [err.message];
-    
+    const { message, errors } = err;
+    console.log('Validation error:', message, errors);
+
     res
     .status(httpStatus.BAD_REQUEST)
     .send({
-      message: `${errors.length} ${errors.length === 1 ? 'erro ocorreu' : 'erros ocorreram'}`,
-      errors: errors,
+      message,
+      errors,
     });
   }
 }

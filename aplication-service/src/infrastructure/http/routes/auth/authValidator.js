@@ -6,9 +6,10 @@ export default yup
     email:
       yup
         .string()
-        .required("Required (email)"),
+        .trim()
+        .required("Email é obrigatório"),
     password:
       yup
         .string()
-        .required("Required (password)"),
-  });
+        .required("Senha é obrigatória"),
+  }).noUnknown(false); 
