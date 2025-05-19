@@ -45,6 +45,10 @@ export default yup
           .string()
           .max(45, "CEP deve ter no máximo 45 caracteres"),
         verified: yup
-          .boolean()  
-  }).noUnknown(false); 
+          .boolean(),
+        isDriver: yup
+          .boolean(),
+        isPassenger: yup
+          .boolean()
+  }).noUnknown(false);
 

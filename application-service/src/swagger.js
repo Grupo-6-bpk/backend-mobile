@@ -22,7 +22,6 @@ const doc = {
     "/login/{{*", 
     "/api/users/{{*" 
   ],
-
   components: {
     schemas: {
       InternalServerError: {
@@ -43,7 +42,12 @@ const doc = {
         zipcode: "01000-000",
         createAt: "2025-05-18T12:00:00Z",
         updatedAt: "2025-05-18T12:00:00Z",
-        verified: true
+        isDriver: true,
+        isPassenger: true,
+        verified: true,
+      },      UserRoles: {
+        isDriver: true,
+        isPassenger: true
       },
       VehicleCreate: {
         model: "Civic",

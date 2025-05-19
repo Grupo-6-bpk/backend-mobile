@@ -106,10 +106,56 @@
         "tags": [
           "Users"
         ],
-        "description": "",
+        "description": "Create a new user with optional driver and/or passenger roles",
         "responses": {
           "201": {
-            "description": "Created"
+            "description": "User created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "isDriver": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "isPassenger": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "isDriver": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "isPassenger": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
           },
           "400": {
             "description": "Bad Request"
@@ -300,6 +346,383 @@
           }
         ]
       }
+    },
+    "/api/users/{id}/roles": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Get user with their roles (driver/passenger)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "John"
+                    },
+                    "last_name": {
+                      "type": "string",
+                      "example": "Doe"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "john.doe@example.com"
+                    },
+                    "password": {
+                      "type": "string",
+                      "example": "hashed_password"
+                    },
+                    "cpf": {
+                      "type": "string",
+                      "example": "123.456.789-00"
+                    },
+                    "phone": {
+                      "type": "string",
+                      "example": "(11) 98765-4321"
+                    },
+                    "street": {
+                      "type": "string",
+                      "example": "Main Avenue"
+                    },
+                    "number": {
+                      "type": "number",
+                      "example": 123
+                    },
+                    "city": {
+                      "type": "string",
+                      "example": "São Paulo"
+                    },
+                    "zipcode": {
+                      "type": "string",
+                      "example": "01000-000"
+                    },
+                    "createAt": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "isDriver": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "isPassenger": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "driver": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "cnhVerified": {
+                          "type": "boolean",
+                          "example": false
+                        },
+                        "active": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
+                    },
+                    "passenger": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "active": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "John"
+                    },
+                    "last_name": {
+                      "type": "string",
+                      "example": "Doe"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "john.doe@example.com"
+                    },
+                    "password": {
+                      "type": "string",
+                      "example": "hashed_password"
+                    },
+                    "cpf": {
+                      "type": "string",
+                      "example": "123.456.789-00"
+                    },
+                    "phone": {
+                      "type": "string",
+                      "example": "(11) 98765-4321"
+                    },
+                    "street": {
+                      "type": "string",
+                      "example": "Main Avenue"
+                    },
+                    "number": {
+                      "type": "number",
+                      "example": 123
+                    },
+                    "city": {
+                      "type": "string",
+                      "example": "São Paulo"
+                    },
+                    "zipcode": {
+                      "type": "string",
+                      "example": "01000-000"
+                    },
+                    "createAt": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "isDriver": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "isPassenger": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "driver": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "cnhVerified": {
+                          "type": "boolean",
+                          "example": false
+                        },
+                        "active": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
+                    },
+                    "passenger": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "active": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Update user roles (driver/passenger)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User roles updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "John"
+                    },
+                    "last_name": {
+                      "type": "string",
+                      "example": "Doe"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "john.doe@example.com"
+                    },
+                    "isDriver": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "isPassenger": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "John"
+                    },
+                    "last_name": {
+                      "type": "string",
+                      "example": "Doe"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "john.doe@example.com"
+                    },
+                    "isDriver": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "isPassenger": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRoles"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRoles"
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -375,6 +798,14 @@
             "type": "string",
             "example": "2025-05-18T12:00:00Z"
           },
+          "isDriver": {
+            "type": "boolean",
+            "example": true
+          },
+          "isPassenger": {
+            "type": "boolean",
+            "example": true
+          },
           "verified": {
             "type": "boolean",
             "example": true
@@ -382,6 +813,22 @@
         },
         "xml": {
           "name": "User"
+        }
+      },
+      "UserRoles": {
+        "type": "object",
+        "properties": {
+          "isDriver": {
+            "type": "boolean",
+            "example": true
+          },
+          "isPassenger": {
+            "type": "boolean",
+            "example": true
+          }
+        },
+        "xml": {
+          "name": "UserRoles"
         }
       },
       "VehicleCreate": {
