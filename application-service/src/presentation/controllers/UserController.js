@@ -3,7 +3,7 @@ import prisma from "../../infrastructure/config/prismaClient.js";
 
 export const login = async (req, res, next) => {
   /*
-  #swagger.tags = ["Login"]
+  #swagger.tags = ["Users"]
   */
   try {
     const user = await prisma.user.findFirst({
@@ -158,6 +158,7 @@ export const createUser = async (req, res, next) => {
 export const editUser = async (req, res, next) => {
   /*
   #swagger.tags = ["Users"]
+  #swagger.description = 'Update user information with PATCH'
   #swagger.requestBody = {
     required: true,
     schema: { $ref: "#/components/schemas/User" }
@@ -219,7 +220,7 @@ export const deleteUser = async (req, res, next) => {
 export const updateUserRoles = async (req, res, next) => {
   /*
   #swagger.tags = ["Users"]
-  #swagger.description = 'Update user roles (driver/passenger)'
+  #swagger.description = 'Update user roles (driver/passenger) with PATCH'
   #swagger.requestBody = {
     required: true,
     schema: { $ref: "#/components/schemas/UserRoles" }

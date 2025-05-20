@@ -15,7 +15,7 @@
     "/login/": {
       "post": {
         "tags": [
-          "Login"
+          "Users"
         ],
         "description": "",
         "responses": {
@@ -54,54 +54,7 @@
         }
       }
     },
-    "/api/users/": {
-      "get": {
-        "tags": [
-          "Users"
-        ],
-        "description": "",
-        "parameters": [
-          {
-            "name": "_page",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "_size",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      },
+    "/register/": {
       "post": {
         "tags": [
           "Users"
@@ -176,11 +129,6 @@
             }
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -196,6 +144,55 @@
             }
           }
         }
+      }
+    },
+    "/api/users/": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "_page",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "_size",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/api/users/{id}": {
@@ -243,11 +240,11 @@
           }
         ]
       },
-      "put": {
+      "patch": {
         "tags": [
           "Users"
         ],
-        "description": "",
+        "description": "Update user information with PATCH",
         "parameters": [
           {
             "name": "id",
@@ -594,11 +591,11 @@
           }
         ]
       },
-      "put": {
+      "patch": {
         "tags": [
           "Users"
         ],
-        "description": "Update user roles (driver/passenger)",
+        "description": "Update user roles (driver/passenger) with PATCH",
         "parameters": [
           {
             "name": "id",
