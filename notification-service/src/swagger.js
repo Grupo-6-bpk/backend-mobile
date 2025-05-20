@@ -8,7 +8,7 @@ const doc = {
   },
   servers: [
     {
-      url: 'http://localhost:4042',
+      url: 'http://localhost:4041',
       description: 'Development server'
     }
   ],
@@ -121,8 +121,9 @@ const outputFile = './src/swagger.json';
 const endpointsFiles = ['./src/presentation/routes/*.js'];
 
 swaggerAutogen({ openapi: '3.0.0' })(outputFile, endpointsFiles, doc)
-  .then(() => {
+  .then(async () => {
     console.log('Swagger documentation generated successfully');
+    await import('./server.js')
   })
   .catch(error => {
     console.error('Error generating Swagger documentation:', error);

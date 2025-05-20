@@ -18,7 +18,7 @@ routes.use(handler);
 routes.use(order);
 
 routes.use('/login', AuthRouter);
-routes.use('/api/users', verify, userRouter);
+routes.use('/api/users', userRouter);
 
 routes.use(InternalServerError);
 routes.use(NotFound);

@@ -5,7 +5,7 @@ import compression from "compression";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
-import * as swaggerDocument from "./swagger.json" assert { type: "json" };
+import * as swaggerDocument from "./swagger.json" with { type: "json" };
 
 dotenv.config();
 
