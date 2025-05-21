@@ -1,0 +1,24 @@
+// Basic Prisma schema for Document Validation Service
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Document entity
+model Document {
+  id          String   @id @default(uuid())
+  userId      String
+  type        String   // identity, driver's license, etc.
+  documentId  String   // document identification number
+  status      String   @default("pending") // pending, approved, rejected
+  fileUrl     String?  // URL to the document file
+  rejectionReason String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  validatedAt DateTime?
+  validatedBy String?  // ID of admin/system that validated the document
+}

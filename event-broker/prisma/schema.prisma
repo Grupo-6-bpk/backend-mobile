@@ -1,0 +1,37 @@
+// Basic Prisma schema for Event Broker
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Event entity
+model Event {
+  id            Int       @id @default(autoincrement())
+  type          String    @db.VarChar(255)
+  payload       Json
+  status        String    @default("pending") @db.VarChar(50) // pending, processed, failed
+  createdAt     DateTime  @default(now()) @map("created_at")
+  processedAt   DateTime? @map("processed_at")
+  retryCount    Int       @default(0) @map("retry_count")
+  sourceService String    @map("source_service") @db.VarChar(100)
+  targetService String?   @map("target_service") @db.VarChar(100)
+
+  @@map("events")
+}
+
+// Subscription entity - tracks which services are subscribed to which event types
+model Subscription {
+  id          Int      @id @default(autoincrement())
+  eventType   String   @map("event_type") @db.VarChar(255)
+  serviceName String   @map("service_name") @db.VarChar(100)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@unique([eventType, serviceName])
+  @@map("subscriptions")
+}

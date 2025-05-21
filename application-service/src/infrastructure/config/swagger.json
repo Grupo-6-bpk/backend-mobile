@@ -1,0 +1,894 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "BPkar Application API",
+    "description": "API Documentation for Aplication Service"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:4040",
+      "description": "Development server"
+    }
+  ],
+  "paths": {
+    "/login/": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "description": "",
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "example": "any"
+                  },
+                  "password": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/register/": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Create a new user with optional driver and/or passenger roles",
+        "responses": {
+          "201": {
+            "description": "User created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "isDriver": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "isPassenger": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "isDriver": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "isPassenger": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "_page",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "_size",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/users/{id}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Update user information with PATCH",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Delete a user by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "User deleted successfully"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/users/{id}/roles": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Get user with their roles (driver/passenger)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "John"
+                    },
+                    "last_name": {
+                      "type": "string",
+                      "example": "Doe"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "john.doe@example.com"
+                    },
+                    "password": {
+                      "type": "string",
+                      "example": "hashed_password"
+                    },
+                    "cpf": {
+                      "type": "string",
+                      "example": "123.456.789-00"
+                    },
+                    "phone": {
+                      "type": "string",
+                      "example": "(11) 98765-4321"
+                    },
+                    "street": {
+                      "type": "string",
+                      "example": "Main Avenue"
+                    },
+                    "number": {
+                      "type": "number",
+                      "example": 123
+                    },
+                    "city": {
+                      "type": "string",
+                      "example": "São Paulo"
+                    },
+                    "zipcode": {
+                      "type": "string",
+                      "example": "01000-000"
+                    },
+                    "createAt": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "isDriver": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "isPassenger": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "driver": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "cnhVerified": {
+                          "type": "boolean",
+                          "example": false
+                        },
+                        "active": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
+                    },
+                    "passenger": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "active": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "John"
+                    },
+                    "last_name": {
+                      "type": "string",
+                      "example": "Doe"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "john.doe@example.com"
+                    },
+                    "password": {
+                      "type": "string",
+                      "example": "hashed_password"
+                    },
+                    "cpf": {
+                      "type": "string",
+                      "example": "123.456.789-00"
+                    },
+                    "phone": {
+                      "type": "string",
+                      "example": "(11) 98765-4321"
+                    },
+                    "street": {
+                      "type": "string",
+                      "example": "Main Avenue"
+                    },
+                    "number": {
+                      "type": "number",
+                      "example": 123
+                    },
+                    "city": {
+                      "type": "string",
+                      "example": "São Paulo"
+                    },
+                    "zipcode": {
+                      "type": "string",
+                      "example": "01000-000"
+                    },
+                    "createAt": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "isDriver": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "isPassenger": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "driver": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "cnhVerified": {
+                          "type": "boolean",
+                          "example": false
+                        },
+                        "active": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
+                    },
+                    "passenger": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "active": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Update user roles (driver/passenger) with PATCH",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User roles updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "John"
+                    },
+                    "last_name": {
+                      "type": "string",
+                      "example": "Doe"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "john.doe@example.com"
+                    },
+                    "isDriver": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "isPassenger": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "John"
+                    },
+                    "last_name": {
+                      "type": "string",
+                      "example": "Doe"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "john.doe@example.com"
+                    },
+                    "isDriver": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "isPassenger": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRoles"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRoles"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "InternalServerError": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "number",
+            "example": 500
+          },
+          "message": {
+            "type": "string",
+            "example": "Internal Server Error"
+          }
+        },
+        "xml": {
+          "name": "InternalServerError"
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "John"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "john.doe@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "hashed_password"
+          },
+          "cpf": {
+            "type": "string",
+            "example": "123.456.789-00"
+          },
+          "phone": {
+            "type": "string",
+            "example": "(11) 98765-4321"
+          },
+          "street": {
+            "type": "string",
+            "example": "Main Avenue"
+          },
+          "number": {
+            "type": "number",
+            "example": 123
+          },
+          "city": {
+            "type": "string",
+            "example": "São Paulo"
+          },
+          "zipcode": {
+            "type": "string",
+            "example": "01000-000"
+          },
+          "createAt": {
+            "type": "string",
+            "example": "2025-05-18T12:00:00Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2025-05-18T12:00:00Z"
+          },
+          "isDriver": {
+            "type": "boolean",
+            "example": true
+          },
+          "isPassenger": {
+            "type": "boolean",
+            "example": true
+          },
+          "verified": {
+            "type": "boolean",
+            "example": true
+          }
+        },
+        "xml": {
+          "name": "User"
+        }
+      },
+      "UserRoles": {
+        "type": "object",
+        "properties": {
+          "isDriver": {
+            "type": "boolean",
+            "example": true
+          },
+          "isPassenger": {
+            "type": "boolean",
+            "example": true
+          }
+        },
+        "xml": {
+          "name": "UserRoles"
+        }
+      },
+      "VehicleCreate": {
+        "type": "object",
+        "properties": {
+          "model": {
+            "type": "string",
+            "example": "Civic"
+          },
+          "brand": {
+            "type": "string",
+            "example": "Honda"
+          },
+          "year": {
+            "type": "number",
+            "example": 2023
+          },
+          "phone": {
+            "type": "string",
+            "example": "(11) 98765-4321"
+          },
+          "street": {
+            "type": "string",
+            "example": "Main Avenue"
+          },
+          "number": {
+            "type": "number",
+            "example": 123
+          },
+          "renavam": {
+            "type": "string",
+            "example": "12345678901"
+          },
+          "plate": {
+            "type": "string",
+            "example": "ABC1234"
+          },
+          "fuelConsumption": {
+            "type": "number",
+            "example": 12.5
+          },
+          "driverId": {
+            "type": "number",
+            "example": 1
+          }
+        },
+        "xml": {
+          "name": "VehicleCreate"
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "ignore": [
+    "/login/*",
+    "{{*",
+    "*}}}",
+    "/login/{{*",
+    "/api/users/{{*"
+  ]
+}
