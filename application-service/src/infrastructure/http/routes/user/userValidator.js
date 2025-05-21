@@ -43,8 +43,9 @@ export default yup
           .max(45, "Cidade deve ter no máximo 45 caracteres"),
         zipcode: yup
           .string()
-          .max(45, "CEP deve ter no máximo 45 caracteres"),
-        verified: yup
+          .max(45, "CEP deve ter no máximo 45 caracteres"),        verified: yup
+          .boolean(),
+        active: yup
           .boolean(),
         isDriver: yup
           .boolean(),

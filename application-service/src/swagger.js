@@ -29,22 +29,22 @@ const doc = {
         message: "Internal Server Error"
       },
       User: {
-        id: 1,
-        name: "John",
-        last_name: "Doe",
-        email: "john.doe@example.com",
+        name: "Chapolin",
+        last_name: "colorado",
+        email: "er@example.com",
         password: "hashed_password",
         cpf: "123.456.789-00",
         phone: "(11) 98765-4321",
-        street: "Main Avenue",
+        street: "das dores",
         number: 123,
-        city: "São Paulo",
+        city: "Xique xique bahia",
         zipcode: "01000-000",
         createAt: "2025-05-18T12:00:00Z",
         updatedAt: "2025-05-18T12:00:00Z",
         isDriver: true,
         isPassenger: true,
         verified: true,
+        active: true,
       },      UserRoles: {
         isDriver: true,
         isPassenger: true

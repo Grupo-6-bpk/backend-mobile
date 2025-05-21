@@ -1,4 +1,3 @@
-// Basic Prisma schema for API Service
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
@@ -9,115 +8,51 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// User entity
 model User {
-  id        Int         @id @default(autoincrement())
-  name      String      @db.VarChar(255)
-  last_name String      @db.VarChar(255)
-  email     String?     @db.VarChar(255)
-  password  String      @db.VarChar(255)
-  cpf       String?     @db.VarChar(45)
-  phone     String?     @db.VarChar(45)
-  street    String?     @db.VarChar(45)
+  id        Int        @id @default(autoincrement())
+  name      String     @db.VarChar(255)
+  last_name String     @db.VarChar(255)
+  email     String?    @db.VarChar(255)
+  password  String     @db.VarChar(255)
+  cpf       String?    @db.VarChar(45)
+  phone     String?    @db.VarChar(45)
+  street    String?    @db.VarChar(45)
   number    Int?
-  city      String?     @db.VarChar(45)
-  zipcode   String?     @db.VarChar(45)
-  createAt  DateTime?   @default(now()) @map("create_at")
-  updatedAt DateTime?   @map("updated_at")
-  verified  Boolean?    @map("verified")
-
-  // Relacionamentos
+  city      String?    @db.VarChar(45)
+  zipcode   String?    @db.VarChar(45)
+  createAt  DateTime?  @default(now()) @map("create_at")
+  updatedAt DateTime?  @map("updated_at")
+  active    Boolean?
+  verified  Boolean?   @map("verified")
   driver    Driver?
   passenger Passenger?
 
   @@map("user")
 }
 
-// Driver entity
 model Driver {
-  id          Int         @id @default(autoincrement())
-  cnhVerified Boolean?    @map("cnh_verified")
-  active      Boolean?
-  userId      Int         @unique @map("user_id")
-  user        User        @relation(fields: [userId], references: [id])
-  
-  // Relacionamentos
-  rideGroups  RideGroup[]
-  rides       Ride[]
-  scheduledRides ScheduledRide[]
-  vehicles    Vehicle[]
+  id            Int             @id @default(autoincrement())
+  cnhVerified   Boolean?        @map("cnh_verified")
+  userId        Int             @unique @map("user_id")
+  user          User            @relation(fields: [userId], references: [id])
+  rides         Ride[]
+  ridegroup     ridegroup[]
+  scheduledride scheduledride[]
+  vehicles      Vehicle[]
 
   @@map("driver")
 }
 
-// Passenger entity
 model Passenger {
-  id          Int               @id @default(autoincrement())
-  active      Boolean?
-  userId      Int               @unique @map("user_id")
-  user        User              @relation(fields: [userId], references: [id])
-  
-  // Relacionamentos
-  groupMemberships RideGroupMember[]
-  rideRequests     RideRequest[]
+  id              Int               @id @default(autoincrement())
+  userId          Int               @unique @map("user_id")
+  user            User              @relation(fields: [userId], references: [id])
+  rideRequests    RideRequest[]
+  ridegroupmember ridegroupmember[]
 
   @@map("passenger")
 }
 
-// RideGroup entity
-model RideGroup {
-  id          Int               @id @default(autoincrement())
-  name        String            @db.VarChar(255)
-  description String?           @db.Text
-  driverId    Int               @map("driver_id")
-  createdAt   DateTime?         @map("created_at")
-  updatedAt   DateTime?         @map("updated_at")
-  driver      Driver            @relation(fields: [driverId], references: [id])
-  
-  // Relacionamentos
-  members     RideGroupMember[]
-  scheduledRides ScheduledRide[]
-
-  @@map("RideGroup")
-}
-
-// RideGroupMember entity
-model RideGroupMember {
-  id          Int       @id @default(autoincrement())
-  joinDate    Int?      @map("join_date")
-  createdAt   DateTime? @map("created_at")
-  updatedAt   DateTime? @map("updated_at")
-  groupId     Int       @map("group_id")
-  passengerId Int       @map("passenger_id")
-  
-  group       RideGroup @relation(fields: [groupId], references: [id])
-  passenger   Passenger @relation(fields: [passengerId], references: [id])
-
-  @@map("RideGroupMember")
-}
-
-// ScheduledRide entity
-model ScheduledRide {
-  id              Int       @id @default(autoincrement())
-  scheduledDate   DateTime? @map("scheduled_date")
-  estimatedCost   Float?    @map("estimated_cost")
-  availableSeats  Int?      @map("available_seats")
-  totalSeats      Int?      @map("total_seats")
-  startLocation   String?   @map("start_location") @db.VarChar(255)
-  endLocation     String?   @map("end_location") @db.VarChar(255)
-  distance        Float?
-  createdAt       DateTime? @map("created_at")
-  updatedAt       DateTime? @map("updated_at")
-  groupId         Int       @map("group_id")
-  driverId        Int       @map("driver_id")
-  
-  group           RideGroup @relation(fields: [groupId], references: [id])
-  driver          Driver    @relation(fields: [driverId], references: [id])
-
-  @@map("ScheduledRide")
-}
-
-// Ride entity
 model Ride {
   id            Int           @id @default(autoincrement())
   startLocation String?       @map("start_location") @db.VarChar(255)
@@ -129,14 +64,13 @@ model Ride {
   createdAt     DateTime?     @map("created_at")
   updatedAt     DateTime?     @map("updated_at")
   driverId      Int           @map("driver_id")
-  
   driver        Driver        @relation(fields: [driverId], references: [id])
   rideRequests  RideRequest[]
 
+  @@index([driverId], map: "ride_driver_id_fkey")
   @@map("ride")
 }
 
-// RideRequest entity
 model RideRequest {
   id             Int       @id @default(autoincrement())
   startLocation  String?   @map("start_location") @db.VarChar(255)
@@ -147,14 +81,14 @@ model RideRequest {
   updatedAt      DateTime? @map("updated_at")
   rideId         Int       @map("ride_id")
   passengerId    Int       @map("passanger_id")
-  
-  ride           Ride      @relation(fields: [rideId], references: [id])
   passenger      Passenger @relation(fields: [passengerId], references: [id])
+  ride           Ride      @relation(fields: [rideId], references: [id])
 
+  @@index([passengerId], map: "ride_request_passanger_id_fkey")
+  @@index([rideId], map: "ride_request_ride_id_fkey")
   @@map("ride_request")
 }
 
-// Vehicle entity
 model Vehicle {
   id              Int       @id @default(autoincrement())
   model           String?   @db.VarChar(255)
@@ -169,8 +103,56 @@ model Vehicle {
   createAt        DateTime? @default(now()) @map("create_at")
   updatedAt       DateTime? @map("updated_at")
   driverId        Int       @map("driver_id")
-  
   driver          Driver    @relation(fields: [driverId], references: [id])
 
+  @@index([driverId], map: "vehicle_driver_id_fkey")
   @@map("vehicle")
+}
+
+model ridegroup {
+  id              Int               @id @default(autoincrement())
+  name            String            @db.VarChar(255)
+  description     String?           @db.Text
+  driver_id       Int
+  created_at      DateTime?
+  updated_at      DateTime?
+  driver          Driver            @relation(fields: [driver_id], references: [id], map: "RideGroup_driver_id_fkey")
+  ridegroupmember ridegroupmember[]
+  scheduledride   scheduledride[]
+
+  @@index([driver_id], map: "RideGroup_driver_id_fkey")
+}
+
+model ridegroupmember {
+  id           Int       @id @default(autoincrement())
+  join_date    Int?
+  created_at   DateTime?
+  updated_at   DateTime?
+  group_id     Int
+  passenger_id Int
+  ridegroup    ridegroup @relation(fields: [group_id], references: [id], map: "RideGroupMember_group_id_fkey")
+  passenger    Passenger @relation(fields: [passenger_id], references: [id], map: "RideGroupMember_passenger_id_fkey")
+
+  @@index([group_id], map: "RideGroupMember_group_id_fkey")
+  @@index([passenger_id], map: "RideGroupMember_passenger_id_fkey")
+}
+
+model scheduledride {
+  id              Int       @id @default(autoincrement())
+  scheduled_date  DateTime?
+  estimated_cost  Float?
+  available_seats Int?
+  total_seats     Int?
+  start_location  String?   @db.VarChar(255)
+  end_location    String?   @db.VarChar(255)
+  distance        Float?
+  created_at      DateTime?
+  updated_at      DateTime?
+  group_id        Int
+  driver_id       Int
+  driver          Driver    @relation(fields: [driver_id], references: [id], map: "ScheduledRide_driver_id_fkey")
+  ridegroup       ridegroup @relation(fields: [group_id], references: [id], map: "ScheduledRide_group_id_fkey")
+
+  @@index([driver_id], map: "ScheduledRide_driver_id_fkey")
+  @@index([group_id], map: "ScheduledRide_group_id_fkey")
 }

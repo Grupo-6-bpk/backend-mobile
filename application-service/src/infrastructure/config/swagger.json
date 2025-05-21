@@ -798,12 +798,15 @@
           "isDriver": {
             "type": "boolean",
             "example": true
-          },
-          "isPassenger": {
+          },          "isPassenger": {
             "type": "boolean",
             "example": true
           },
           "verified": {
+            "type": "boolean",
+            "example": true
+          },
+          "active": {
             "type": "boolean",
             "example": true
           }

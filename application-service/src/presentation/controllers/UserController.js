@@ -115,19 +115,18 @@ export const createUser = async (req, res, next) => {
           message: "Email já está em uso por outro usuário" 
         });
       }
-    }
-    const result = await prisma.$transaction(async (prisma) => {
+    }    const result = await prisma.$transaction(async (prisma) => {
       const newUser = await prisma.user.create({
         data: {
           ...userData,
-          verified: userData.verified || false
+          verified: userData.verified || false,
+          active: userData.active !== undefined ? userData.active : true
         }
       });      
       if (isDriver) {
         await prisma.driver.create({
           data: {
             userId: newUser.id,
-            active: true,
             cnhVerified: false
           }
         });
@@ -135,8 +134,7 @@ export const createUser = async (req, res, next) => {
       if (isPassenger) {
         await prisma.passenger.create({
           data: {
-            userId: newUser.id,
-            active: true
+            userId: newUser.id
           }
         });
       }
@@ -238,7 +236,6 @@ export const updateUserRoles = async (req, res, next) => {
   }
   #swagger.responses[404] = { description: 'User not found' }
   */
-
   try {
     const { isDriver, isPassenger } = req.body;
     const userId = Number(req.params.id) || 0;
@@ -262,7 +259,6 @@ export const updateUserRoles = async (req, res, next) => {
           await prisma.driver.create({
             data: {
               userId: user.id,
-              active: true,
               cnhVerified: false
             }
           });
@@ -276,8 +272,7 @@ export const updateUserRoles = async (req, res, next) => {
         if (isPassenger && !user.passenger) {
           await prisma.passenger.create({
             data: {
-              userId: user.id,
-              active: true
+              userId: user.id
             }
           });
         } else if (!isPassenger && user.passenger) {
@@ -328,16 +323,15 @@ export const getUserWithRoles = async (req, res, next) => {
       zipcode: "01000-000",
       createAt: "2025-05-18T12:00:00Z",
       updatedAt: "2025-05-18T12:00:00Z",
+      active: true,
       isDriver: true,
       isPassenger: true,
       driver: {
         id: 1,
-        cnhVerified: false,
-        active: true
+        cnhVerified: false
       },
       passenger: {
-        id: 1,
-        active: true
+        id: 1
       }
     }
   }
