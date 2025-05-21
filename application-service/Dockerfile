@@ -8,8 +8,10 @@ RUN npm install
 
 COPY . .
 
-RUN npx prisma generate
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 4040
 
-ENTRYPOINT ["sh", "-c", "npx prisma migrate dev --name initial  && npm run swagger:watch"]
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["npm", "run", "swagger:watch"]
