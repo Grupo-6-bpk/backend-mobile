@@ -10,6 +10,7 @@ import NotFound from "./helper/404.js";
 import { verify } from "../../../presentation/controllers/authController.js";
 
 import userRouter from './user/userRouter.js';
+import registerRouter from './user/registerRouter.js';
 import AuthRouter from './auth/authRouter.js';
 
 const routes = Router();
@@ -19,7 +20,7 @@ routes.use(order);
 
 routes.use('/login', AuthRouter);
 routes.use('/api/users', userRouter);
-
+routes.use('/register', registerRouter);
 routes.use(InternalServerError);
 routes.use(NotFound);
 

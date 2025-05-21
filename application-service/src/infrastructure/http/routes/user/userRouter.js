@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import validator from "../../middlewares/validator.js";
-import userValidator from "./userValidator.js";
+import userPatchValidator from "./userPatchValidator.js";
 import userRolesValidator from "./userRolesValidator.js";
 
 import {
@@ -18,9 +18,8 @@ const router = Router();
 router.get("/", listUsers);
 router.get("/:id", showUser);
 router.get("/:id/roles", getUserWithRoles);
-router.post("/", validator(userValidator), createUser);
-router.put("/:id", validator(userValidator), editUser);
-router.put("/:id/roles", validator(userRolesValidator), updateUserRoles);
+router.patch("/:id", validator(userPatchValidator), editUser);
+router.patch("/:id/roles", validator(userRolesValidator), updateUserRoles);
 router.delete("/:id", deleteUser);
 
 export default router;
