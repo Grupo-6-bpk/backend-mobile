@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:4040",
+      "url": "http://localhost:3000",
       "description": "Development server"
     }
   ],
@@ -48,98 +48,6 @@
                     "example": "any"
                   }
                 }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/register/": {
-      "post": {
-        "tags": [
-          "Users"
-        ],
-        "description": "Create a new user with optional driver and/or passenger roles",
-        "responses": {
-          "201": {
-            "description": "User created successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "number",
-                      "example": 1
-                    },
-                    "isDriver": {
-                      "type": "boolean",
-                      "example": true
-                    },
-                    "isPassenger": {
-                      "type": "boolean",
-                      "example": true
-                    }
-                  },
-                  "xml": {
-                    "name": "main"
-                  }
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "number",
-                      "example": 1
-                    },
-                    "isDriver": {
-                      "type": "boolean",
-                      "example": true
-                    },
-                    "isPassenger": {
-                      "type": "boolean",
-                      "example": true
-                    }
-                  },
-                  "xml": {
-                    "name": "main"
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
               }
             }
           }
@@ -187,12 +95,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        }
       }
     },
     "/api/users/{id}": {
@@ -233,12 +136,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        }
       },
       "patch": {
         "tags": [
@@ -278,11 +176,6 @@
             }
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -336,12 +229,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        }
       }
     },
     "/api/users/{id}/roles": {
@@ -584,12 +472,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        }
       },
       "patch": {
         "tags": [
@@ -699,11 +582,6 @@
             }
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -715,6 +593,308 @@
             "application/xml": {
               "schema": {
                 "$ref": "#/components/schemas/UserRoles"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/register/": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Create a new user with optional driver and/or passenger roles",
+        "responses": {
+          "201": {
+            "description": "User created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "isDriver": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "isPassenger": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "isDriver": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "isPassenger": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/chat/groups": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/chat/groups/{groupId}/messages": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/chat/users/search": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "groupId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/chat/users/contacts": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
               }
             }
           }
@@ -875,12 +1055,373 @@
         "xml": {
           "name": "VehicleCreate"
         }
+      },
+      "ChatGroup": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Grupo Teste"
+          },
+          "description": {
+            "type": "string",
+            "example": "Descrição do grupo"
+          },
+          "type": {
+            "type": "string",
+            "example": "group"
+          },
+          "imageUrl": {
+            "type": "string",
+            "example": "https://example.com/group.jpg"
+          },
+          "createdById": {
+            "type": "number",
+            "example": 1
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2024-12-01T10:00:00Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2024-12-01T10:00:00Z"
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": true
+          },
+          "maxMembers": {
+            "type": "number",
+            "example": 100
+          },
+          "memberCount": {
+            "type": "number",
+            "example": 3
+          },
+          "lastMessage": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number",
+                "example": 10
+              },
+              "content": {
+                "type": "string",
+                "example": "Última mensagem do grupo"
+              },
+              "senderId": {
+                "type": "number",
+                "example": 2
+              },
+              "createdAt": {
+                "type": "string",
+                "example": "2024-12-01T11:30:00Z"
+              }
+            }
+          }
+        },
+        "xml": {
+          "name": "ChatGroup"
+        }
+      },
+      "Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "content": {
+            "type": "string",
+            "example": "Olá pessoal!"
+          },
+          "type": {
+            "type": "string",
+            "example": "text"
+          },
+          "senderId": {
+            "type": "number",
+            "example": 1
+          },
+          "groupId": {
+            "type": "number",
+            "example": 1
+          },
+          "replyToId": {},
+          "status": {
+            "type": "string",
+            "example": "sent"
+          },
+          "fileUrl": {},
+          "fileName": {},
+          "fileSize": {},
+          "createdAt": {
+            "type": "string",
+            "example": "2024-12-01T10:00:00Z"
+          },
+          "updatedAt": {},
+          "editedAt": {},
+          "deletedAt": {},
+          "isDeleted": {
+            "type": "boolean",
+            "example": false
+          },
+          "sender": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number",
+                "example": 1
+              },
+              "name": {
+                "type": "string",
+                "example": "João"
+              },
+              "last_name": {
+                "type": "string",
+                "example": "Silva"
+              }
+            }
+          }
+        },
+        "xml": {
+          "name": "Message"
+        }
+      },
+      "UserSearchResult": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 2
+          },
+          "name": {
+            "type": "string",
+            "example": "Maria"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Santos"
+          },
+          "email": {
+            "type": "string",
+            "example": "maria@example.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "(11) 98765-4321"
+          },
+          "verified": {
+            "type": "boolean",
+            "example": true
+          },
+          "isMember": {
+            "type": "boolean",
+            "example": false
+          }
+        },
+        "xml": {
+          "name": "UserSearchResult"
+        }
+      },
+      "ContactResult": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 3
+          },
+          "name": {
+            "type": "string",
+            "example": "Pedro"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Oliveira"
+          },
+          "email": {
+            "type": "string",
+            "example": "pedro@example.com"
+          },
+          "lastChatAt": {
+            "type": "string",
+            "example": "2024-12-01T09:00:00Z"
+          },
+          "groupId": {
+            "type": "number",
+            "example": 5
+          },
+          "groupType": {
+            "type": "string",
+            "example": "direct"
+          }
+        },
+        "xml": {
+          "name": "ContactResult"
+        }
+      },
+      "Pagination": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "number",
+            "example": 1
+          },
+          "limit": {
+            "type": "number",
+            "example": 20
+          },
+          "total": {
+            "type": "number",
+            "example": 100
+          },
+          "totalPages": {
+            "type": "number",
+            "example": 5
+          },
+          "hasNext": {
+            "type": "boolean",
+            "example": true
+          },
+          "hasPrevious": {
+            "type": "boolean",
+            "example": false
+          }
+        },
+        "xml": {
+          "name": "Pagination"
+        }
+      },
+      "HATEOASLink": {
+        "type": "object",
+        "properties": {
+          "rel": {
+            "type": "string",
+            "example": "self"
+          },
+          "href": {
+            "type": "string",
+            "example": "/api/chat/groups/1"
+          },
+          "method": {
+            "type": "string",
+            "example": "GET"
+          }
+        },
+        "xml": {
+          "name": "HATEOASLink"
+        }
+      },
+      "BadRequestError": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Dados inválidos"
+          },
+          "error": {
+            "type": "string",
+            "example": "Nome é obrigatório para grupos"
+          },
+          "details": {
+            "type": "array",
+            "example": [
+              "name.required"
+            ],
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "xml": {
+          "name": "BadRequestError"
+        }
+      },
+      "UnauthorizedError": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Token inválido ou expirado"
+          },
+          "error": {
+            "type": "string",
+            "example": "Unauthorized"
+          }
+        },
+        "xml": {
+          "name": "UnauthorizedError"
+        }
+      },
+      "ForbiddenError": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Você não tem permissão para acessar este grupo"
+          },
+          "error": {
+            "type": "string",
+            "example": "Forbidden"
+          }
+        },
+        "xml": {
+          "name": "ForbiddenError"
+        }
+      }
+    },
+    "responses": {
+      "BadRequestError": {
+        "description": "Requisição inválida",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BadRequestError"
+            }
+          }
+        }
+      },
+      "UnauthorizedError": {
+        "description": "Não autorizado",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedError"
+            }
+          }
+        }
+      },
+      "ForbiddenError": {
+        "description": "Acesso negado",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenError"
+            }
+          }
+        }
+      },
+      "InternalServerError": {
+        "description": "Erro interno do servidor",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerError"
+            }
+          }
+        }
       }
     },
     "securitySchemes": {
       "bearerAuth": {
         "type": "http",
-        "scheme": "bearer"
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   },

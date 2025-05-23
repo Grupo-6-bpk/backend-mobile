@@ -2,7 +2,7 @@ import http from 'node:http';
 import app from './app.js';
 import SocketServer from './infrastructure/websocket/SocketServer.js';
 
-const PORT = process.env.PORT || 4040;
+const PORT = process.env.PORT || 3000;
 const HOST = '0.0.0.0'; 
 
 const server = http.createServer(app);

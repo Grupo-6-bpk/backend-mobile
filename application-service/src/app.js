@@ -26,7 +26,7 @@ app.use('/uploads', express.static('uploads'));
 
 app.use(morgan("dev"));
 app.use(responseHandler);
-app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.use(routes);
 

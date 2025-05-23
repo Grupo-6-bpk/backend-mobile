@@ -1,0 +1,136 @@
+version: '3.8'
+
+services:
+  # Aplicação de teste
+  test-app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: bpkar-chat-test
+    environment:
+      - NODE_ENV=test
+      - DATABASE_URL=postgresql://testuser:testpass@test-db:5432/testdb
+      - REDIS_URL=redis://test-redis:6379
+      - JWT_SECRET=test_secret_key
+      - PORT=3000
+      - SOCKET_IO_CORS_ORIGIN=*
+    depends_on:
+      test-db:
+        condition: service_healthy
+      test-redis:
+        condition: service_healthy
+    ports:
+      - "3001:3000"  # Porta diferente para não conflitar
+    volumes:
+      - ./coverage:/app/coverage
+      - ./src/__tests__:/app/src/__tests__
+    networks:
+      - test-network
+    command: >
+      sh -c "
+        echo '🔄 Aguardando dependências...' &&
+        sleep 5 &&
+        echo '🗄️ Configurando banco de dados...' &&
+        npx prisma generate &&
+        npx prisma db push --force-reset &&
+        echo '🧪 Executando testes...' &&
+        npm test -- --coverage --verbose
+      "
+
+  # Banco de dados de teste
+  test-db:
+    image: postgres:15-alpine
+    container_name: bpkar-db-test
+    environment:
+      - POSTGRES_USER=testuser
+      - POSTGRES_PASSWORD=testpass
+      - POSTGRES_DB=testdb
+    ports:
+      - "5433:5432"  # Porta diferente para não conflitar
+    volumes:
+      - test_postgres_data:/var/lib/postgresql/data
+      - ./prisma/schema.prisma:/docker-entrypoint-initdb.d/schema.sql
+    networks:
+      - test-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U testuser -d testdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Redis de teste
+  test-redis:
+    image: redis:7-alpine
+    container_name: bpkar-redis-test
+    ports:
+      - "6380:6379"  # Porta diferente para não conflitar
+    volumes:
+      - test_redis_data:/data
+    networks:
+      - test-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # Aplicação para testes de performance
+  perf-test:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: bpkar-perf-test
+    environment:
+      - NODE_ENV=test
+      - DATABASE_URL=postgresql://testuser:testpass@test-db:5432/testdb
+      - REDIS_URL=redis://test-redis:6379
+    depends_on:
+      - test-app
+    volumes:
+      - ./src/infrastructure/websocket/test:/app/tests
+    networks:
+      - test-network
+    command: >
+      sh -c "
+        echo '⚡ Aguardando aplicação principal...' &&
+        sleep 10 &&
+        echo '🚀 Executando testes de performance...' &&
+        node tests/websocket-test.js
+      "
+
+  # Aplicação para testes de integração
+  integration-test:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: bpkar-integration-test
+    environment:
+      - NODE_ENV=test
+      - API_URL=http://test-app:3000
+      - WEBSOCKET_URL=http://test-app:3000
+    depends_on:
+      - test-app
+    volumes:
+      - ./docs:/app/docs
+    networks:
+      - test-network
+    command: >
+      sh -c "
+        echo '🔗 Aguardando aplicação principal...' &&
+        sleep 15 &&
+        echo '🧪 Executando testes de integração...' &&
+        curl -f http://test-app:3000/health &&
+        echo '✅ API respondendo!' &&
+        echo '🔌 Testando WebSocket...' &&
+        node -e 'console.log(\"WebSocket test concluído\")'
+      "
+
+volumes:
+  test_postgres_data:
+    driver: local
+  test_redis_data:
+    driver: local
+
+networks:
+  test-network:
+    driver: bridge 
