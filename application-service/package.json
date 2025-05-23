@@ -11,29 +11,44 @@
     "prisma:migrate:create": "prisma migrate dev --create-only",
     "prisma:migrate": "prisma migrate deploy",
     "prisma:studio": "prisma studio",
-    "seed": "node prisma/seed.js"
+    "seed": "node prisma/seed.js",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
+    "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
+    "test:ci": "node --experimental-vm-modules node_modules/jest/bin/jest.js --ci --coverage --watchAll=false",
+    "test:unit": "node --experimental-vm-modules node_modules/jest/bin/jest.js src/__tests__/unit",
+    "test:integration": "node --experimental-vm-modules node_modules/jest/bin/jest.js src/__tests__/integration"
   },
   "dependencies": {
-    "@prisma/client": "^6.7.0",
+    "@prisma/client": "^6.8.2",
     "amqplib": "0.10.7",
     "api-service": "file:",
     "aplication-service": "file:",
+    "bcrypt": "5.1.1",
     "compression": "1.8.0",
     "cors": "2.8.5",
     "crypto": "1.0.1",
     "dotenv": "16.4.7",
     "express": "4.21.2",
     "express-prometheus-middleware": "1.2.0",
+    "express-rate-limit": "7.4.1",
     "helmet": "8.0.0",
     "http-status": "2.1.0",
     "jsonwebtoken": "9.0.2",
     "morgan": "1.10.0",
+    "multer": "1.4.5-lts.1",
+    "socket.io": "4.8.1",
+    "socket.io-redis": "^5.4.0",
     "swagger-ui-express": "5.0.1",
     "uuid": "~11.1.0",
+    "winston": "3.17.0",
     "yup": "1.6.1"
   },
   "devDependencies": {
+    "@jest/globals": "29.7.0",
+    "jest": "29.7.0",
     "prisma": "^6.8.2",
+    "socket.io-client": "^4.8.1",
     "swagger-autogen": "2.23.7"
   }
 }

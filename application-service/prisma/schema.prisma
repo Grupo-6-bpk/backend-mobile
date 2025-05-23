@@ -30,6 +30,13 @@ model User {
   driver    Driver?
   passenger Passenger?
 
+  // Relacionamentos do chat
+  createdGroups GroupMember[] @relation("MemberAddedBy")
+  groupMemberships GroupMember[]
+  sentMessages  Message[]
+  messageReads  MessageRead[]
+  chatGroups    ChatGroup[]
+
   @@map("user")
 }
 
@@ -173,4 +180,92 @@ model Vehicle {
   driver          Driver    @relation(fields: [driverId], references: [id])
 
   @@map("vehicle")
+}
+
+// ======= CHAT SYSTEM ENTITIES =======
+
+// ChatGroup entity
+model ChatGroup {
+  id          Int          @id @default(autoincrement())
+  name        String       @db.VarChar(255)
+  description String?      @db.Text
+  type        String       @default("group") @db.VarChar(20) // 'group' ou 'direct'
+  imageUrl    String?      @map("image_url") @db.VarChar(500)
+  createdById Int          @map("created_by_id")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime?    @map("updated_at")
+  isActive    Boolean      @default(true) @map("is_active")
+  maxMembers  Int          @default(100) @map("max_members")
+
+  // Relacionamentos
+  createdBy   User         @relation(fields: [createdById], references: [id])
+  members     GroupMember[]
+  messages    Message[]
+
+  @@map("chat_group")
+}
+
+// GroupMember entity
+model GroupMember {
+  id            Int       @id @default(autoincrement())
+  userId        Int       @map("user_id")
+  groupId       Int       @map("group_id")
+  role          String    @default("member") @db.VarChar(20) // 'admin', 'moderator', 'member'
+  joinedAt      DateTime  @default(now()) @map("joined_at")
+  addedById     Int?      @map("added_by_id")
+  isActive      Boolean   @default(true) @map("is_active")
+  lastSeenAt    DateTime? @map("last_seen_at")
+  notifications Boolean   @default(true)
+  leftAt        DateTime? @map("left_at")
+
+  // Relacionamentos
+  user          User      @relation(fields: [userId], references: [id])
+  group         ChatGroup @relation(fields: [groupId], references: [id])
+  addedBy       User?     @relation("MemberAddedBy", fields: [addedById], references: [id])
+
+  @@unique([userId, groupId])
+  @@map("group_member")
+}
+
+// Message entity
+model Message {
+  id        Int       @id @default(autoincrement())
+  content   String?   @db.Text
+  type      String    @default("text") @db.VarChar(20) // 'text', 'image', 'file', 'audio', 'video'
+  senderId  Int       @map("sender_id")
+  groupId   Int       @map("group_id")
+  replyToId Int?      @map("reply_to_id")
+  status    String    @default("sent") @db.VarChar(20) // 'sent', 'delivered', 'read'
+  fileUrl   String?   @map("file_url") @db.VarChar(500)
+  fileName  String?   @map("file_name") @db.VarChar(255)
+  fileSize  Int?      @map("file_size")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @map("updated_at")
+  editedAt  DateTime? @map("edited_at")
+  deletedAt DateTime? @map("deleted_at")
+  isDeleted Boolean   @default(false) @map("is_deleted")
+
+  // Relacionamentos
+  sender    User      @relation(fields: [senderId], references: [id])
+  group     ChatGroup @relation(fields: [groupId], references: [id])
+  replyTo   Message?  @relation("MessageReply", fields: [replyToId], references: [id])
+  replies   Message[] @relation("MessageReply")
+  reads     MessageRead[]
+
+  @@map("message")
+}
+
+// MessageRead entity (para controle de leitura individual)
+model MessageRead {
+  id        Int      @id @default(autoincrement())
+  messageId Int      @map("message_id")
+  userId    Int      @map("user_id")
+  readAt    DateTime @default(now()) @map("read_at")
+
+  // Relacionamentos
+  message   Message  @relation(fields: [messageId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([messageId, userId])
+  @@map("message_read")
 }

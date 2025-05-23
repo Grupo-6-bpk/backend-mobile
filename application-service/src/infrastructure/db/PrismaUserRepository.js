@@ -114,4 +114,69 @@ export default class PrismaUserRepository extends UserRepository {
       return false;
     }
   }
+
+  /**
+   * Search users by name (for chat functionality)
+   * @param {string} name - The name to search for
+   * @param {number} limit - Maximum number of results
+   * @return {Promise<Array>} - A promise that resolves to an array of users
+   */
+  async searchByName(name, limit = 10) {
+    return this.prisma.user.findMany({
+      where: {
+        OR: [
+          {
+            name: {
+              contains: name,
+              mode: 'insensitive'
+            }
+          },
+          {
+            last_name: {
+              contains: name,
+              mode: 'insensitive'
+            }
+          },
+          {
+            email: {
+              contains: name,
+              mode: 'insensitive'
+            }
+          }
+        ]
+      },
+      select: {
+        id: true,
+        name: true,
+        last_name: true,
+        email: true,
+        verified: true,
+        createAt: true
+      },
+      take: limit,
+      orderBy: [
+        { name: 'asc' },
+        { last_name: 'asc' }
+      ]
+    });
+  }
+
+  /**
+   * Find users by IDs (for chat functionality)
+   * @param {Array<number>} ids - Array of user IDs
+   * @return {Promise<Array>} - A promise that resolves to an array of users
+   */
+  async findByIds(ids) {
+    return this.prisma.user.findMany({
+      where: {
+        id: {
+          in: ids.map(id => Number(id))
+        }
+      },
+      include: {
+        driver: true,
+        passenger: true
+      }
+    });
+  }
 }

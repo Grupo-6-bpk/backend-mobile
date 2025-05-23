@@ -1,0 +1,39 @@
+{
+  "preset": "env",
+  "testEnvironment": "node",
+  "extensionsToTreatAsEsm": [".js"],
+  "moduleFileExtensions": ["js", "json"],
+  "transform": {},
+  "testMatch": [
+    "**/__tests__/**/*.js",
+    "**/?(*.)+(spec|test).js"
+  ],
+  "collectCoverage": true,
+  "coverageDirectory": "coverage",
+  "coverageReporters": ["text", "lcov", "html"],
+  "collectCoverageFrom": [
+    "src/**/*.js",
+    "!src/server.js",
+    "!src/swagger.js",
+    "!src/infrastructure/config/**/*.js",
+    "!**/__tests__/**/*.js",
+    "!**/*.test.js",
+    "!**/*.spec.js"
+  ],
+  "coverageThreshold": {
+    "global": {
+      "branches": 95,
+      "functions": 95,
+      "lines": 95,
+      "statements": 95
+    }
+  },
+  "setupFilesAfterEnv": ["<rootDir>/jest.setup.js"],
+  "testTimeout": 30000,
+  "verbose": true,
+  "detectOpenHandles": true,
+  "forceExit": true,
+  "clearMocks": true,
+  "resetMocks": true,
+  "restoreMocks": true
+} 
