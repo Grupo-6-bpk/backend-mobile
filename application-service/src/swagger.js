@@ -21,8 +21,7 @@ const doc = {
     "*}}}",
     "/login/{{*", 
     "/api/users/{{*" 
-  ],
-  components: {
+  ],  components: {
     schemas: {
       InternalServerError: {
         code: 500,
@@ -30,10 +29,10 @@ const doc = {
       },
       User: {
         id: 1,
-        name: "John",
-        last_name: "Doe",
-        email: "john.doe@example.com",
-        password: "hashed_password",
+        name: "Djanathan",
+        last_name: "Corinthiano",
+        email: "email@example.com",
+        password: "password",
         cpf: "123.456.789-00",
         phone: "(11) 98765-4321",
         street: "Main Avenue",
@@ -45,7 +44,12 @@ const doc = {
         isDriver: true,
         isPassenger: true,
         verified: true,
-      },      UserRoles: {
+      },
+      Login: {
+        email: "email@example.com",
+        password: "password",
+      },
+      UserRoles: {
         isDriver: true,
         isPassenger: true
       },
@@ -60,6 +64,48 @@ const doc = {
         plate: "ABC1234",
         fuelConsumption: 12.5,
         driverId: 1
+      },
+      Vehicle: {
+        id: 1,
+        model: "Civic",
+        brand: "Honda",
+        year: 2023,
+        phone: "(11) 98765-4321",
+        street: "Main Avenue",
+        number: 123,
+        renavam: "12345678901",        
+        plate: "ABC1234",
+        fuelConsumption: 12.5,
+        createAt: "2025-05-18T12:00:00Z",
+        updatedAt: "2025-05-18T12:00:00Z",
+        driverId: 1,
+        driver: {
+          id: 1,
+          name: "John Doe",
+          userId: 1
+        }
+      },
+      VehicleVerification: {
+        vehicleStatus: "VERIFIED",
+        vehicleData: {
+          modelo: "Civic",
+          marca: "Honda",
+          ano: 2023,
+          placa: "ABC1234",
+          renavam: "12345678901",
+          chassi: "9BW2D11J0Y4019551",
+          combustivel: "Gasolina/Etanol",
+          cor: "Prata",
+          potencia: "106cv"
+        },
+        cnhStatus: "VERIFIED",
+        cnhData: {
+          numero: "01234567890",
+          categoria: "B",
+          validade: "2030-12-31",
+          situacao: "REGULAR",
+          restricoes: []
+        }
       }
     },
     securitySchemes: {

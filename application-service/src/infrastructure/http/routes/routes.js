@@ -12,6 +12,7 @@ import { verify } from "../../../presentation/controllers/authController.js";
 import userRouter from './user/userRouter.js';
 import registerRouter from './user/registerRouter.js';
 import AuthRouter from './auth/authRouter.js';
+import vehicleRouter from './vehicle/vehicleRouter.js';
 
 const routes = Router();
 routes.use(hateoas);
@@ -22,6 +23,7 @@ routes.use('/login', AuthRouter);
 routes.use('/register', registerRouter);
 
 routes.use('/api/users', verify, userRouter);
+routes.use('/api/vehicles', verify, vehicleRouter);
 
 routes.use(InternalServerError);
 routes.use(NotFound);

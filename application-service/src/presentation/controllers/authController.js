@@ -3,12 +3,26 @@ import jsonwebtoken from "jsonwebtoken";
 
 
 export const generate = (req, res, next) => {
+  /*
+  #swagger.tags = ["Authentication"]
+  #swagger.description = 'Generate JWT token after successful login'
+  #swagger.responses[200] = { 
+    description: 'Token generated successfully',
+    schema: { 
+      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." 
+    }
+  }
+  #swagger.responses[401] = { 
+    description: 'Unauthorized'
+  }
+  */
   if (!req.user) {
-    res.unauthorized();
+    return res.unauthorized();
   }
 
   const payload = {
     email: req.user.email,
+    id: req.user.id
   };
 
   const JWTSECRET = process.env.JWTSECRET;
