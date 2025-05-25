@@ -9,9 +9,11 @@ import NotFound from "./helper/404.js";
 
 import { verify } from "../../../presentation/controllers/authController.js";
 
+import Group from './group/groupRouter.js';
 import userRouter from './user/userRouter.js';
 import registerRouter from './user/registerRouter.js';
 import AuthRouter from './auth/authRouter.js';
+import grouprouter from './group/groupRouter.js';
 
 const routes = Router();
 routes.use(hateoas);
@@ -20,6 +22,7 @@ routes.use(order);
 
 routes.use('/login', AuthRouter);
 routes.use('/api/users', userRouter);
+routes.use('/api/groups', grouprouter);
 routes.use('/register', registerRouter);
 routes.use(InternalServerError);
 routes.use(NotFound);

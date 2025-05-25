@@ -31,6 +31,7 @@ class User {
         this.verified = verified || false;
         this.driver = null;
         this.passenger = null;
+        this.groups = [];
     }
 
     getFullName() {
@@ -50,6 +51,21 @@ class User {
     setPassenger(passenger) {
         this.passenger = passenger;
         return this;
+    }
+
+    
+    addGroup(group) {
+        if (!this.groups.find(g => g.id === group.id)) {
+            this.groups.push(group);
+        }
+    }
+
+    removeGroup(groupId) {
+        this.groups = this.groups.filter(g => g.id !== groupId);
+    }
+
+    getGroups() {
+        return this.groups;
     }
 
     toJSON() {

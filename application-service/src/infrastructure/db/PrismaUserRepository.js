@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import UserRepository from '../../domain/repositories/UserRepository.js';
+ import UserRepository from '../../domain/repositories/UserRepository.js';
 
 /**
  * Prisma implementation of UserRepository
