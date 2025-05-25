@@ -2,24 +2,48 @@
 
 ## ✅ Status do Módulo
 
-**PRONTO PARA TESTES** - Módulo de chat 100% funcional e documentado.
+**ATUALIZADO E CORRIGIDO** - Problemas de autenticação foram resolvidos!
+
+### 🔧 Correções Implementadas:
+- ✅ **Autenticação Swagger** - Agora aplica automaticamente o Bearer token
+- ✅ **Middleware de Auth** melhorado com logs detalhados
+- ✅ **Segurança global** configurada corretamente no Swagger
+- ✅ **Validações de token** aprimoradas com mensagens claras
+- ✅ **Script de teste** automatizado criado
 
 ### 📋 O que foi Implementado:
 - ✅ **WebSocket** funcionando em `ws://localhost:3000/socket.io`
 - ✅ **Swagger UI** disponível em `http://localhost:3000/api-docs`
-- ✅ **4 Endpoints REST** documentados e funcionais
+- ✅ **5 Endpoints REST** documentados e funcionais
 - ✅ **Middlewares** de autenticação e rate limiting
 - ✅ **Schemas completos** no Swagger
 - ✅ **Validações** de entrada em todos os endpoints
 
 ---
 
-## 🚀 Como Iniciar
+## 🚀 Como Iniciar ⭐ **ATUALIZADO**
 
+### 1. **Setup Inicial** (primeira vez):
 ```bash
 cd application-service
 npm install
+node setup-environment.js  # Cria arquivo .env
+```
+
+### 2. **Configurar Banco de Dados**:
+- Certifique-se que o MySQL está rodando
+- Configure as credenciais no arquivo `.env` criado
+- Execute as migrations:
+```bash
+npx prisma generate
+npx prisma migrate dev --name init_chat_tables
+```
+
+### 3. **Iniciar Servidor**:
+```bash
 npm start
+# ou
+npm run swagger  # Para regenerar documentação + servidor
 ```
 
 **URLs importantes:**
@@ -51,10 +75,11 @@ Bearer test-jwt-token-for-swagger-testing
 ### 1. Acessar Swagger
 **URL**: `http://localhost:3000/api-docs`
 
-### 2. Autenticar
+### 2. Autenticar ⭐ **CORRIGIDO**
 1. Clique no botão **🔒 Authorize** (canto superior direito)
-2. Digite: `Bearer test-jwt-token-for-swagger-testing`
+2. Digite apenas: `test-jwt-token-for-swagger-testing` (sem "Bearer")
 3. Clique em **Authorize**
+4. ✅ **Agora o 🔒 aparece em TODAS as rotas de chat automaticamente**
 
 ### 3. Endpoints Disponíveis
 
@@ -158,6 +183,36 @@ Authorization: {{token}}
 
 ---
 
+## 🤖 Teste Automatizado ⭐ **NOVO**
+
+### Script de Teste Criado
+Execute este comando para testar automaticamente a autenticação:
+
+```bash
+cd application-service
+node test-auth.js
+```
+
+### O que o script testa:
+- ✅ Rejeita acesso sem token (401)
+- ✅ Aceita token de teste válido
+- ✅ Cria grupo de chat
+- ✅ Busca usuários
+- ✅ Rejeita token inválido (401)
+
+### Resultado esperado:
+```
+🚀 === TESTE DE AUTENTICAÇÃO - MÓDULO CHAT ===
+
+✅ PASSOU - Rejeitou acesso sem token
+✅ PASSOU - Aceitou token de teste
+✅ PASSOU - Grupo criado com sucesso
+✅ PASSOU - Busca de usuários funcionando
+✅ PASSOU - Rejeitou token inválido
+```
+
+---
+
 ## 🔌 Teste WebSocket
 
 ### Via Browser Console:
@@ -217,12 +272,34 @@ socket.on('userStatusChanged', (status) => {
 
 ---
 
-## 🐛 Problemas Comuns
+## 🐛 Problemas Comuns ⭐ **CORRIGIDOS**
+
+### **❌ "Token inválido" no Swagger** - **RESOLVIDO**
+**Problema era:** Swagger não aplicava autenticação automaticamente
+**Solução implementada:**
+- ✅ Configuração de segurança global adicionada
+- ✅ Todas as rotas `/api/chat/*` agora exigem autenticação automaticamente
+- ✅ Middleware melhorado com logs detalhados
+
+### **❌ "Authorization header missing"** - **MELHORADO**
+**Agora o middleware fornece:**
+- ✅ Mensagens de erro mais claras
+- ✅ Dicas de como corrigir
+- ✅ Logs detalhados no console do servidor
+
+### **❌ "Erro de Migration/Banco"** - **RESOLVIDO**
+**Problema era:** Faltava configuração do banco e migrations das tabelas de chat
+**Solução implementada:**
+- ✅ Script `setup-environment.js` criado para configurar .env
+- ✅ Schema do Prisma com todas as tabelas de chat
+- ✅ Comando de migration documentado
+- ✅ Instruções passo-a-passo no guia
 
 ### **401 Unauthorized**
 - ✅ Verificar header: `Authorization: Bearer token`
 - ✅ Token não pode estar vazio
 - ✅ Deve começar com "Bearer "
+- ⭐ **NOVO**: Verifique os logs do servidor para detalhes
 
 ### **404 Not Found**
 - ✅ Servidor rodando na porta 3000
@@ -311,21 +388,30 @@ socket.on('userStatusChanged', (status) => {
 
 ---
 
-## 📞 Suporte Rápido
+## 📞 Suporte Rápido ⭐ **ATUALIZADO**
 
 **Se algo não funcionar:**
 
-1. **Verificar servidor**: `npm start` deve mostrar "Server running at http://0.0.0.0:3000"
-2. **Testar Swagger**: Acessar `http://localhost:3000/api-docs`
-3. **Verificar token**: Deve estar no formato `Bearer token`
-4. **Ver logs**: Console do servidor mostra erros detalhados
+1. **Teste automatizado**: `node test-auth.js` - **PRIMEIRO PASSO**
+2. **Verificar servidor**: `npm start` deve mostrar "Server running at http://0.0.0.0:3000"
+3. **Testar Swagger**: Acessar `http://localhost:3000/api-docs`
+4. **Verificar autenticação**: 🔒 deve aparecer em todas as rotas de chat
+5. **Ver logs**: Console do servidor mostra logs detalhados de autenticação
 
 **Arquivos importantes:**
 - `src/infrastructure/http/routes/chatRoutes.js` - Endpoints
 - `src/infrastructure/http/controllers/ChatController.js` - Lógica
-- `src/swagger.js` - Configuração Swagger
+- `src/infrastructure/http/middlewares/authMiddleware.js` - **MELHORADO**
+- `src/swagger.js` - **CORRIGIDO** - Configuração Swagger
 - `src/infrastructure/config/swagger.json` - Documentação gerada
+- `test-auth.js` - **NOVO** - Script de teste automatizado
 
----
+## 🎯 Resultado das Correções
 
-**🎯 RESULTADO ESPERADO**: Todos os endpoints funcionando perfeitamente no Swagger, prontos para integração com Flutter! 
+✅ **Autenticação funcionando 100%**
+✅ **Swagger UI com 🔒 em todas as rotas de chat**
+✅ **Logs detalhados para debugging**
+✅ **Mensagens de erro claras**
+✅ **Teste automatizado funcionando**
+
+**🚀 MÓDULO PRONTO PARA INTEGRAÇÃO COM FLUTTER!** 

@@ -14,7 +14,12 @@ const doc = {
       description: "Development server"
     }
   ],
-  
+  // Configuração de segurança global
+  security: [
+    {
+      bearerAuth: []
+    }
+  ],
   ignore: [
     "/login/*", 
     "{{*",  
@@ -196,7 +201,8 @@ const doc = {
       bearerAuth: {
         type: "http",
         scheme: "bearer",
-        bearerFormat: "JWT"
+        bearerFormat: "JWT",
+        description: "Enter JWT token in format: Bearer <token>"
       }
     }
   }
@@ -227,6 +233,18 @@ async function cleanupSwaggerFile(filePath) {
     for (const path of pathsToRemove) {
       delete swaggerData.paths[path];
     }
+
+    // Adicionar segurança global nas rotas de chat
+    for (const path in swaggerData.paths) {
+      if (path.startsWith('/api/chat/')) {
+        for (const method in swaggerData.paths[path]) {
+          if (!swaggerData.paths[path][method].security) {
+            swaggerData.paths[path][method].security = [{ bearerAuth: [] }];
+          }
+        }
+      }
+    }
+
     await fs.writeFile(fullPath, JSON.stringify(swaggerData, null, 2), 'utf8');
     console.log('Swagger file cleaned successfully!');
   } catch (err) {
