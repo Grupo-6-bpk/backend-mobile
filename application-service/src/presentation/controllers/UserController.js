@@ -168,7 +168,7 @@ export const createUser = async (req, res, next) => {
   }
   */
   try {
-    const { id, createAt, updatedAt, isDriver, isPassenger, ...userData } = req.body;
+    const { id, createAt, updatedAt, isDriver, isPassenger, cnh, cnh_front, cnh_back, bpk_link, ...userData } = req.body;
 
     if (userData.email) {
       const existingUser = await prisma.user.findFirst({
@@ -193,7 +193,11 @@ export const createUser = async (req, res, next) => {
           data: {
             userId: newUser.id,
             active: true,
-            cnhVerified: false
+            cnhVerified: false,
+            cnh,
+            cnh_front,
+            cnh_back,
+            bpk_link,
           }
         });
       }

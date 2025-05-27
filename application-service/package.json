@@ -14,7 +14,7 @@
     "seed": "node prisma/seed.js"
   },
   "dependencies": {
-    "@prisma/client": "^6.7.0",
+    "@prisma/client": "^6.8.2",
     "amqplib": "0.10.7",
     "api-service": "file:",
     "aplication-service": "file:",
