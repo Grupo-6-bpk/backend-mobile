@@ -25,27 +25,63 @@ export const login = async (req, res, next) => {
   }
 }
 
-export const showUser = async (req, res, next) => {
+export const getUser = async (req, res, next) => {
   /*
   #swagger.tags = ["Users"]
-  #swagger.responses[200]
-  #swagger.responses[404] = {
-    description: "User not found"
+  #swagger.description = 'Get user with their roles (driver/passenger)'
+  #swagger.responses[200] = { 
+    description: 'User found',
+    schema: {
+      id: 1,
+      name: "John",
+      last_name: "Doe",
+      email: "john.doe@example.com",
+      password: "hashed_password",
+      cpf: "123.456.789-00",
+      phone: "(11) 98765-4321",
+      street: "Main Avenue",
+      number: 123,
+      city: "São Paulo",
+      zipcode: "01000-000",
+      createAt: "2025-05-18T12:00:00Z",
+      updatedAt: "2025-05-18T12:00:00Z",
+      isDriver: true,
+      isPassenger: true,
+      driver: {
+        id: 1,
+        cnhVerified: false,
+        active: true
+      },
+      passenger: {
+        id: 1,
+        active: true
+      }
+    }
   }
+  #swagger.responses[404] = { description: 'User not found' }
   */
 
   try {
+    const userId = Number(req.params.id) || 0;
+
     const user = await prisma.user.findUnique({
-      where: { 
-        id: Number(req.params.id) || 0
-      },
+      where: { id: userId },
+      include: {
+        driver: true,
+        passenger: true
+      }
     });
 
     if (!user) {
       return res.status(404).json({ message: "Usuário não encontrado" });
     }
 
-    const data = res.hateos_item(user);
+    const data = res.hateos_item({
+      ...user,
+      isDriver: !!user.driver,
+      isPassenger: !!user.passenger
+    });
+
     res.ok(data);
   } catch (err) {
     next(err);
@@ -55,7 +91,26 @@ export const showUser = async (req, res, next) => {
 export const listUsers = async (req, res, next) => {
   /*
   #swagger.tags = ["Users"]
-  #swagger.responses[200]
+  #swagger.description = 'List users with their roles (driver/passenger)'
+  #swagger.responses[200] = {
+    description: 'Users listed successfully',
+    schema: {
+      currentPage: 1,
+      totalPages: 3,
+      totalItems: 25,
+      items: [
+        {
+          id: 1,
+          name: "John",
+          email: "john.doe@example.com",
+          isDriver: true,
+          isPassenger: true,
+          driver: { id: 1, cnhVerified: false, active: true },
+          passenger: { id: 1, active: true }
+        }
+      ]
+    }
+  }
   */
 
   try {
@@ -70,17 +125,27 @@ export const listUsers = async (req, res, next) => {
       orderBy: {
         ...req.order,
       },
+      include: {
+        driver: true,
+        passenger: true,
+      }
     });
 
     const totalData = await prisma.user.count();
     const totalPages = Math.ceil(totalData / size);
 
-    const data = res.hateos_list("users", users, totalPages);
+    const usersWithRoles = users.map(user => ({
+      ...user,
+      isDriver: !!user.driver,
+      isPassenger: !!user.passenger
+    }));
+
+    const data = res.hateos_list("users", usersWithRoles, totalPages);
     res.ok(data);
   } catch (err) {
     next(err);
   }
-}
+};
 
 export const createUser = async (req, res, next) => {
   /*
@@ -308,65 +373,4 @@ export const updateUserRoles = async (req, res, next) => {
     next(err);
   }
 }
-export const getUserWithRoles = async (req, res, next) => {
-  /*
-  #swagger.tags = ["Users"]
-  #swagger.description = 'Get user with their roles (driver/passenger)'
-  #swagger.responses[200] = { 
-    description: 'User found',
-    schema: {
-      id: 1,
-      name: "John",
-      last_name: "Doe",
-      email: "john.doe@example.com",
-      password: "hashed_password",
-      cpf: "123.456.789-00",
-      phone: "(11) 98765-4321",
-      street: "Main Avenue",
-      number: 123,
-      city: "São Paulo",
-      zipcode: "01000-000",
-      createAt: "2025-05-18T12:00:00Z",
-      updatedAt: "2025-05-18T12:00:00Z",
-      isDriver: true,
-      isPassenger: true,
-      driver: {
-        id: 1,
-        cnhVerified: false,
-        active: true
-      },
-      passenger: {
-        id: 1,
-        active: true
-      }
-    }
-  }
-  #swagger.responses[404] = { description: 'User not found' }
-  */
 
-  try {
-    const userId = Number(req.params.id) || 0;
-
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      include: {
-        driver: true,
-        passenger: true
-      }
-    });
-
-    if (!user) {
-      return res.status(404).json({ message: "Usuário não encontrado" });
-    }
-
-    const data = res.hateos_item({
-      ...user,
-      isDriver: !!user.driver,
-      isPassenger: !!user.passenger
-    });
-
-    res.ok(data);
-  } catch (err) {
-    next(err);
-  }
-}

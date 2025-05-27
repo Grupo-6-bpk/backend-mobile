@@ -21,9 +21,11 @@ routes.use(handler);
 routes.use(order);
 
 routes.use('/login', AuthRouter);
-routes.use('/api/users', userRouter);
 routes.use('/api/groups', grouprouter);
 routes.use('/register', registerRouter);
+
+routes.use('/api/users', verify, userRouter);
+
 routes.use(InternalServerError);
 routes.use(NotFound);
 
