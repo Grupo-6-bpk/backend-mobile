@@ -18,6 +18,7 @@
     "amqplib": "0.10.7",
     "api-service": "file:",
     "aplication-service": "file:",
+    "axios": "^1.9.0",
     "compression": "1.8.0",
     "cors": "2.8.5",
     "crypto": "1.0.1",
