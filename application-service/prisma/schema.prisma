@@ -100,42 +100,50 @@ model RideGroupMember {
   @@map("RideGroupMember")
 }
 
+
 // ScheduledRide entity
 model ScheduledRide {
-  id             Int       @id @default(autoincrement())
-  scheduledDate  DateTime? @map("scheduled_date")
-  estimatedCost  Float?    @map("estimated_cost")
-  availableSeats Int?      @map("available_seats")
-  totalSeats     Int?      @map("total_seats")
-  startLocation  String?   @map("start_location") @db.VarChar(255)
-  endLocation    String?   @map("end_location") @db.VarChar(255)
-  distance       Float?
-  createdAt      DateTime? @map("created_at")
-  updatedAt      DateTime? @map("updated_at")
-  groupId        Int       @map("group_id")
-  driverId       Int       @map("driver_id")
-
-  group  RideGroup @relation(fields: [groupId], references: [id])
-  driver Driver    @relation(fields: [driverId], references: [id])
+  id              Int       @id @default(autoincrement())
+  scheduledDate   DateTime? @map("scheduled_date")
+  estimatedCost   Float?    @map("estimated_cost")
+  availableSeats  Int?      @map("available_seats")
+  totalSeats      Int?      @map("total_seats")
+  startLocation   String?   @map("start_location") @db.VarChar(255)
+  endLocation     String?   @map("end_location") @db.VarChar(255)
+  distance        Float?
+  createdAt       DateTime? @map("created_at")
+  updatedAt       DateTime? @map("updated_at")
+  groupId         Int       @map("group_id")
+  driverId        Int       @map("driver_id")
+  vehicleId       Int?      @map("vehicle_id")
+  
+  group           RideGroup @relation(fields: [groupId], references: [id])
+  driver          Driver    @relation(fields: [driverId], references: [id])
+  vehicle         Vehicle?  @relation(fields: [vehicleId], references: [id])
 
   @@map("ScheduledRide")
 }
 
 // Ride entity
 model Ride {
-  id            Int       @id @default(autoincrement())
-  startLocation String?   @map("start_location") @db.VarChar(255)
-  endLocation   String?   @map("end_location") @db.VarChar(255)
+  id            Int           @id @default(autoincrement())
+  startLocation String?       @map("start_location") @db.VarChar(255)
+  endLocation   String?       @map("end_location") @db.VarChar(255)
   distance      Float?
-  departureTime DateTime? @map("departure_time")
-  totalCost     Float?    @map("total_cost")
-  fuelPrice     Float?    @map("fuel_price")
-  createdAt     DateTime? @map("created_at")
-  updatedAt     DateTime? @map("updated_at")
-  driverId      Int       @map("driver_id")
-
-  driver       Driver        @relation(fields: [driverId], references: [id])
-  rideRequests RideRequest[]
+  departureTime DateTime?     @map("departure_time")
+  totalCost     Float?        @map("total_cost")
+  fuelPrice     Float?        @map("fuel_price")
+  pricePerMember Float?       @map("price_per_member")
+  totalSeats    Int?          @map("total_seats")
+  availableSeats Int?         @map("available_seats")
+  createdAt     DateTime?     @map("created_at")
+  updatedAt     DateTime?     @map("updated_at")
+  driverId      Int           @map("driver_id")
+  vehicleId     Int?          @map("vehicle_id")
+  
+  driver        Driver        @relation(fields: [driverId], references: [id])
+  vehicle       Vehicle?      @relation(fields: [vehicleId], references: [id])
+  rideRequests  RideRequest[]
 
   @@map("ride")
 }
@@ -175,6 +183,8 @@ model Vehicle {
   driverId        Int       @map("driver_id")
 
   driver Driver @relation(fields: [driverId], references: [id])
+  rides           Ride[]
+  scheduledRides  ScheduledRide[]
 
   @@map("vehicle")
 }

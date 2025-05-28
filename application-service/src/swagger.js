@@ -14,21 +14,19 @@ const doc = {
       description: "Development server"
     }
   ],
-  
+
   ignore: [
-    "/login/*", 
-    "{{*",  
+    "/login/*",
+    "{{*",
     "*}}}",
-    "/login/{{*", 
-    "/api/users/{{*" 
-  ],  components: {
+    "/login/{{*",
+    "/api/users/{{*"
+  ], components: {
     schemas: {
       InternalServerError: {
         code: 500,
         message: "Internal Server Error"
-      },
-      User: {
-        id: 1,
+      }, User: {
         name: "Djanathan",
         last_name: "Corinthiano",
         email: "email@example.com",
@@ -44,6 +42,11 @@ const doc = {
         isDriver: true,
         isPassenger: true,
         verified: true,
+        // Driver specific fields (required when isDriver is true)
+        cnh: "1234567890",
+        cnh_front: "https://example.com/cnh_front.jpg",
+        cnh_back: "https://example.com/cnh_back.jpg",
+        bpk_link: "https://example.com/bpk_link",
       },
       Login: {
         email: "email@example.com",
@@ -60,20 +63,19 @@ const doc = {
         phone: "(11) 98765-4321",
         street: "Main Avenue",
         number: 123,
-        renavam: "12345678901",        
+        renavam: "12345678901",
         plate: "ABC1234",
         fuelConsumption: 12.5,
         driverId: 1
       },
       Vehicle: {
-        id: 1,
         model: "Civic",
         brand: "Honda",
         year: 2023,
         phone: "(11) 98765-4321",
         street: "Main Avenue",
         number: 123,
-        renavam: "12345678901",        
+        renavam: "12345678901",
         plate: "ABC1234",
         fuelConsumption: 12.5,
         createAt: "2025-05-18T12:00:00Z",
@@ -98,21 +100,109 @@ const doc = {
           cor: "Prata",
           potencia: "106cv"
         },
-        cnhStatus: "VERIFIED",
-        cnhData: {
-          numero: "01234567890",
-          categoria: "B",
-          validade: "2030-12-31",
-          situacao: "REGULAR",
-          restricoes: []
+        cnhStatus: "VERIFIED", 
+      },
+      RideRequestCreate: {
+        startLocation: "Origin Location",
+        endLocation: "Destination Location",
+        rideId: 1,
+        passengerId: 1
+      },       RideRequestUpdate: {
+        startLocation: "Origin Location",
+        endLocation: "Destination Location",
+        status: "APPROVED",
+        rideId: 1,
+        passengerId: 1
+      },
+      RideRequestStatusUpdate: {
+        status: "APPROVED"
+      },
+      RideRequest: {
+        id: 1,
+        startLocation: "Origin Location",
+        endLocation: "Destination Location",
+        status: "PENDING",
+        passengerShare: 25.50,
+        createdAt: "2025-05-18T12:00:00Z",
+        updatedAt: "2025-05-18T12:00:00Z",
+        rideId: 1,
+        passengerId: 1,        ride: {
+          id: 1,
+          startLocation: "Start Location",
+          endLocation: "End Location",
+          distance: 15.5,
+          departureTime: "2025-05-18T12:00:00Z",
+          totalCost: 50.00,
+          fuelPrice: 5.50,
+          pricePerMember: 12.50,
+          totalSeats: 4,
+          availableSeats: 2,
+          vehicleId: 1,
+          vehicle: {
+            id: 1,
+            model: "Civic",
+            brand: "Honda",
+            plate: "ABC1234"
+          }
+        },passenger: {
+          id: 1,
+          active: true,
+          userId: 1
         }
-      }
+      },      RideCreate: {
+        startLocation: "Start Location",
+        endLocation: "End Location",
+        distance: 15.5,
+        departureTime: "2025-05-18T12:00:00Z",
+        fuelPrice: 5.50,
+        totalSeats: 4,
+        driverId: 1,
+        vehicleId: 1
+      },      Ride: {
+        id: 1,
+        startLocation: "Start Location",
+        endLocation: "End Location",
+        distance: 15.5,
+        departureTime: "2025-05-18T12:00:00Z",
+        totalCost: 50.00,
+        fuelPrice: 5.50,
+        pricePerMember: 12.50,
+        totalSeats: 4,
+        availableSeats: 2,
+        createdAt: "2025-05-18T12:00:00Z",
+        updatedAt: "2025-05-18T12:00:00Z",
+        driverId: 1,
+        vehicleId: 1,
+        driver: {
+          id: 1,
+          cnh: "1234567890",
+          cnhVerified: true,
+          userId: 1,
+          user: {
+            id: 1,
+            name: "Driver Name"
+          }
+        },
+        vehicle: {
+          id: 1,
+          model: "Civic",
+          brand: "Honda",
+          plate: "ABC1234"
+        },
+        rideRequests: [
+          {
+            id: 1,
+            status: "PENDING",
+            passengerShare: 12.50
+          }
+        ]
+      },
     },
     securitySchemes: {
       bearerAuth: {
         type: "http",
         scheme: "bearer",
-        
+
       }
     }
   }
@@ -128,14 +218,14 @@ async function cleanupSwaggerFile(filePath) {
     const data = await fs.readFile(fullPath, 'utf8');
     const swaggerData = JSON.parse(data);
     const pathsToRemove = [];
-    
+
     for (const path in swaggerData.paths) {
-      if (path.includes('{{') || 
-          path.includes('}}') || 
-          path.includes('catch(err)') || 
-          path.includes('next(err)') || 
-          path.includes('res.no_content()') ||
-          (path !== '/login/' && path.startsWith('/login/'))) {
+      if (path.includes('{{') ||
+        path.includes('}}') ||
+        path.includes('catch(err)') ||
+        path.includes('next(err)') ||
+        path.includes('res.no_content()') ||
+        (path !== '/login/' && path.startsWith('/login/'))) {
         pathsToRemove.push(path);
       }
     }

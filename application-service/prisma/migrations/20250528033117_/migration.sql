@@ -21,6 +21,10 @@ CREATE TABLE `user` (
 -- CreateTable
 CREATE TABLE `driver` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `cnh` VARCHAR(10) NOT NULL,
+    `cnh_front` VARCHAR(90) NOT NULL,
+    `cnh_back` VARCHAR(90) NOT NULL,
+    `bpk_link` VARCHAR(90) NOT NULL,
     `cnh_verified` BOOLEAN NULL,
     `active` BOOLEAN NULL,
     `user_id` INTEGER NOT NULL,
@@ -91,6 +95,9 @@ CREATE TABLE `ride` (
     `departure_time` DATETIME(3) NULL,
     `total_cost` DOUBLE NULL,
     `fuel_price` DOUBLE NULL,
+    `price_per_member` DOUBLE NULL,
+    `total_seats` INTEGER NULL,
+    `available_seats` INTEGER NULL,
     `created_at` DATETIME(3) NULL,
     `updated_at` DATETIME(3) NULL,
     `driver_id` INTEGER NOT NULL,
