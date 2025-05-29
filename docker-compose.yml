@@ -3,6 +3,9 @@ services:
     build: ./application-service
     environment:
       - DATABASE_URL=mysql://root:root@application-db:3306/bpkar_db
+      - JWTSECRET=your_secret
+      - JWTEXPIRE=1d
+      - PORT=4040
     ports:
       - "4040:4040"
     depends_on:

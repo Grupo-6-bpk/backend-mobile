@@ -1,20 +1,25 @@
-import prisma from "../../infrastructure/config/prismaClient.js";
+import prisma from "../../infrastructure/config/prismaClient.js"; 
 
 export class PrismaGroupRepository {
+
   async create(groupData) {
-    const { name, description, driverId, members } = groupData; // 'members' aqui são os passengerIds
+    const { name, description, driverId, members } = groupData;
 
     if (!name || typeof name !== 'string' || name.trim() === '') {
-      // Adicionando validação mais robusta para o nome, que deve vir do Service
       throw new Error("Group name is required and must be a non-empty string.");
     }
     if (driverId === undefined || driverId === null) {
       throw new Error("driverId is required.");
     }
 
-    const parsedDriverId = parseInt(driverId);
-    if (isNaN(parsedDriverId)) {
-      throw new Error("driverId must be a valid number.");
+    let parsedDriverId;
+    try {
+      parsedDriverId = parseInt(driverId);
+      if (isNaN(parsedDriverId)) {
+        throw new Error("driverId must be a valid number string or number.");
+      }
+    } catch (e) {
+      throw new Error("driverId is invalid.");
     }
 
     try {
@@ -22,24 +27,44 @@ export class PrismaGroupRepository {
         data: {
           name,
           description,
-          driverId: parsedDriverId, // Prisma espera o ID escalar aqui
-          createdAt: new Date(),   // Mantendo manual, pois seu schema não tem @default(now())
-          updatedAt: new Date(),   // Mantendo manual, pois seu schema não tem @updatedAt
-          // Usando nested writes para criar membros
+          driver: {
+            connect: { id: driverId }
+          },
           members: (members && members.length > 0)
             ? {
-                createMany: { // Ou create: members.map(...) se quiser mais controle por membro
-                  data: members.map(passengerId => ({
-                    passengerId: parseInt(passengerId),
-                    joinDate: Math.floor(Date.now() / 1000),
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                  })),
-                },
+                create: members.map(passengerId => {
+                  return {
+                    passenger: {
+                      connect: { id: passengerId }
+                    },
+                  };
+                }),
               }
-            : undefined, // Não cria a chave 'members' se não houver membros
+            : undefined,
         },
-        include: { // Para retornar o grupo completo com o motorista e os membros
+        include: {
+          driver: { include: { user: true } },
+          members: { include: { passenger: { include: { user: true } } } },
+        },
+      });
+    } catch (error) {
+      if (error.code === 'P2002') {
+        throw new Error(`Failed to create group: A group with this name or other unique property might already exist. Prisma Code: P2002. Details: ${error.meta?.target?.join(', ')}`);
+      }
+      if (error.code === 'P2025') {
+         const message = error.meta?.cause || "A related record (like a driver or passenger) was not found.";
+        throw new Error(`Failed to create group: ${message}. Prisma Code: P2025.`);
+      }
+      console.error("Error in PrismaGroupRepository.create:", error);
+      throw new Error(`Database error while creating group: ${error.message}`);
+    }
+  }
+
+  async findAll() {
+    console.log("PrismaGroupRepository: Executing findAll");
+    try {
+      return await prisma.rideGroup.findMany({
+        include: {
           driver: {
             include: {
               user: true,
@@ -55,31 +80,30 @@ export class PrismaGroupRepository {
             },
           },
         },
+        orderBy: {
+          createdAt: 'desc',
+        }
       });
     } catch (error) {
-      // Prisma lança erros específicos que podem ser úteis
-      if (error.code === 'P2002') { // Exemplo: Unique constraint failed
-        // Isso poderia acontecer se você tivesse um unique constraint no nome do grupo, por exemplo
-        throw new Error(`Failed to create group: A group with similar unique properties might already exist. Details: ${error.message}`);
-      }
-      if (error.code === 'P2003') { // Foreign key constraint failed
-        // ESTE É UM CANDIDATO FORTE SE O driverId OU passengerId NÃO EXISTIR
-        if (error.meta && error.meta.field_name) {
-            if (String(error.meta.field_name).includes('driver_id')) {
-                 throw new Error(`Failed to create group: The specified driverId (${parsedDriverId}) does not exist or is invalid.`);
-            }
-            if (String(error.meta.field_name).includes('passenger_id')) {
-                throw new Error(`Failed to create group: One or more specified passengerIds do not exist or are invalid.`);
-            }
-        }
-        throw new Error(`Failed to create group due to a data integrity issue (e.g., non-existent related record). Details: ${error.message}`);
-      }
-      console.error("Error in PrismaGroupRepository.create:", error);
-      throw new Error(`Database error while creating group: ${error.message}`);
+      console.error("Error in PrismaGroupRepository.findAll:", error);
+      throw new Error(`Database error while fetching all groups: ${error.message}`);
     }
   }
 
-  // ... (restante dos seus métodos: findAll, findById, addMemberToGroup, removeMemberFromGroup, updateGroupDetails)
-  // Eles parecem bons como estão. Apenas certifique-se de que o tratamento de erro e a consistência
-  // com os timestamps (manual vs. schema-driven) estejam alinhados.
+  async findById(id) {
+    console.log(`PrismaGroupRepository: Executing findById for ID: ${id}`);
+    try {
+      const group = await prisma.rideGroup.findUnique({
+        where: { id: id },
+        include: {
+          driver: { include: { user: true } },
+          members: { include: { passenger: { include: { user: true } } } },
+        },
+      });
+      return group;
+    } catch (error) {
+      console.error(`Error in PrismaGroupRepository.findById for ID ${id}:`, error);
+      throw new Error(`Database error while fetching group by ID ${id}: ${error.message}`);
+    }
+  }
 }
