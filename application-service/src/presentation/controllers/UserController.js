@@ -1,9 +1,36 @@
 import prisma from "../../infrastructure/config/prismaClient.js";
 
-
 export const login = async (req, res, next) => {
   /*
-  #swagger.tags = ["Users"]
+  #swagger.tags = ["Authentication"]
+  #swagger.description = 'Login user with email and password'
+  #swagger.requestBody = {
+    required: true,
+    content: {
+      'application/json': {
+        schema: { $ref: '#/components/schemas/Login' },
+        example: {
+          email: "email@example.com",
+          password: "password"
+        }
+      }
+    }
+  }
+  #swagger.responses[200] = { 
+    description: 'Login successful',
+    content: {
+      'application/json': {
+        example: { token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' }
+      }
+    }
+  }
+  #swagger.responses[401] = { 
+    description: 'Unauthorized - Invalid credentials'
+  }
+  #swagger.responses[500] = { 
+    description: 'Internal server error',
+    schema: { $ref: '#/components/schemas/InternalServerError' }
+  }
   */
   try {
     const user = await prisma.user.findFirst({
@@ -168,7 +195,7 @@ export const createUser = async (req, res, next) => {
   }
   */
   try {
-    const { id, createAt, updatedAt, isDriver, isPassenger, ...userData } = req.body;
+    const { id, createAt, updatedAt, isDriver, isPassenger, cnh, cnh_front, cnh_back, bpk_link, ...userData } = req.body;
 
     if (userData.email) {
       const existingUser = await prisma.user.findFirst({
@@ -193,7 +220,11 @@ export const createUser = async (req, res, next) => {
           data: {
             userId: newUser.id,
             active: true,
-            cnhVerified: false
+            cnhVerified: false,
+            cnh,
+            cnh_front,
+            cnh_back,
+            bpk_link,
           }
         });
       }
@@ -294,9 +325,9 @@ export const updateUserRoles = async (req, res, next) => {
     description: 'User roles updated successfully',
     schema: {
       id: 1,
-      name: "John",
-      last_name: "Doe",
-      email: "john.doe@example.com",
+      name: "Djonathan",
+      last_name: "Corithiano",
+      email: "email@example.com",
       isDriver: true,
       isPassenger: true
     }

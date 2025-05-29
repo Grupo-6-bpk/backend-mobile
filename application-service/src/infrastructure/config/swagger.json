@@ -927,6 +927,670 @@
           }
         }
       }
+    },
+    "/api/vehicles/": {
+      "post": {
+        "tags": [
+          "Vehicles"
+        ],
+        "description": "Cria um novo veículo para um motorista",
+        "responses": {
+          "201": {
+            "description": "Veículo criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "model": {
+                      "type": "string",
+                      "example": "Civic"
+                    },
+                    "brand": {
+                      "type": "string",
+                      "example": "Honda"
+                    },
+                    "plate": {
+                      "type": "string",
+                      "example": "ABC1234"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "model": {
+                      "type": "string",
+                      "example": "Civic"
+                    },
+                    "brand": {
+                      "type": "string",
+                      "example": "Honda"
+                    },
+                    "plate": {
+                      "type": "string",
+                      "example": "ABC1234"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Requisição inválida"
+          },
+          "404": {
+            "description": "Motorista não encontrado"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VehicleCreate"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/VehicleCreate"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Vehicles"
+        ],
+        "description": "Lista veículos com paginação",
+        "parameters": [
+          {
+            "name": "_page",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "_size",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "driverId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Veículos listados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "currentPage": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "totalPages": {
+                      "type": "number",
+                      "example": 3
+                    },
+                    "totalItems": {
+                      "type": "number",
+                      "example": 25
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number",
+                            "example": 1
+                          },
+                          "model": {
+                            "type": "string",
+                            "example": "Civic"
+                          },
+                          "brand": {
+                            "type": "string",
+                            "example": "Honda"
+                          },
+                          "year": {
+                            "type": "number",
+                            "example": 2023
+                          },
+                          "plate": {
+                            "type": "string",
+                            "example": "ABC1234"
+                          },
+                          "driver": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number",
+                                "example": 1
+                              },
+                              "name": {
+                                "type": "string",
+                                "example": "John Doe"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "currentPage": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "totalPages": {
+                      "type": "number",
+                      "example": 3
+                    },
+                    "totalItems": {
+                      "type": "number",
+                      "example": 25
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number",
+                            "example": 1
+                          },
+                          "model": {
+                            "type": "string",
+                            "example": "Civic"
+                          },
+                          "brand": {
+                            "type": "string",
+                            "example": "Honda"
+                          },
+                          "year": {
+                            "type": "number",
+                            "example": 2023
+                          },
+                          "plate": {
+                            "type": "string",
+                            "example": "ABC1234"
+                          },
+                          "driver": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number",
+                                "example": 1
+                              },
+                              "name": {
+                                "type": "string",
+                                "example": "John Doe"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/vehicles/{id}": {
+      "get": {
+        "tags": [
+          "Vehicles"
+        ],
+        "description": "Busca um veículo por ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Veículo encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "model": {
+                      "type": "string",
+                      "example": "Civic"
+                    },
+                    "brand": {
+                      "type": "string",
+                      "example": "Honda"
+                    },
+                    "year": {
+                      "type": "number",
+                      "example": 2023
+                    },
+                    "plate": {
+                      "type": "string",
+                      "example": "ABC1234"
+                    },
+                    "renavam": {
+                      "type": "string",
+                      "example": "12345678901"
+                    },
+                    "fuelConsumption": {
+                      "type": "number",
+                      "example": 12.5
+                    },
+                    "driver": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "John Doe"
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "model": {
+                      "type": "string",
+                      "example": "Civic"
+                    },
+                    "brand": {
+                      "type": "string",
+                      "example": "Honda"
+                    },
+                    "year": {
+                      "type": "number",
+                      "example": 2023
+                    },
+                    "plate": {
+                      "type": "string",
+                      "example": "ABC1234"
+                    },
+                    "renavam": {
+                      "type": "string",
+                      "example": "12345678901"
+                    },
+                    "fuelConsumption": {
+                      "type": "number",
+                      "example": 12.5
+                    },
+                    "driver": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "John Doe"
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Veículo não encontrado"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Vehicles"
+        ],
+        "description": "Atualiza um veículo existente",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Veículo atualizado com sucesso"
+          },
+          "400": {
+            "description": "Requisição inválida"
+          },
+          "404": {
+            "description": "Veículo não encontrado"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VehicleCreate"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/VehicleCreate"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Vehicles"
+        ],
+        "description": "Deleta um veículo por ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Veículo deletado com sucesso"
+          },
+          "404": {
+            "description": "Veículo não encontrado"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/vehicles/{id}/verify": {
+      "post": {
+        "tags": [
+          "Vehicles"
+        ],
+        "description": "Verifica informações do veículo e da CNH usando APIs externas",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Verificação concluída com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "vehicleStatus": {
+                      "type": "string",
+                      "example": "VERIFIED"
+                    },
+                    "vehicleData": {
+                      "type": "object",
+                      "properties": {
+                        "model": {
+                          "type": "string",
+                          "example": "Civic"
+                        },
+                        "brand": {
+                          "type": "string",
+                          "example": "Honda"
+                        },
+                        "year": {
+                          "type": "number",
+                          "example": 2023
+                        }
+                      }
+                    },
+                    "cnhStatus": {
+                      "type": "string",
+                      "example": "VERIFIED"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "vehicleStatus": {
+                      "type": "string",
+                      "example": "VERIFIED"
+                    },
+                    "vehicleData": {
+                      "type": "object",
+                      "properties": {
+                        "model": {
+                          "type": "string",
+                          "example": "Civic"
+                        },
+                        "brand": {
+                          "type": "string",
+                          "example": "Honda"
+                        },
+                        "year": {
+                          "type": "number",
+                          "example": 2023
+                        }
+                      }
+                    },
+                    "cnhStatus": {
+                      "type": "string",
+                      "example": "VERIFIED"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Veículo não encontrado"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
     }
   },
   "components": {

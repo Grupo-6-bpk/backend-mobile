@@ -13,6 +13,7 @@ import Group from './group/groupRouter.js';
 import userRouter from './user/userRouter.js';
 import registerRouter from './user/registerRouter.js';
 import AuthRouter from './auth/authRouter.js';
+import vehicleRouter from './vehicle/vehicleRouter.js';
 import grouprouter from './group/groupRouter.js';
 
 const routes = Router();
@@ -25,6 +26,7 @@ routes.use('/api/groups', grouprouter);
 routes.use('/register', registerRouter);
 
 routes.use('/api/users', verify, userRouter);
+routes.use('/api/vehicles', verify, vehicleRouter);
 
 routes.use(InternalServerError);
 routes.use(NotFound);
