@@ -56,10 +56,13 @@ model Driver {
 
 // Passenger entity
 model Passenger {
-  id     Int      @id @default(autoincrement())
-  active Boolean?
-  userId Int      @unique @map("user_id")
-  user   User     @relation(fields: [userId], references: [id])
+  id       Int      @id @default(autoincrement())
+  rg_front String   @db.VarChar(90)
+  rg_back  String   @db.VarChar(90)
+  bpk_link String   @db.VarChar(90)
+  active   Boolean?
+  userId   Int      @unique @map("user_id")
+  user     User     @relation(fields: [userId], references: [id])
 
   // Relacionamentos
   groupMemberships RideGroupMember[]
