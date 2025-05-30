@@ -21,12 +21,7 @@ CREATE TABLE `user` (
 -- CreateTable
 CREATE TABLE `driver` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `cnh` VARCHAR(10) NOT NULL,
-    `cnh_front` VARCHAR(90) NOT NULL,
-    `cnh_back` VARCHAR(90) NOT NULL,
-    `bpk_link` VARCHAR(90) NOT NULL,
     `cnh_verified` BOOLEAN NULL,
-    `active` BOOLEAN NULL,
     `user_id` INTEGER NOT NULL,
 
     UNIQUE INDEX `driver_user_id_key`(`user_id`),
@@ -81,7 +76,6 @@ CREATE TABLE `ScheduledRide` (
     `updated_at` DATETIME(3) NULL,
     `group_id` INTEGER NOT NULL,
     `driver_id` INTEGER NOT NULL,
-    `vehicle_id` INTEGER NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -95,13 +89,9 @@ CREATE TABLE `ride` (
     `departure_time` DATETIME(3) NULL,
     `total_cost` DOUBLE NULL,
     `fuel_price` DOUBLE NULL,
-    `price_per_member` DOUBLE NULL,
-    `total_seats` INTEGER NULL,
-    `available_seats` INTEGER NULL,
     `created_at` DATETIME(3) NULL,
     `updated_at` DATETIME(3) NULL,
     `driver_id` INTEGER NOT NULL,
-    `vehicle_id` INTEGER NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -162,13 +152,7 @@ ALTER TABLE `ScheduledRide` ADD CONSTRAINT `ScheduledRide_group_id_fkey` FOREIGN
 ALTER TABLE `ScheduledRide` ADD CONSTRAINT `ScheduledRide_driver_id_fkey` FOREIGN KEY (`driver_id`) REFERENCES `driver`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `ScheduledRide` ADD CONSTRAINT `ScheduledRide_vehicle_id_fkey` FOREIGN KEY (`vehicle_id`) REFERENCES `vehicle`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE `ride` ADD CONSTRAINT `ride_driver_id_fkey` FOREIGN KEY (`driver_id`) REFERENCES `driver`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `ride` ADD CONSTRAINT `ride_vehicle_id_fkey` FOREIGN KEY (`vehicle_id`) REFERENCES `vehicle`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `ride_request` ADD CONSTRAINT `ride_request_ride_id_fkey` FOREIGN KEY (`ride_id`) REFERENCES `ride`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

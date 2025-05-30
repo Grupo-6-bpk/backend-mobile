@@ -286,11 +286,8 @@ export const createRide = async (req, res, next) => {  /*
 
     const newRide = await prisma.ride.create({
       data: createData
-    });
-
-    res.created(newRide);
+    });    res.created(newRide);
   } catch (err) {
-    console.error("Erro ao criar carona:", err);
     next(err);
   }
 };
@@ -577,6 +574,13 @@ export const listAvailableRides = async (req, res, next) => {
       }
     };
     
+    // Only show future rides by default, unless includeExpired is true
+    if (!req.query.includeExpired || req.query.includeExpired !== 'true') {
+      where.departureTime = {
+        gte: new Date()
+      };
+    }
+    
     // Filter by driver if query param exists
     if (req.query.driverId) {
       where.driverId = parseInt(req.query.driverId);
@@ -588,6 +592,14 @@ export const listAvailableRides = async (req, res, next) => {
         gte: new Date(req.query.fromDate),
         lte: new Date(req.query.toDate)
       };
+    } else if (req.query.fromDate) {
+      where.departureTime = {
+        gte: new Date(req.query.fromDate)
+      };
+    } else if (req.query.toDate) {
+      where.departureTime = {
+        lte: new Date(req.query.toDate)
+      };
     }
 
     const rides = await prisma.ride.findMany({
@@ -596,7 +608,7 @@ export const listAvailableRides = async (req, res, next) => {
       take: size,
       orderBy: {
         departureTime: 'asc',
-        ...req.order,
+        ...(req.order || {})
       },
       include: {
         driver: {
@@ -615,11 +627,9 @@ export const listAvailableRides = async (req, res, next) => {
         }
       }
     });
-
+    
     const totalData = await prisma.ride.count({ where });
-    const totalPages = Math.ceil(totalData / size);
-
-    const data = res.hateos_list("rides/available", rides, totalPages);
+    const totalPages = Math.ceil(totalData / size);    const data = res.hateos_list("rides/available", rides, totalPages);
     res.ok(data);
   } catch (err) {
     next(err);

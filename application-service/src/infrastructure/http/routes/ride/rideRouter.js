@@ -15,8 +15,8 @@ import {
 
 const router = Router();
 router.get("/", listRides);
-router.get("/:id", getRide);
 router.get("/available", listAvailableRides);
+router.get("/:id", getRide);
 router.post("/", validator(rideValidator), createRide);
 router.put("/:id", validator(ridePatchValidator), updateRide);
 router.delete("/:id", deleteRide);

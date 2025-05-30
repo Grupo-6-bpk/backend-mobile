@@ -1,10 +1,5 @@
 /**
- * Utility functions for ride cost calculations
- */
-
-/**
  * Calculate the total cost of a ride
- * Formula: (fuelPrice * distance) + 20% markup for vehicle wear
  * @param {number} fuelPrice - Price per km of fuel
  * @param {number} distance - Distance in km
  * @returns {number} Total cost of the ride
@@ -14,26 +9,22 @@ export const calculateTotalCost = (fuelPrice, distance) => {
     throw new Error("Preço do combustível e distância devem ser valores positivos");
   }
   
-  const fuelCost = fuelPrice * distance;
-  const markup = fuelCost * 0.20; // 20% markup for vehicle wear
-  return Math.round((fuelCost + markup) * 100) / 100; // Round to 2 decimal places
+  const totalCost = fuelPrice * distance;
+  return Math.round(totalCost * 100) / 100; // Round to 2 decimal places
 };
-
 /**
- * Calculate the price per member (passenger)
- * The driver doesn't pay, so total cost is divided by number of passengers
+ * Calculate the price per member (passenger and driver)
  * @param {number} totalCost - Total cost of the ride
- * @param {number} totalSeats - Total number of seats available
- * @returns {number} Price per passenger
+ * @param {number} totalSeats - Total number of seats available (including driver)
+ * @returns {number} Price per member (passenger or driver)
  */
 export const calculatePricePerMember = (totalCost, totalSeats) => {
   if (!totalCost || !totalSeats || totalCost <= 0 || totalSeats <= 0) {
     throw new Error("Custo total e número de vagas devem ser valores positivos");
   }
   
-  // Driver doesn't pay, so we divide by number of passenger seats
-  const passengerSeats = totalSeats;
-  return Math.round((totalCost / passengerSeats) * 100) / 100; // Round to 2 decimal places
+  const totalMembers = totalSeats + 1; // +1 for the driver
+  return Math.round((totalCost / totalMembers) * 100) / 100; // Round to 2 decimal places
 };
 
 /**

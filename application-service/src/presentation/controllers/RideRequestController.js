@@ -236,11 +236,8 @@ export const createRideRequest = async (req, res, next) => {
           updatedAt: new Date()
         }
       });
-    }
-
-    res.created(newRideRequest);
+    }    res.created(newRideRequest);
   } catch (err) {
-    console.error("Erro ao criar solicitação de carona:", err);
     next(err);
   }
 };
@@ -317,8 +314,7 @@ export const updateRideRequest = async (req, res, next) => {
         });
       }
     }
-    
-    const updatedRideRequest = await prisma.rideRequest.update({
+      const updatedRideRequest = await prisma.rideRequest.update({
       where: { id: rideRequestId },
       data: updateData
     });
@@ -459,11 +455,15 @@ export const updateRideRequestStatus = async (req, res, next) => {
       });
     }
 
-    // Check if ride has already departed (optional business rule)
     const now = new Date();
-    if (rideRequestExists.ride.departureTime && new Date(rideRequestExists.ride.departureTime) < now) {
+    if (rideRequestExists.ride.departureTime && 
+        new Date(rideRequestExists.ride.departureTime) instanceof Date && 
+        !isNaN(new Date(rideRequestExists.ride.departureTime)) && 
+        new Date(rideRequestExists.ride.departureTime) < now) {
       return res.status(400).json({ 
-        message: "Não é possível alterar o status de uma solicitação para carona que já partiu" 
+        message: "Não é possível alterar o status de uma solicitação para carona que já partiu",
+        departureTime: rideRequestExists.ride.departureTime,
+        currentTime: now
       });
     }
     
@@ -541,12 +541,9 @@ export const updateRideRequestStatus = async (req, res, next) => {
         adjustment: seatAdjustment,
         newAvailableSeats: result.ride.availableSeats
       } : null
-    };
-
-    const data = res.hateos_item(responseData);
+    };    const data = res.hateos_item(responseData);
     res.ok(data);
   } catch (err) {
-    console.error("Erro ao atualizar status da solicitação de carona:", err);
     next(err);
   }
 };
