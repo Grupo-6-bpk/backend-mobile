@@ -25,11 +25,6 @@ routes.use('/login', AuthRouter);
 routes.use('/register', registerRouter);
 
 routes.use('/api/users', verify, userRouter);
-routes.use('/api/vehicles', verify, vehicleRouter);
-
-routes.use('/api/rides', verify, rideRouter);
-routes.use('/api/ride-requests', verify, rideRequestRouter);
-
 
 routes.use(InternalServerError);
 routes.use(NotFound);
