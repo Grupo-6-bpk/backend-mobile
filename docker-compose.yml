@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   application-service:
     build: ./application-service
@@ -6,31 +8,18 @@ services:
       - JWTSECRET=your_secret
       - JWTEXPIRE=1d
       - PORT=4040
+      - RABBITMQ_URL=amqp://rabbitmq:5672
     ports:
       - "4040:4040"
     depends_on:
       application-db:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     networks:
       - application-network
-      - default
-  application-db:
-    image: mysql:8.0
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: bpkar_db
-    volumes:
-      - application-db:/var/lib/mysql
-    ports:
-      - "3307:3306"
-    healthcheck:
-      test: ["CMD", "mysql", "-uroot", "-proot", "-e", "SELECT 1;", "bpkar_db"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-    networks:
-      - application-network
-  # notification-service:
+
+    # notification-service:
   #   build: ./notification-service
   #   environment:
   #     - DATABASE_URL=mysql://root:root@notification-db:3306/notification_db
@@ -60,6 +49,39 @@ services:
   #   networks:
   #     - notification-network
   #     - default
+  
+  application-db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: bpkar_db
+    volumes:
+      - application-db:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mysql", "-uroot", "-proot", "-e", "SELECT 1;", "bpkar_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - application-network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"    # porta AMQP
+      - "15672:15672"  # console de gerenciamento
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - application-network
 
 networks:
   default:

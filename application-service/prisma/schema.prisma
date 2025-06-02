@@ -17,7 +17,8 @@ model User {
   email     String?   @db.VarChar(255)
   password  String    @db.VarChar(255)
   cpf       String?   @db.VarChar(45)
-  phone     String?   @db.VarChar(45)
+  phone     String?   @db.VarChar(45) @unique
+  avatarUrl String?   @map("avatar_url") @db.VarChar(500)
   street    String?   @db.VarChar(45)
   number    Int?
   city      String?   @db.VarChar(45)
@@ -29,8 +30,53 @@ model User {
   // Relacionamentos
   driver    Driver?
   passenger Passenger?
+  
+  // Chat relacionamentos
+  chats     ChatParticipant[]
+  messages  ChatMessage[]     @relation("sender_messages")
 
   @@map("user")
+}
+
+// Chat entity
+model Chat {
+  id           Int               @id @default(autoincrement())
+  isGroup      Boolean           @map("is_group")
+  name         String?           @db.VarChar(255)
+  createdAt    DateTime          @default(now()) @map("created_at")
+  updatedAt    DateTime          @updatedAt @map("updated_at")
+  adminId      Int?              @map("admin_id")
+  participants ChatParticipant[]
+  messages     ChatMessage[]
+
+  @@map("chat")
+}
+
+// ChatParticipant entity
+model ChatParticipant {
+  id      Int     @id @default(autoincrement())
+  userId  Int     @map("user_id")
+  chatId  Int     @map("chat_id")
+  blocked Boolean @default(false)
+  user    User    @relation(fields: [userId], references: [id])
+  chat    Chat    @relation(fields: [chatId], references: [id])
+
+  @@unique([userId, chatId])
+  @@map("chat_participant")
+}
+
+// ChatMessage entity
+model ChatMessage {
+  id       Int      @id @default(autoincrement())
+  content  String   @db.VarChar(1000)
+  sentAt   DateTime @default(now()) @map("sent_at")
+  senderId Int      @map("sender_id")
+  chatId   Int      @map("chat_id")
+  sender   User     @relation("sender_messages", fields: [senderId], references: [id])
+  chat     Chat     @relation(fields: [chatId], references: [id])
+
+  @@index([chatId, sentAt])
+  @@map("chat_message")
 }
 
 // Driver entity
