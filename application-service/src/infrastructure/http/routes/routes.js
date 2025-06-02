@@ -13,6 +13,8 @@ import userRouter from './user/userRouter.js';
 import registerRouter from './user/registerRouter.js';
 import AuthRouter from './auth/authRouter.js';
 import vehicleRouter from './vehicle/vehicleRouter.js';
+import rideRequestRouter from './rideRequest/rideRequestRouter.js';
+import rideRouter from './ride/rideRouter.js';
 
 const routes = Router();
 routes.use(hateoas);
@@ -24,6 +26,10 @@ routes.use('/register', registerRouter);
 
 routes.use('/api/users', verify, userRouter);
 routes.use('/api/vehicles', verify, vehicleRouter);
+
+routes.use('/api/rides', verify, rideRouter);
+routes.use('/api/ride-requests', verify, rideRequestRouter);
+
 
 routes.use(InternalServerError);
 routes.use(NotFound);

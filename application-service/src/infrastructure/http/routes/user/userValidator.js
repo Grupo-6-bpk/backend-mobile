@@ -43,12 +43,40 @@ export default yup
           .max(45, "Cidade deve ter no máximo 45 caracteres"),
         zipcode: yup
           .string()
-          .max(45, "CEP deve ter no máximo 45 caracteres"),
-        verified: yup
+          .max(45, "CEP deve ter no máximo 45 caracteres"),        verified: yup
           .boolean(),
         isDriver: yup
           .boolean(),
         isPassenger: yup
-          .boolean()
+          .boolean(),
+       
+        cnh: yup
+          .string()
+          .max(10, "CNH deve ter no máximo 10 caracteres")
+          .when('isDriver', {
+            is: true,
+            then: (schema) => schema.required('CNH é obrigatória quando o usuário é motorista')
+          }),
+        cnh_front: yup
+          .string()
+          .max(90, "Imagem da frente da CNH deve ter no máximo 90 caracteres")
+          .when('isDriver', {
+            is: true,
+            then: (schema) => schema.required('Imagem da frente da CNH é obrigatória quando o usuário é motorista')
+          }),
+        cnh_back: yup
+          .string()
+          .max(90, "Imagem do verso da CNH deve ter no máximo 90 caracteres")
+          .when('isDriver', {
+            is: true,
+            then: (schema) => schema.required('Imagem do verso da CNH é obrigatória quando o usuário é motorista')
+          }),
+        bpk_link: yup
+          .string()
+          .max(90, "Link BPK deve ter no máximo 90 caracteres")
+          .when('isDriver', {
+            is: true,
+            then: (schema) => schema.required('Link BPK é obrigatório quando o usuário é motorista')
+          })
   }).noUnknown(false);
 
