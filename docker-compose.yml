@@ -18,20 +18,19 @@ services:
         condition: service_healthy
     networks:
       - application-network
+      - internal
 
     # notification-service:
   #   build: ./notification-service
   #   environment:
   #     - DATABASE_URL=mysql://root:root@notification-db:3306/notification_db
   #     - PORT=4041
-  #   ports:
-  #     - "4041:4040"
   #   depends_on:
   #     notification-db:
   #       condition: service_healthy
   #   networks:
   #     - notification-network
-  #     - default
+  #     - internal
   # notification-db:
   #   image: mysql:8.0
   #   environment:
@@ -39,8 +38,6 @@ services:
   #     MYSQL_DATABASE: notification_db
   #   volumes:
   #     - notification-db:/var/lib/mysql
-  #   ports:
-  #     - "3308:3306"
   #   healthcheck:
   #     test: ["CMD", "mysql", "-uroot", "-proot", "-e", "SELECT 1;", "notification_db"]
   #     interval: 5s
@@ -48,7 +45,7 @@ services:
   #     retries: 10
   #   networks:
   #     - notification-network
-  #     - default
+  #     - internal
   
   application-db:
     image: mysql:8.0
@@ -57,8 +54,6 @@ services:
       MYSQL_DATABASE: bpkar_db
     volumes:
       - application-db:/var/lib/mysql
-    ports:
-      - "3307:3306"
     healthcheck:
       test: ["CMD", "mysql", "-uroot", "-proot", "-e", "SELECT 1;", "bpkar_db"]
       interval: 5s
@@ -72,23 +67,25 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
-    ports:
-      - "5672:5672"    # porta AMQP
-      - "15672:15672"  # console de gerenciamento
     healthcheck:
       test: ["CMD", "rabbitmqctl", "status"]
       interval: 5s
       timeout: 5s
       retries: 10
     networks:
-      - application-network
+      - internal
 
 networks:
-  default:
+  internal:
+    internal: true
+    driver: bridge
+  public:
     driver: bridge
   application-network:
+    internal: true
     driver: bridge
   notification-network:
+    internal: true
     driver: bridge
 
 volumes:
