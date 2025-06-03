@@ -17,6 +17,7 @@ services:
     networks:
       - application-network
       - internal
+      - public
 
     # notification-service:
   #   build: ./notification-service
