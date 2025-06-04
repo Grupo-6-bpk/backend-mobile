@@ -15,12 +15,37 @@
     "/login/": {
       "post": {
         "tags": [
-          "Users"
+          "Authentication"
         ],
-        "description": "",
+        "description": "Generate JWT token after successful login",
         "responses": {
+          "200": {
+            "description": "Token generated successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                }
+              }
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string",
+                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
           "500": {
-            "description": "Internal Server Error",
+            "description": "Internal server error",
             "content": {
               "application/json": {
                 "schema": {
@@ -32,111 +57,22 @@
                   "$ref": "#/components/schemas/InternalServerError"
                 }
               }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerError"
             }
           }
         },
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "example": "any"
-                  },
-                  "password": {
-                    "example": "any"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/groups/": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
+                "$ref": "#/components/schemas/Login"
               },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "description": "",
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/groups/{id}/members": {
-      "patch": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/InternalServerError"
-                }
+              "example": {
+                "email": "email@example.com",
+                "password": "password"
               }
             }
           }
@@ -827,15 +763,15 @@
                     },
                     "name": {
                       "type": "string",
-                      "example": "John"
+                      "example": "Djonathan"
                     },
                     "last_name": {
                       "type": "string",
-                      "example": "Doe"
+                      "example": "Corithiano"
                     },
                     "email": {
                       "type": "string",
-                      "example": "john.doe@example.com"
+                      "example": "email@example.com"
                     },
                     "isDriver": {
                       "type": "boolean",
@@ -861,15 +797,15 @@
                     },
                     "name": {
                       "type": "string",
-                      "example": "John"
+                      "example": "Djonathan"
                     },
                     "last_name": {
                       "type": "string",
-                      "example": "Doe"
+                      "example": "Corithiano"
                     },
                     "email": {
                       "type": "string",
-                      "example": "john.doe@example.com"
+                      "example": "email@example.com"
                     },
                     "isDriver": {
                       "type": "boolean",
@@ -1367,7 +1303,7 @@
           }
         ]
       },
-      "put": {
+      "patch": {
         "tags": [
           "Vehicles"
         ],
@@ -1591,6 +1527,248 @@
           }
         ]
       }
+    },
+    "/api/groups/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "example": "any"
+                  },
+                  "description": {
+                    "example": "any"
+                  },
+                  "driverId": {
+                    "example": "any"
+                  },
+                  "members": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/groups/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/groups/{id}/users": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/groups/{id}/members": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userIds": {
+                    "example": "any"
+                  },
+                  "action": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1620,19 +1798,19 @@
           },
           "name": {
             "type": "string",
-            "example": "John"
+            "example": "Djanathan"
           },
           "last_name": {
             "type": "string",
-            "example": "Doe"
+            "example": "Corinthiano"
           },
           "email": {
             "type": "string",
-            "example": "john.doe@example.com"
+            "example": "email@example.com"
           },
           "password": {
             "type": "string",
-            "example": "hashed_password"
+            "example": "password"
           },
           "cpf": {
             "type": "string",
@@ -1681,6 +1859,22 @@
         },
         "xml": {
           "name": "User"
+        }
+      },
+      "Login": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "email@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "password"
+          }
+        },
+        "xml": {
+          "name": "Login"
         }
       },
       "UserRoles": {
@@ -1745,6 +1939,166 @@
         },
         "xml": {
           "name": "VehicleCreate"
+        }
+      },
+      "Vehicle": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "model": {
+            "type": "string",
+            "example": "Civic"
+          },
+          "brand": {
+            "type": "string",
+            "example": "Honda"
+          },
+          "year": {
+            "type": "number",
+            "example": 2023
+          },
+          "phone": {
+            "type": "string",
+            "example": "(11) 98765-4321"
+          },
+          "street": {
+            "type": "string",
+            "example": "Main Avenue"
+          },
+          "number": {
+            "type": "number",
+            "example": 123
+          },
+          "renavam": {
+            "type": "string",
+            "example": "12345678901"
+          },
+          "plate": {
+            "type": "string",
+            "example": "ABC1234"
+          },
+          "fuelConsumption": {
+            "type": "number",
+            "example": 12.5
+          },
+          "createAt": {
+            "type": "string",
+            "example": "2025-05-18T12:00:00Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2025-05-18T12:00:00Z"
+          },
+          "driverId": {
+            "type": "number",
+            "example": 1
+          },
+          "driver": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number",
+                "example": 1
+              },
+              "name": {
+                "type": "string",
+                "example": "John Doe"
+              },
+              "userId": {
+                "type": "number",
+                "example": 1
+              }
+            }
+          }
+        },
+        "xml": {
+          "name": "Vehicle"
+        }
+      },
+      "VehicleVerification": {
+        "type": "object",
+        "properties": {
+          "vehicleStatus": {
+            "type": "string",
+            "example": "VERIFIED"
+          },
+          "vehicleData": {
+            "type": "object",
+            "properties": {
+              "modelo": {
+                "type": "string",
+                "example": "Civic"
+              },
+              "marca": {
+                "type": "string",
+                "example": "Honda"
+              },
+              "ano": {
+                "type": "number",
+                "example": 2023
+              },
+              "placa": {
+                "type": "string",
+                "example": "ABC1234"
+              },
+              "renavam": {
+                "type": "string",
+                "example": "12345678901"
+              },
+              "chassi": {
+                "type": "string",
+                "example": "9BW2D11J0Y4019551"
+              },
+              "combustivel": {
+                "type": "string",
+                "example": "Gasolina/Etanol"
+              },
+              "cor": {
+                "type": "string",
+                "example": "Prata"
+              },
+              "potencia": {
+                "type": "string",
+                "example": "106cv"
+              }
+            }
+          },
+          "cnhStatus": {
+            "type": "string",
+            "example": "VERIFIED"
+          },
+          "cnhData": {
+            "type": "object",
+            "properties": {
+              "numero": {
+                "type": "string",
+                "example": "01234567890"
+              },
+              "categoria": {
+                "type": "string",
+                "example": "B"
+              },
+              "validade": {
+                "type": "string",
+                "example": "2030-12-31"
+              },
+              "situacao": {
+                "type": "string",
+                "example": "REGULAR"
+              },
+              "restricoes": {
+                "type": "array",
+                "example": [],
+                "items": {}
+              }
+            }
+          }
+        },
+        "xml": {
+          "name": "VehicleVerification"
         }
       }
     },

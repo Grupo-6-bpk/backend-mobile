@@ -1,10 +1,12 @@
 import express from 'express';
-import { createGroup, listGroups, showGroup } from '../../../../presentation/controllers/GroupController.js';
+import { createGroup, listGroups, getGroupById, listUsersByGroup, updateGroupMembers } from '../../../../presentation/controllers/GroupController.js';
 
-const grouprouter = express.Router();
+const router = express.Router();
 
-grouprouter.get('/', listGroups);
-grouprouter.post('/', createGroup);
-grouprouter.patch('/:id/members', showGroup);
+router.get('/', listGroups);
+router.post('/', createGroup);
+router.get('/:id', getGroupById);
+router.get('/:id/users', listUsersByGroup);
+router.put('/:id/members', updateGroupMembers);
 
-export default grouprouter;
+export default router;

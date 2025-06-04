@@ -1,4 +1,4 @@
-import { PrismaGroupRepository } from '../../domain/repositories/PrismaGroupRepository.js';
+import { PrismaGroupRepository } from '../../infrastructure/db/PrismaGroupRepository.js';
 import prisma from '../../infrastructure/config/prismaClient.js';
 
 /**
