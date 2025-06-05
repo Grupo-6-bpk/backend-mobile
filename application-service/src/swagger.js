@@ -52,17 +52,15 @@ const doc = {
       UserRoles: {
         isDriver: true,
         isPassenger: true
-      },
-      VehicleCreate: {
+      },      VehicleCreate: {
         model: "Civic",
         brand: "Honda",
         year: 2023,
-        phone: "(11) 98765-4321",
-        street: "Main Avenue",
-        number: 123,
-        renavam: "12345678901",        
+        color: "Prata",
+        renavam: "12345678901",
         plate: "ABC1234",
         fuelConsumption: 12.5,
+        carImageUrl: "https://example.com/car-image.jpg",
         driverId: 1
       },
       Vehicle: {
@@ -70,13 +68,12 @@ const doc = {
         model: "Civic",
         brand: "Honda",
         year: 2023,
-        phone: "(11) 98765-4321",
-        street: "Main Avenue",
-        number: 123,
+        color: "Prata",
         renavam: "12345678901",        
         plate: "ABC1234",
         fuelConsumption: 12.5,
-        createAt: "2025-05-18T12:00:00Z",
+        carImageUrl: "https://example.com/car-image.jpg",
+        createdAt: "2025-05-18T12:00:00Z",
         updatedAt: "2025-05-18T12:00:00Z",
         driverId: 1,
         driver: {
@@ -84,8 +81,7 @@ const doc = {
           name: "John Doe",
           userId: 1
         }
-      },
-      VehicleVerification: {
+      },      VehicleVerification: {
         vehicleStatus: "VERIFIED",
         vehicleData: {
           modelo: "Civic",
@@ -106,7 +102,102 @@ const doc = {
           situacao: "REGULAR",
           restricoes: []
         }
-      }
+      },
+      RideRequestCreate: {
+        startLocation: "Origin Location",
+        endLocation: "Destination Location",
+        rideId: 1,
+        passengerId: 1
+      },       RideRequestUpdate: {
+        startLocation: "Origin Location",
+        endLocation: "Destination Location",
+        status: "APPROVED",
+        rideId: 1,
+        passengerId: 1
+      },
+      RideRequestStatusUpdate: {
+        status: "APPROVED"
+      },
+      RideRequest: {
+        id: 1,
+        startLocation: "Origin Location",
+        endLocation: "Destination Location",
+        status: "PENDING",
+        passengerShare: 25.50,
+        createdAt: "2025-05-18T12:00:00Z",
+        updatedAt: "2025-05-18T12:00:00Z",
+        rideId: 1,
+        passengerId: 1,        ride: {
+          id: 1,
+          startLocation: "Start Location",
+          endLocation: "End Location",
+          distance: 15.5,
+          departureTime: "2025-05-18T12:00:00Z",
+          totalCost: 50.00,
+          fuelPrice: 5.50,
+          pricePerMember: 12.50,
+          totalSeats: 4,
+          availableSeats: 2,
+          vehicleId: 1,
+          vehicle: {
+            id: 1,
+            model: "Civic",
+            brand: "Honda",
+            plate: "ABC1234"
+          }
+        },passenger: {
+          id: 1,
+          active: true,
+          userId: 1
+        }
+      },      RideCreate: {
+        startLocation: "Start Location",
+        endLocation: "End Location",
+        distance: 15.5,
+        departureTime: "2025-05-18T12:00:00Z",
+        fuelPrice: 5.50,
+        totalSeats: 4,
+        driverId: 1,
+        vehicleId: 1
+      },      Ride: {
+        id: 1,
+        startLocation: "Start Location",
+        endLocation: "End Location",
+        distance: 15.5,
+        departureTime: "2025-05-18T12:00:00Z",
+        totalCost: 50.00,
+        fuelPrice: 5.50,
+        pricePerMember: 12.50,
+        totalSeats: 4,
+        availableSeats: 2,
+        createdAt: "2025-05-18T12:00:00Z",
+        updatedAt: "2025-05-18T12:00:00Z",
+        driverId: 1,
+        vehicleId: 1,
+        driver: {
+          id: 1,
+          cnh: "1234567890",
+          cnhVerified: true,
+          userId: 1,
+          user: {
+            id: 1,
+            name: "Driver Name"
+          }
+        },
+        vehicle: {
+          id: 1,
+          model: "Civic",
+          brand: "Honda",
+          plate: "ABC1234"
+        },
+        rideRequests: [
+          {
+            id: 1,
+            status: "PENDING",
+            passengerShare: 12.50
+          }
+        ]
+      },
     },
     securitySchemes: {
       bearerAuth: {

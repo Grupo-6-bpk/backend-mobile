@@ -16,17 +16,10 @@ export default yup
       .typeError("Ano deve ser um valor numérico")
       .positive("Ano deve ser positivo")
       .integer("Ano deve ser um inteiro"),
-    phone: yup
+    color: yup
       .string()
-      .max(45, "Telefone deve ter no máximo 45 caracteres"),
-    street: yup
-      .string()
-      .max(45, "Endereço deve ter no máximo 45 caracteres"),
-    number: yup
-      .number()
-      .typeError("Número deve ser um valor numérico")
-      .positive("Número deve ser positivo")
-      .integer("Número deve ser um inteiro"),
+      .min(2, "Cor deve ter pelo menos 2 caracteres")
+      .max(100, "Cor deve ter no máximo 100 caracteres"),
     renavam: yup
       .string()
       .matches(/^[0-9]{11}$/, "RENAVAM inválido (deve conter 11 dígitos)"),
@@ -37,6 +30,10 @@ export default yup
       .number()
       .typeError("Consumo de combustível deve ser um valor numérico")
       .positive("Consumo de combustível deve ser positivo"),
+    carImageUrl: yup
+      .string()
+      .url("URL da imagem do carro deve ser uma URL válida")
+      .max(500, "URL da imagem deve ter no máximo 500 caracteres"),
     driverId: yup
       .number()
       .typeError("ID do motorista deve ser um valor numérico")

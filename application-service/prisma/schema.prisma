@@ -157,17 +157,16 @@ model RideRequest {
 // Vehicle entity
 model Vehicle {
   id              Int       @id @default(autoincrement())
-  model           String?   @db.VarChar(255)
-  brand           String?   @db.VarChar(255)
-  year            Int?
-  phone           String?   @db.VarChar(45)
-  street          String?   @db.VarChar(45)
-  number          Int?
-  renavam         String?   @db.VarChar(255)
-  plate           String?   @db.VarChar(255)
-  fuelConsumption Float?    @map("fuel_consumption")
-  createAt        DateTime? @default(now()) @map("create_at")
-  updatedAt       DateTime? @map("updated_at")
+  model           String    @db.VarChar(255)
+  brand           String    @db.VarChar(255)
+  year            Int
+  color           String    @db.VarChar(100)
+  renavam         String    @db.VarChar(255)
+  plate           String    @db.VarChar(255)
+  fuelConsumption Float     @map("fuel_consumption")
+  carImageUrl     String?   @map("car_image_url") @db.VarChar(500)
+  createdAt       DateTime? @default(now()) @map("created_at")
+  updatedAt       DateTime? @updatedAt @map("updated_at")
   driverId        Int       @map("driver_id")
   
   driver          Driver    @relation(fields: [driverId], references: [id])
