@@ -233,4 +233,30 @@ export class PrismaGroupRepository {
       throw new Error(error.message || `Erro no banco de dados ao remover membros do grupo ${numericGroupId}.`);
     }
   }
+ // DENTRO DA CLASSE PrismaGroupRepository
+
+async deleteById(id) {
+    const numericId = parseInt(id);
+    if (isNaN(numericId)) {
+      throw new Error("ID do grupo inválido. Deve ser um número.");
+    }
+    console.log(`PrismaGroupRepository: Executando deleteById para ID: ${numericId}`);
+
+    try {
+      const deletedGroup = await prisma.rideGroup.delete({
+        where: { id: numericId },
+      });
+      return deletedGroup;
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new Error(`Grupo com ID ${numericId} não encontrado para deleção.`);
+      }
+      if (error.code === 'P2003') {
+        throw new Error(`Falha ao deletar grupo com ID ${numericId}: Existem registros relacionados que impedem a exclusão.`);
+      }
+
+      console.error(`Erro em PrismaGroupRepository.deleteById para ID ${numericId}:`, error);
+      throw new Error(error.message || `Erro no banco de dados ao deletar o grupo ${numericId}.`);
+    }
+}
 }

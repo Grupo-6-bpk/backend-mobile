@@ -147,3 +147,24 @@ export const updateGroupMembers = async (req, res, next) => {
     next(err);
   }
 };
+
+export const deleteGroup = async (req, res, next) => {
+  try {
+    const groupId = parseInt(req.params.id);
+
+    if (isNaN(groupId) || groupId <= 0) {
+      return res.status(400).json({ message: "ID do grupo inválido." });
+    }
+
+    const deletedGroup = await groupRepository.deleteById(groupId);
+
+    if (!deletedGroup) {
+      return res.status(404).json({ message: "Grupo não encontrado." });
+    }
+
+    return res.status(200).json({ message: "Grupo deletado com sucesso." });
+  } catch (err) {
+    console.error(`Erro ao deletar grupo ${req.params.id}:`, err);
+    next(err);
+  }
+}
