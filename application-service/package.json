@@ -14,11 +14,7 @@
     "seed": "node prisma/seed.js"
   },
   "dependencies": {
-<<<<<<< HEAD
-    "@prisma/client": "^6.9.0",
-=======
     "@prisma/client": "^6.8.2",
->>>>>>> a8295439dd11c525c29a90b1040fd8d185ed456e
     "amqplib": "0.10.7",
     "api-service": "file:",
     "aplication-service": "file:",
@@ -39,11 +35,7 @@
     "yup": "1.6.1"
   },
   "devDependencies": {
-<<<<<<< HEAD
-    "prisma": "^6.9.0",
-=======
     "prisma": "^6.8.2",
->>>>>>> a8295439dd11c525c29a90b1040fd8d185ed456e
     "socket.io-client": "^4.8.1",
     "supertest": "^7.0.0",
     "swagger-autogen": "2.23.7"
