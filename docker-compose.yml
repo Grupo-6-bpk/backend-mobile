@@ -6,43 +6,30 @@ services:
       - JWTSECRET=your_secret
       - JWTEXPIRE=1d
       - PORT=4040
+      - RABBITMQ_URL=amqp://rabbitmq:5672
     ports:
       - "4040:4040"
     depends_on:
       application-db:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     networks:
       - application-network
-      - default
-  application-db:
-    image: mysql:8.0
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: bpkar_db
-    volumes:
-      - application-db:/var/lib/mysql
-    ports:
-      - "3307:3306"
-    healthcheck:
-      test: ["CMD", "mysql", "-uroot", "-proot", "-e", "SELECT 1;", "bpkar_db"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-    networks:
-      - application-network
-  # notification-service:
+      - internal
+      - public
+
+    # notification-service:
   #   build: ./notification-service
   #   environment:
   #     - DATABASE_URL=mysql://root:root@notification-db:3306/notification_db
   #     - PORT=4041
-  #   ports:
-  #     - "4041:4040"
   #   depends_on:
   #     notification-db:
   #       condition: service_healthy
   #   networks:
   #     - notification-network
-  #     - default
+  #     - internal
   # notification-db:
   #   image: mysql:8.0
   #   environment:
@@ -50,8 +37,6 @@ services:
   #     MYSQL_DATABASE: notification_db
   #   volumes:
   #     - notification-db:/var/lib/mysql
-  #   ports:
-  #     - "3308:3306"
   #   healthcheck:
   #     test: ["CMD", "mysql", "-uroot", "-proot", "-e", "SELECT 1;", "notification_db"]
   #     interval: 5s
@@ -59,14 +44,56 @@ services:
   #     retries: 10
   #   networks:
   #     - notification-network
-  #     - default
+  #     - internal
+
+  application-db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: bpkar_db
+    volumes:
+      - application-db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysql", "-uroot", "-proot", "-e", "SELECT 1;", "bpkar_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - application-network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - internal
+
+  adminer:
+    image: adminer:5.3.0
+    ports:
+      - 8081:8080
+    networks:
+      - public
+      - application-network
+      - notification-network
 
 networks:
-  default:
+  internal:
+    internal: true
+    driver: bridge
+  public:
     driver: bridge
   application-network:
+    internal: true
     driver: bridge
   notification-network:
+    internal: true
     driver: bridge
 
 volumes:

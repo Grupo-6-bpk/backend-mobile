@@ -52,6 +52,7 @@ export const verify = async (req, res, next) => {
       if (err) return next(err);
 
       req.payload = payload;
+      req.user = { id: payload.id, email: payload.email };
 
       return next();
     });

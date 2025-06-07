@@ -1,5 +1,4 @@
 import prisma from "../../infrastructure/config/prismaClient.js";
-import axios from "axios";
 
 /**
  * Cria um novo veículo

@@ -14,10 +14,10 @@ const doc = {
       description: "Development server"
     }
   ],
-  
+
   ignore: [
-    "/login/*", 
-    "{{*",  
+    "/login/*",
+    "{{*",
     "*}}}",
     "/login/{{*", 
     "/api/users/{{*" 
@@ -26,16 +26,14 @@ const doc = {
       InternalServerError: {
         code: 500,
         message: "Internal Server Error"
-      },
-      User: {
-        id: 1,
+      }, User: {
         name: "Djanathan",
         last_name: "Corinthiano",
         email: "email@example.com",
         password: "password",
         cpf: "123.456.789-00",
         phone: "(11) 98765-4321",
-        street: "Main Avenue",
+        street: "Av. Maripa",
         number: 123,
         city: "São Paulo",
         zipcode: "01000-000",
@@ -44,6 +42,13 @@ const doc = {
         isDriver: true,
         isPassenger: true,
         verified: true,
+        // Driver specific fields (required when isDriver is true)
+        rg_front: "https://example.com/rg_front.jpg",
+        rg_back: "https://example.com/rg_back.jpg",
+        cnh: "1234567890",
+        cnh_front: "https://example.com/cnh_front.jpg",
+        cnh_back: "https://example.com/cnh_back.jpg",
+        bpk_link: "https://example.com/bpk_link",
       },
       Login: {
         email: "email@example.com",
@@ -102,6 +107,85 @@ const doc = {
           situacao: "REGULAR",
           restricoes: []
         }
+      },
+      Vehicle: {
+        model: "Civic",
+        brand: "Honda",
+        year: 2023,
+        phone: "(11) 98765-4321",
+        street: "Main Avenue",
+        number: 123,
+        renavam: "12345678901",
+        plate: "ABC1234",
+        fuelConsumption: 12.5,
+        createAt: "2025-05-18T12:00:00Z",
+        updatedAt: "2025-05-18T12:00:00Z",
+        driverId: 1,
+        driver: {
+          id: 1,
+          name: "John Doe",
+          userId: 1
+        }
+      },
+      VehicleVerification: {
+        vehicleStatus: "VERIFIED",
+        vehicleData: {
+          modelo: "Civic",
+          marca: "Honda",
+          ano: 2023,
+          placa: "ABC1234",
+          renavam: "12345678901",
+          chassi: "9BW2D11J0Y4019551",
+          combustivel: "Gasolina/Etanol",
+          cor: "Prata",
+          potencia: "106cv"
+        },
+        cnhStatus: "VERIFIED",      },
+      GroupCreate: {
+        name: "Grupo Campus - Shopping",
+        description: "Grupo para caronas entre o campus e o shopping",
+        driverId: 1,
+        members: [2, 3, 4]
+      },
+      Group: {
+        id: 1,
+        name: "Grupo Campus - Shopping",
+        description: "Grupo para caronas entre o campus e o shopping",
+        createdAt: "2025-05-18T12:00:00Z",
+        updatedAt: "2025-05-18T12:00:00Z",
+        driverId: 1,
+        driver: {
+          id: 1,
+          userId: 1,
+          user: {
+            id: 1,
+            name: "João",
+            last_name: "Silva"
+          }
+        },
+        members: [
+          {
+            id: 2,
+            userId: 2,
+            user: {
+              id: 2,
+              name: "Maria",
+              last_name: "Santos"
+            }
+          },
+          {
+            id: 3,
+            userId: 3,
+            user: {
+              id: 3,
+              name: "Pedro",
+              last_name: "Oliveira"
+            }
+          }
+        ]
+      },      GroupMembersUpdate: {
+        passengerIds: [5],
+        action: "add"
       },
       RideRequestCreate: {
         startLocation: "Origin Location",
@@ -203,7 +287,7 @@ const doc = {
       bearerAuth: {
         type: "http",
         scheme: "bearer",
-        
+
       }
     }
   }
@@ -219,14 +303,14 @@ async function cleanupSwaggerFile(filePath) {
     const data = await fs.readFile(fullPath, 'utf8');
     const swaggerData = JSON.parse(data);
     const pathsToRemove = [];
-    
+
     for (const path in swaggerData.paths) {
-      if (path.includes('{{') || 
-          path.includes('}}') || 
-          path.includes('catch(err)') || 
-          path.includes('next(err)') || 
-          path.includes('res.no_content()') ||
-          (path !== '/login/' && path.startsWith('/login/'))) {
+      if (path.includes('{{') ||
+        path.includes('}}') ||
+        path.includes('catch(err)') ||
+        path.includes('next(err)') ||
+        path.includes('res.no_content()') ||
+        (path !== '/login/' && path.startsWith('/login/'))) {
         pathsToRemove.push(path);
       }
     }

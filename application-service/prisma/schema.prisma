@@ -11,52 +11,105 @@ datasource db {
 
 // User entity
 model User {
-  id        Int         @id @default(autoincrement())
-  name      String      @db.VarChar(255)
-  last_name String      @db.VarChar(255)
-  email     String?     @db.VarChar(255)
-  password  String      @db.VarChar(255)
-  cpf       String?     @db.VarChar(45)
-  phone     String?     @db.VarChar(45)
-  street    String?     @db.VarChar(45)
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(255)
+  last_name String    @db.VarChar(255)
+  email     String?   @db.VarChar(255)
+  password  String    @db.VarChar(255)
+  cpf       String?   @db.VarChar(45)
+  phone     String?   @db.VarChar(45) @unique
+  avatarUrl String?   @map("avatar_url") @db.VarChar(500)
+  street    String?   @db.VarChar(45)
   number    Int?
-  city      String?     @db.VarChar(45)
-  zipcode   String?     @db.VarChar(45)
-  createAt  DateTime?   @default(now()) @map("create_at")
-  updatedAt DateTime?   @map("updated_at")
-  verified  Boolean?    @map("verified")
+  city      String?   @db.VarChar(45)
+  zipcode   String?   @db.VarChar(45)
+  createAt  DateTime? @default(now()) @map("create_at")
+  updatedAt DateTime? @map("updated_at")
+  verified  Boolean?  @map("verified")
 
   // Relacionamentos
   driver    Driver?
   passenger Passenger?
+  
+  // Chat relacionamentos
+  chats     ChatParticipant[]
+  messages  ChatMessage[]     @relation("sender_messages")
 
   @@map("user")
 }
 
+// Chat entity
+model Chat {
+  id           Int               @id @default(autoincrement())
+  isGroup      Boolean           @map("is_group")
+  name         String?           @db.VarChar(255)
+  createdAt    DateTime          @default(now()) @map("created_at")
+  updatedAt    DateTime          @updatedAt @map("updated_at")
+  adminId      Int?              @map("admin_id")
+  participants ChatParticipant[]
+  messages     ChatMessage[]
+
+  @@map("chat")
+}
+
+// ChatParticipant entity
+model ChatParticipant {
+  id      Int     @id @default(autoincrement())
+  userId  Int     @map("user_id")
+  chatId  Int     @map("chat_id")
+  blocked Boolean @default(false)
+  user    User    @relation(fields: [userId], references: [id])
+  chat    Chat    @relation(fields: [chatId], references: [id])
+
+  @@unique([userId, chatId])
+  @@map("chat_participant")
+}
+
+// ChatMessage entity
+model ChatMessage {
+  id       Int      @id @default(autoincrement())
+  content  String   @db.VarChar(1000)
+  sentAt   DateTime @default(now()) @map("sent_at")
+  senderId Int      @map("sender_id")
+  chatId   Int      @map("chat_id")
+  sender   User     @relation("sender_messages", fields: [senderId], references: [id])
+  chat     Chat     @relation(fields: [chatId], references: [id])
+
+  @@index([chatId, sentAt])
+  @@map("chat_message")
+}
+
 // Driver entity
 model Driver {
-  id          Int         @id @default(autoincrement())
-  cnhVerified Boolean?    @map("cnh_verified")
+  id          Int      @id @default(autoincrement())
+  cnh         String   @db.VarChar(10)
+  cnh_front   String   @db.VarChar(90)
+  cnh_back    String   @db.VarChar(90)
+  bpk_link    String   @db.VarChar(90)
+  cnhVerified Boolean? @map("cnh_verified")
   active      Boolean?
-  userId      Int         @unique @map("user_id")
-  user        User        @relation(fields: [userId], references: [id])
-  
+  userId      Int      @unique @map("user_id")
+  user        User     @relation(fields: [userId], references: [id])
+
   // Relacionamentos
-  rideGroups  RideGroup[]
-  rides       Ride[]
+  rideGroups     RideGroup[]
+  rides          Ride[]
   scheduledRides ScheduledRide[]
-  vehicles    Vehicle[]
+  vehicles       Vehicle[]
 
   @@map("driver")
 }
 
 // Passenger entity
 model Passenger {
-  id          Int               @id @default(autoincrement())
-  active      Boolean?
-  userId      Int               @unique @map("user_id")
-  user        User              @relation(fields: [userId], references: [id])
-  
+  id       Int      @id @default(autoincrement())
+  rg_front String   @db.VarChar(90)
+  rg_back  String   @db.VarChar(90)
+  bpk_link String   @db.VarChar(90)
+  active   Boolean?
+  userId   Int      @unique @map("user_id")
+  user     User     @relation(fields: [userId], references: [id])
+
   // Relacionamentos
   groupMemberships RideGroupMember[]
   rideRequests     RideRequest[]
@@ -66,16 +119,16 @@ model Passenger {
 
 // RideGroup entity
 model RideGroup {
-  id          Int               @id @default(autoincrement())
-  name        String            @db.VarChar(255)
-  description String?           @db.Text
-  driverId    Int               @map("driver_id")
-  createdAt   DateTime?         @map("created_at")
-  updatedAt   DateTime?         @map("updated_at")
-  driver      Driver            @relation(fields: [driverId], references: [id])
-  
+  id          Int       @id @default(autoincrement())
+  name        String    @db.VarChar(255)
+  description String?   @db.Text
+  driverId    Int       @map("driver_id")
+  createdAt   DateTime? @map("created_at")
+  updatedAt   DateTime? @map("updated_at")
+  driver      Driver    @relation(fields: [driverId], references: [id])
+
   // Relacionamentos
-  members     RideGroupMember[]
+  members        RideGroupMember[]
   scheduledRides ScheduledRide[]
 
   @@map("RideGroup")
@@ -89,12 +142,13 @@ model RideGroupMember {
   updatedAt   DateTime? @map("updated_at")
   groupId     Int       @map("group_id")
   passengerId Int       @map("passenger_id")
-  
-  group       RideGroup @relation(fields: [groupId], references: [id])
-  passenger   Passenger @relation(fields: [passengerId], references: [id])
+
+  group     RideGroup @relation(fields: [groupId], references: [id])
+  passenger Passenger @relation(fields: [passengerId], references: [id])
 
   @@map("RideGroupMember")
 }
+
 
 // ScheduledRide entity
 model ScheduledRide {
@@ -110,9 +164,11 @@ model ScheduledRide {
   updatedAt       DateTime? @map("updated_at")
   groupId         Int       @map("group_id")
   driverId        Int       @map("driver_id")
+  vehicleId       Int?      @map("vehicle_id")
   
   group           RideGroup @relation(fields: [groupId], references: [id])
   driver          Driver    @relation(fields: [driverId], references: [id])
+  vehicle         Vehicle?  @relation(fields: [vehicleId], references: [id])
 
   @@map("ScheduledRide")
 }
@@ -126,11 +182,16 @@ model Ride {
   departureTime DateTime?     @map("departure_time")
   totalCost     Float?        @map("total_cost")
   fuelPrice     Float?        @map("fuel_price")
+  pricePerMember Float?       @map("price_per_member")
+  totalSeats    Int?          @map("total_seats")
+  availableSeats Int?         @map("available_seats")
   createdAt     DateTime?     @map("created_at")
   updatedAt     DateTime?     @map("updated_at")
   driverId      Int           @map("driver_id")
+  vehicleId     Int?          @map("vehicle_id")
   
   driver        Driver        @relation(fields: [driverId], references: [id])
+  vehicle       Vehicle?      @relation(fields: [vehicleId], references: [id])
   rideRequests  RideRequest[]
 
   @@map("ride")
@@ -147,9 +208,9 @@ model RideRequest {
   updatedAt      DateTime? @map("updated_at")
   rideId         Int       @map("ride_id")
   passengerId    Int       @map("passanger_id")
-  
-  ride           Ride      @relation(fields: [rideId], references: [id])
-  passenger      Passenger @relation(fields: [passengerId], references: [id])
+
+  ride      Ride      @relation(fields: [rideId], references: [id])
+  passenger Passenger @relation(fields: [passengerId], references: [id])
 
   @@map("ride_request")
 }
@@ -168,8 +229,10 @@ model Vehicle {
   createdAt       DateTime? @default(now()) @map("created_at")
   updatedAt       DateTime? @updatedAt @map("updated_at")
   driverId        Int       @map("driver_id")
-  
-  driver          Driver    @relation(fields: [driverId], references: [id])
+
+  driver Driver @relation(fields: [driverId], references: [id])
+  rides           Ride[]
+  scheduledRides  ScheduledRide[]
 
   @@map("vehicle")
 }

@@ -1,4 +1,7 @@
 import prisma from "../../infrastructure/config/prismaClient.js";
+import { UserService } from '../../application/services/UserService.js';
+
+const userService = new UserService();
 
 export const login = async (req, res, next) => {
   /*
@@ -24,13 +27,8 @@ export const login = async (req, res, next) => {
       }
     }
   }
-  #swagger.responses[401] = { 
-    description: 'Unauthorized - Invalid credentials'
-  }
-  #swagger.responses[500] = { 
-    description: 'Internal server error',
-    schema: { $ref: '#/components/schemas/InternalServerError' }
-  }
+  #swagger.responses[401] = { description: 'Unauthorized - Invalid credentials' }
+  #swagger.responses[500] = { description: 'Internal server error', schema: { $ref: '#/components/schemas/InternalServerError' } }
   */
   try {
     const user = await prisma.user.findFirst({
@@ -87,7 +85,6 @@ export const getUser = async (req, res, next) => {
   }
   #swagger.responses[404] = { description: 'User not found' }
   */
-
   try {
     const userId = Number(req.params.id) || 0;
 
@@ -195,7 +192,7 @@ export const createUser = async (req, res, next) => {
   }
   */
   try {
-    const { id, createAt, updatedAt, isDriver, isPassenger, ...userData } = req.body;
+    const { id, createAt, updatedAt, isDriver, isPassenger, cnh, cnh_front, cnh_back, bpk_link, rg_front, rg_back, ...userData } = req.body;
 
     if (userData.email) {
       const existingUser = await prisma.user.findFirst({
@@ -220,7 +217,11 @@ export const createUser = async (req, res, next) => {
           data: {
             userId: newUser.id,
             active: true,
-            cnhVerified: false
+            cnhVerified: false,
+            cnh: cnh || "0000000000",
+            cnh_front: cnh_front || "pending_upload",
+            cnh_back: cnh_back || "pending_upload",
+            bpk_link: bpk_link || "pending_link",
           }
         });
       }
@@ -228,6 +229,9 @@ export const createUser = async (req, res, next) => {
         await prisma.passenger.create({
           data: {
             userId: newUser.id,
+            rg_front: rg_front || "pending_upload",
+            rg_back: rg_back || "pending_upload",
+            bpk_link: bpk_link || "pending_link",
             active: true
           }
         });
@@ -355,7 +359,11 @@ export const updateUserRoles = async (req, res, next) => {
             data: {
               userId: user.id,
               active: true,
-              cnhVerified: false
+              cnhVerified: false,
+              cnh: "0000000000",
+              cnh_front: "pending_upload",
+              cnh_back: "pending_upload",
+              bpk_link: "pending_link",
             }
           });
         } else if (!isDriver && user.driver) {
@@ -369,7 +377,10 @@ export const updateUserRoles = async (req, res, next) => {
           await prisma.passenger.create({
             data: {
               userId: user.id,
-              active: true
+              active: true,
+              rg_front: "pending_upload",
+              rg_back: "pending_upload", 
+              bpk_link: "pending_link",
             }
           });
         } else if (!isPassenger && user.passenger) {
@@ -401,3 +412,46 @@ export const updateUserRoles = async (req, res, next) => {
   }
 }
 
+export const searchUsers = async (req, res, next) => {
+  /*
+  #swagger.tags = ["Users"]
+  #swagger.description = 'Busca usuários por telefone (apenas dígitos)'
+  #swagger.parameters['phone'] = {
+    in: 'query',
+    description: 'Fragmento do telefone (apenas números)',
+    required: true,
+    type: 'string',
+    example: '4499712'
+  }
+  #swagger.responses[200] = {
+    description: 'Usuários encontrados',
+    schema: [
+      {
+        userId: 12,
+        name: "João Silva",
+        avatarUrl: "https://example.com/avatar.jpg",
+        phone: "+55 41 99999-0000"
+      }
+    ]
+  }
+  #swagger.responses[400] = { description: 'Parâmetro phone é obrigatório' }
+  #swagger.responses[404] = { description: 'Nenhum usuário encontrado' }
+  */
+  try {
+    const { phone } = req.query;
+
+    if (!phone) {
+      return res.status(400).json({ message: 'Parâmetro phone é obrigatório' });
+    }
+
+    const users = await userService.searchByPhone(phone);
+
+    if (users.length === 0) {
+      return res.status(404).json({ message: 'Nenhum usuário encontrado' });
+    }
+
+    res.ok(users);
+  } catch (error) {
+    next(error);
+  }
+};
