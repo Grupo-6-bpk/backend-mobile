@@ -57,17 +57,15 @@ const doc = {
       UserRoles: {
         isDriver: true,
         isPassenger: true
-      },
-      VehicleCreate: {
+      },      VehicleCreate: {
         model: "Civic",
         brand: "Honda",
         year: 2023,
-        phone: "(11) 98765-4321",
-        street: "Main Avenue",
-        number: 123,
+        color: "Prata",
         renavam: "12345678901",
         plate: "ABC1234",
         fuelConsumption: 12.5,
+        carImageUrl: "https://example.com/car-image.jpg",
         driverId: 1
       },
       Vehicle: {
@@ -75,13 +73,12 @@ const doc = {
         model: "Civic",
         brand: "Honda",
         year: 2023,
-        phone: "(11) 98765-4321",
-        street: "Main Avenue",
-        number: 123,
+        color: "Prata",
         renavam: "12345678901",        
         plate: "ABC1234",
         fuelConsumption: 12.5,
-        createAt: "2025-05-18T12:00:00Z",
+        carImageUrl: "https://example.com/car-image.jpg",
+        createdAt: "2025-05-18T12:00:00Z",
         updatedAt: "2025-05-18T12:00:00Z",
         driverId: 1,
         driver: {
@@ -89,8 +86,7 @@ const doc = {
           name: "John Doe",
           userId: 1
         }
-      },
-      VehicleVerification: {
+      },      VehicleVerification: {
         vehicleStatus: "VERIFIED",
         vehicleData: {
           modelo: "Civic",
