@@ -36,6 +36,34 @@ async function main() {
       password: 'senha123',
       verified: true,
     },
+    {
+      name: 'Maria',
+      last_name: 'Oliveira',
+      email: 'maria@example.com',
+      password: 'senha123',
+      cpf: '98765432100',
+      phone: '11988888888',
+      street: 'Avenida B',
+      number: 200,
+      city: 'Rio de Janeiro',
+      zipcode: '20040002',
+      driverId: 2,
+      verified: false,
+    },
+     {
+      name: 'Maria',
+      last_name: 'Oliveira',
+      email: 'maria@example.com',
+      password: 'senha123',
+      cpf: '98765432100',
+      phone: '11988888888',
+      street: 'Avenida B',
+      driverId: 1,
+      number: 200,
+      city: 'Rio de Janeiro',
+      zipcode: '20040002',
+      verified: false,
+    }
   ]
 
   for (const user of users) {

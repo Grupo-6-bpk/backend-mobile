@@ -2718,6 +2718,3956 @@
           }
         }
       }
+    },
+    "/api/rides/": {
+      "get": {
+        "tags": [
+          "Rides"
+        ],
+        "description": "List rides with pagination",
+        "parameters": [
+          {
+            "name": "_page",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "_size",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "driverId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fromDate",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "toDate",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "hasAvailableSeats",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Rides listed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "currentPage": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "totalPages": {
+                      "type": "number",
+                      "example": 3
+                    },
+                    "totalItems": {
+                      "type": "number",
+                      "example": 25
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number",
+                            "example": 1
+                          },
+                          "startLocation": {
+                            "type": "string",
+                            "example": "Start Location"
+                          },
+                          "endLocation": {
+                            "type": "string",
+                            "example": "End Location"
+                          },
+                          "distance": {
+                            "type": "number",
+                            "example": 15.5
+                          },
+                          "departureTime": {
+                            "type": "string",
+                            "example": "2025-05-18T12:00:00Z"
+                          },
+                          "totalCost": {
+                            "type": "number",
+                            "example": 50
+                          },
+                          "fuelPrice": {
+                            "type": "number",
+                            "example": 5.5
+                          },
+                          "pricePerMember": {
+                            "type": "number",
+                            "example": 12.5
+                          },
+                          "totalSeats": {
+                            "type": "number",
+                            "example": 4
+                          },
+                          "availableSeats": {
+                            "type": "number",
+                            "example": 2
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "example": "2025-05-18T12:00:00Z"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "example": "2025-05-18T12:00:00Z"
+                          },
+                          "driverId": {
+                            "type": "number",
+                            "example": 1
+                          },
+                          "vehicleId": {
+                            "type": "number",
+                            "example": 1
+                          },
+                          "driver": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number",
+                                "example": 1
+                              },
+                              "userId": {
+                                "type": "number",
+                                "example": 1
+                              }
+                            }
+                          },
+                          "vehicle": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number",
+                                "example": 1
+                              },
+                              "model": {
+                                "type": "string",
+                                "example": "Model S"
+                              },
+                              "brand": {
+                                "type": "string",
+                                "example": "Tesla"
+                              },
+                              "plate": {
+                                "type": "string",
+                                "example": "ABC1234"
+                              }
+                            }
+                          },
+                          "_count": {
+                            "type": "object",
+                            "properties": {
+                              "rideRequests": {
+                                "type": "number",
+                                "example": 2
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "currentPage": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "totalPages": {
+                      "type": "number",
+                      "example": 3
+                    },
+                    "totalItems": {
+                      "type": "number",
+                      "example": 25
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number",
+                            "example": 1
+                          },
+                          "startLocation": {
+                            "type": "string",
+                            "example": "Start Location"
+                          },
+                          "endLocation": {
+                            "type": "string",
+                            "example": "End Location"
+                          },
+                          "distance": {
+                            "type": "number",
+                            "example": 15.5
+                          },
+                          "departureTime": {
+                            "type": "string",
+                            "example": "2025-05-18T12:00:00Z"
+                          },
+                          "totalCost": {
+                            "type": "number",
+                            "example": 50
+                          },
+                          "fuelPrice": {
+                            "type": "number",
+                            "example": 5.5
+                          },
+                          "pricePerMember": {
+                            "type": "number",
+                            "example": 12.5
+                          },
+                          "totalSeats": {
+                            "type": "number",
+                            "example": 4
+                          },
+                          "availableSeats": {
+                            "type": "number",
+                            "example": 2
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "example": "2025-05-18T12:00:00Z"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "example": "2025-05-18T12:00:00Z"
+                          },
+                          "driverId": {
+                            "type": "number",
+                            "example": 1
+                          },
+                          "vehicleId": {
+                            "type": "number",
+                            "example": 1
+                          },
+                          "driver": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number",
+                                "example": 1
+                              },
+                              "userId": {
+                                "type": "number",
+                                "example": 1
+                              }
+                            }
+                          },
+                          "vehicle": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number",
+                                "example": 1
+                              },
+                              "model": {
+                                "type": "string",
+                                "example": "Model S"
+                              },
+                              "brand": {
+                                "type": "string",
+                                "example": "Tesla"
+                              },
+                              "plate": {
+                                "type": "string",
+                                "example": "ABC1234"
+                              }
+                            }
+                          },
+                          "_count": {
+                            "type": "object",
+                            "properties": {
+                              "rideRequests": {
+                                "type": "number",
+                                "example": 2
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Rides"
+        ],
+        "description": "Create a new ride",
+        "responses": {
+          "201": {
+            "description": "Ride created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "startLocation": {
+                      "type": "string",
+                      "example": "Start Location"
+                    },
+                    "endLocation": {
+                      "type": "string",
+                      "example": "End Location"
+                    },
+                    "distance": {
+                      "type": "number",
+                      "example": 15.5
+                    },
+                    "departureTime": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "totalCost": {
+                      "type": "number",
+                      "example": 50
+                    },
+                    "fuelPrice": {
+                      "type": "number",
+                      "example": 5.5
+                    },
+                    "pricePerMember": {
+                      "type": "number",
+                      "example": 12.5
+                    },
+                    "totalSeats": {
+                      "type": "number",
+                      "example": 4
+                    },
+                    "availableSeats": {
+                      "type": "number",
+                      "example": 4
+                    },
+                    "driverId": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "vehicleId": {
+                      "type": "number",
+                      "example": 1
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "startLocation": {
+                      "type": "string",
+                      "example": "Start Location"
+                    },
+                    "endLocation": {
+                      "type": "string",
+                      "example": "End Location"
+                    },
+                    "distance": {
+                      "type": "number",
+                      "example": 15.5
+                    },
+                    "departureTime": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "totalCost": {
+                      "type": "number",
+                      "example": 50
+                    },
+                    "fuelPrice": {
+                      "type": "number",
+                      "example": 5.5
+                    },
+                    "pricePerMember": {
+                      "type": "number",
+                      "example": 12.5
+                    },
+                    "totalSeats": {
+                      "type": "number",
+                      "example": 4
+                    },
+                    "availableSeats": {
+                      "type": "number",
+                      "example": 4
+                    },
+                    "driverId": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "vehicleId": {
+                      "type": "number",
+                      "example": 1
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RideCreate"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/RideCreate"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/rides/available": {
+      "get": {
+        "tags": [
+          "Rides"
+        ],
+        "description": "List rides with available seats",
+        "parameters": [
+          {
+            "name": "_page",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "_size",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "includeExpired",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "driverId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fromDate",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "toDate",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Available rides listed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "currentPage": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "totalPages": {
+                      "type": "number",
+                      "example": 2
+                    },
+                    "totalItems": {
+                      "type": "number",
+                      "example": 15
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number",
+                            "example": 1
+                          },
+                          "startLocation": {
+                            "type": "string",
+                            "example": "Start Location"
+                          },
+                          "endLocation": {
+                            "type": "string",
+                            "example": "End Location"
+                          },
+                          "distance": {
+                            "type": "number",
+                            "example": 15.5
+                          },
+                          "departureTime": {
+                            "type": "string",
+                            "example": "2025-05-18T12:00:00Z"
+                          },
+                          "totalCost": {
+                            "type": "number",
+                            "example": 50
+                          },
+                          "fuelPrice": {
+                            "type": "number",
+                            "example": 5.5
+                          },
+                          "pricePerMember": {
+                            "type": "number",
+                            "example": 12.5
+                          },
+                          "totalSeats": {
+                            "type": "number",
+                            "example": 4
+                          },
+                          "availableSeats": {
+                            "type": "number",
+                            "example": 2
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "example": "2025-05-18T12:00:00Z"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "example": "2025-05-18T12:00:00Z"
+                          },
+                          "driverId": {
+                            "type": "number",
+                            "example": 1
+                          },
+                          "vehicleId": {
+                            "type": "number",
+                            "example": 1
+                          },
+                          "driver": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number",
+                                "example": 1
+                              },
+                              "userId": {
+                                "type": "number",
+                                "example": 1
+                              }
+                            }
+                          },
+                          "vehicle": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number",
+                                "example": 1
+                              },
+                              "model": {
+                                "type": "string",
+                                "example": "Model S"
+                              },
+                              "brand": {
+                                "type": "string",
+                                "example": "Tesla"
+                              },
+                              "plate": {
+                                "type": "string",
+                                "example": "ABC1234"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "currentPage": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "totalPages": {
+                      "type": "number",
+                      "example": 2
+                    },
+                    "totalItems": {
+                      "type": "number",
+                      "example": 15
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number",
+                            "example": 1
+                          },
+                          "startLocation": {
+                            "type": "string",
+                            "example": "Start Location"
+                          },
+                          "endLocation": {
+                            "type": "string",
+                            "example": "End Location"
+                          },
+                          "distance": {
+                            "type": "number",
+                            "example": 15.5
+                          },
+                          "departureTime": {
+                            "type": "string",
+                            "example": "2025-05-18T12:00:00Z"
+                          },
+                          "totalCost": {
+                            "type": "number",
+                            "example": 50
+                          },
+                          "fuelPrice": {
+                            "type": "number",
+                            "example": 5.5
+                          },
+                          "pricePerMember": {
+                            "type": "number",
+                            "example": 12.5
+                          },
+                          "totalSeats": {
+                            "type": "number",
+                            "example": 4
+                          },
+                          "availableSeats": {
+                            "type": "number",
+                            "example": 2
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "example": "2025-05-18T12:00:00Z"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "example": "2025-05-18T12:00:00Z"
+                          },
+                          "driverId": {
+                            "type": "number",
+                            "example": 1
+                          },
+                          "vehicleId": {
+                            "type": "number",
+                            "example": 1
+                          },
+                          "driver": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number",
+                                "example": 1
+                              },
+                              "userId": {
+                                "type": "number",
+                                "example": 1
+                              }
+                            }
+                          },
+                          "vehicle": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number",
+                                "example": 1
+                              },
+                              "model": {
+                                "type": "string",
+                                "example": "Model S"
+                              },
+                              "brand": {
+                                "type": "string",
+                                "example": "Tesla"
+                              },
+                              "plate": {
+                                "type": "string",
+                                "example": "ABC1234"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/rides/dashboard": {
+      "get": {
+        "tags": [
+          "Rides"
+        ],
+        "description": "Get dashboard data for user including past rides as driver and passenger",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dashboard data retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userId": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "summary": {
+                      "type": "object",
+                      "properties": {
+                        "totalRidesAsDriver": {
+                          "type": "number",
+                          "example": 15
+                        },
+                        "totalRidesAsPassenger": {
+                          "type": "number",
+                          "example": 8
+                        },
+                        "totalSharedCosts": {
+                          "type": "number",
+                          "example": 450.75
+                        },
+                        "totalSavedMoney": {
+                          "type": "number",
+                          "example": 320.5
+                        },
+                        "totalDistanceTraveled": {
+                          "type": "number",
+                          "example": 1250.5
+                        },
+                        "averageCostPerKm": {
+                          "type": "number",
+                          "example": 0.36
+                        }
+                      }
+                    },
+                    "recentRidesAsDriver": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number",
+                            "example": 1
+                          },
+                          "startLocation": {
+                            "type": "string",
+                            "example": "Campus A"
+                          },
+                          "endLocation": {
+                            "type": "string",
+                            "example": "Shopping Center"
+                          },
+                          "distance": {
+                            "type": "number",
+                            "example": 15.5
+                          },
+                          "departureTime": {
+                            "type": "string",
+                            "example": "2025-05-25T14:30:00Z"
+                          },
+                          "totalCost": {
+                            "type": "number",
+                            "example": 45
+                          },
+                          "pricePerMember": {
+                            "type": "number",
+                            "example": 11.25
+                          },
+                          "totalSeats": {
+                            "type": "number",
+                            "example": 4
+                          },
+                          "occupiedSeats": {
+                            "type": "number",
+                            "example": 3
+                          },
+                          "passengersCount": {
+                            "type": "number",
+                            "example": 3
+                          },
+                          "vehicle": {
+                            "type": "object",
+                            "properties": {
+                              "model": {
+                                "type": "string",
+                                "example": "Civic"
+                              },
+                              "brand": {
+                                "type": "string",
+                                "example": "Honda"
+                              },
+                              "plate": {
+                                "type": "string",
+                                "example": "ABC1234"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "recentRidesAsPassenger": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number",
+                            "example": 2
+                          },
+                          "startLocation": {
+                            "type": "string",
+                            "example": "Campus B"
+                          },
+                          "endLocation": {
+                            "type": "string",
+                            "example": "Downtown"
+                          },
+                          "distance": {
+                            "type": "number",
+                            "example": 12
+                          },
+                          "departureTime": {
+                            "type": "string",
+                            "example": "2025-05-20T08:00:00Z"
+                          },
+                          "passengerShare": {
+                            "type": "number",
+                            "example": 15
+                          },
+                          "status": {
+                            "type": "string",
+                            "example": "APPROVED"
+                          },
+                          "driver": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "example": "João Silva"
+                              }
+                            }
+                          },
+                          "vehicle": {
+                            "type": "object",
+                            "properties": {
+                              "model": {
+                                "type": "string",
+                                "example": "Corolla"
+                              },
+                              "brand": {
+                                "type": "string",
+                                "example": "Toyota"
+                              },
+                              "plate": {
+                                "type": "string",
+                                "example": "XYZ5678"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "monthlyStats": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "month": {
+                            "type": "string",
+                            "example": "2025-05"
+                          },
+                          "ridesAsDriver": {
+                            "type": "number",
+                            "example": 3
+                          },
+                          "ridesAsPassenger": {
+                            "type": "number",
+                            "example": 2
+                          },
+                          "totalSharedCosts": {
+                            "type": "number",
+                            "example": 85.5
+                          },
+                          "totalSavedMoney": {
+                            "type": "number",
+                            "example": 45
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userId": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "summary": {
+                      "type": "object",
+                      "properties": {
+                        "totalRidesAsDriver": {
+                          "type": "number",
+                          "example": 15
+                        },
+                        "totalRidesAsPassenger": {
+                          "type": "number",
+                          "example": 8
+                        },
+                        "totalSharedCosts": {
+                          "type": "number",
+                          "example": 450.75
+                        },
+                        "totalSavedMoney": {
+                          "type": "number",
+                          "example": 320.5
+                        },
+                        "totalDistanceTraveled": {
+                          "type": "number",
+                          "example": 1250.5
+                        },
+                        "averageCostPerKm": {
+                          "type": "number",
+                          "example": 0.36
+                        }
+                      }
+                    },
+                    "recentRidesAsDriver": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number",
+                            "example": 1
+                          },
+                          "startLocation": {
+                            "type": "string",
+                            "example": "Campus A"
+                          },
+                          "endLocation": {
+                            "type": "string",
+                            "example": "Shopping Center"
+                          },
+                          "distance": {
+                            "type": "number",
+                            "example": 15.5
+                          },
+                          "departureTime": {
+                            "type": "string",
+                            "example": "2025-05-25T14:30:00Z"
+                          },
+                          "totalCost": {
+                            "type": "number",
+                            "example": 45
+                          },
+                          "pricePerMember": {
+                            "type": "number",
+                            "example": 11.25
+                          },
+                          "totalSeats": {
+                            "type": "number",
+                            "example": 4
+                          },
+                          "occupiedSeats": {
+                            "type": "number",
+                            "example": 3
+                          },
+                          "passengersCount": {
+                            "type": "number",
+                            "example": 3
+                          },
+                          "vehicle": {
+                            "type": "object",
+                            "properties": {
+                              "model": {
+                                "type": "string",
+                                "example": "Civic"
+                              },
+                              "brand": {
+                                "type": "string",
+                                "example": "Honda"
+                              },
+                              "plate": {
+                                "type": "string",
+                                "example": "ABC1234"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "recentRidesAsPassenger": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number",
+                            "example": 2
+                          },
+                          "startLocation": {
+                            "type": "string",
+                            "example": "Campus B"
+                          },
+                          "endLocation": {
+                            "type": "string",
+                            "example": "Downtown"
+                          },
+                          "distance": {
+                            "type": "number",
+                            "example": 12
+                          },
+                          "departureTime": {
+                            "type": "string",
+                            "example": "2025-05-20T08:00:00Z"
+                          },
+                          "passengerShare": {
+                            "type": "number",
+                            "example": 15
+                          },
+                          "status": {
+                            "type": "string",
+                            "example": "APPROVED"
+                          },
+                          "driver": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "example": "João Silva"
+                              }
+                            }
+                          },
+                          "vehicle": {
+                            "type": "object",
+                            "properties": {
+                              "model": {
+                                "type": "string",
+                                "example": "Corolla"
+                              },
+                              "brand": {
+                                "type": "string",
+                                "example": "Toyota"
+                              },
+                              "plate": {
+                                "type": "string",
+                                "example": "XYZ5678"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "monthlyStats": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "month": {
+                            "type": "string",
+                            "example": "2025-05"
+                          },
+                          "ridesAsDriver": {
+                            "type": "number",
+                            "example": 3
+                          },
+                          "ridesAsPassenger": {
+                            "type": "number",
+                            "example": 2
+                          },
+                          "totalSharedCosts": {
+                            "type": "number",
+                            "example": 85.5
+                          },
+                          "totalSavedMoney": {
+                            "type": "number",
+                            "example": 45
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User ID is required"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/rides/history": {
+      "get": {
+        "tags": [
+          "Rides"
+        ],
+        "description": "Get detailed ride history for a user with pagination and filters",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "_page",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "_size",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fromDate",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "toDate",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User ride history retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "currentPage": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "totalPages": {
+                      "type": "number",
+                      "example": 5
+                    },
+                    "totalItems": {
+                      "type": "number",
+                      "example": 45
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number",
+                            "example": 2
+                          },
+                          "type": {
+                            "type": "string",
+                            "example": "passenger"
+                          },
+                          "startLocation": {
+                            "type": "string",
+                            "example": "Campus B"
+                          },
+                          "endLocation": {
+                            "type": "string",
+                            "example": "Downtown"
+                          },
+                          "distance": {
+                            "type": "number",
+                            "example": 12
+                          },
+                          "departureTime": {
+                            "type": "string",
+                            "example": "2025-05-20T08:00:00Z"
+                          },
+                          "totalCost": {
+                            "type": "number",
+                            "example": 30
+                          },
+                          "userShare": {
+                            "type": "number",
+                            "example": 10
+                          },
+                          "savings": {
+                            "type": "number",
+                            "example": 20
+                          },
+                          "status": {
+                            "type": "string",
+                            "example": "completed"
+                          },
+                          "driver": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "example": "João Santos"
+                              }
+                            }
+                          },
+                          "vehicle": {
+                            "type": "object",
+                            "properties": {
+                              "model": {
+                                "type": "string",
+                                "example": "Corolla"
+                              },
+                              "brand": {
+                                "type": "string",
+                                "example": "Toyota"
+                              },
+                              "plate": {
+                                "type": "string",
+                                "example": "XYZ5678"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "currentPage": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "totalPages": {
+                      "type": "number",
+                      "example": 5
+                    },
+                    "totalItems": {
+                      "type": "number",
+                      "example": 45
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number",
+                            "example": 2
+                          },
+                          "type": {
+                            "type": "string",
+                            "example": "passenger"
+                          },
+                          "startLocation": {
+                            "type": "string",
+                            "example": "Campus B"
+                          },
+                          "endLocation": {
+                            "type": "string",
+                            "example": "Downtown"
+                          },
+                          "distance": {
+                            "type": "number",
+                            "example": 12
+                          },
+                          "departureTime": {
+                            "type": "string",
+                            "example": "2025-05-20T08:00:00Z"
+                          },
+                          "totalCost": {
+                            "type": "number",
+                            "example": 30
+                          },
+                          "userShare": {
+                            "type": "number",
+                            "example": 10
+                          },
+                          "savings": {
+                            "type": "number",
+                            "example": 20
+                          },
+                          "status": {
+                            "type": "string",
+                            "example": "completed"
+                          },
+                          "driver": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "example": "João Santos"
+                              }
+                            }
+                          },
+                          "vehicle": {
+                            "type": "object",
+                            "properties": {
+                              "model": {
+                                "type": "string",
+                                "example": "Corolla"
+                              },
+                              "brand": {
+                                "type": "string",
+                                "example": "Toyota"
+                              },
+                              "plate": {
+                                "type": "string",
+                                "example": "XYZ5678"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User ID is required"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/rides/stats": {
+      "get": {
+        "tags": [
+          "Rides"
+        ],
+        "description": "Get cost sharing statistics for environmental and economic impact",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "months",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cost sharing statistics retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userId": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "period": {
+                      "type": "object",
+                      "properties": {
+                        "startDate": {
+                          "type": "string",
+                          "example": "2025-03-01T00:00:00Z"
+                        },
+                        "endDate": {
+                          "type": "string",
+                          "example": "2025-05-31T23:59:59Z"
+                        },
+                        "totalDays": {
+                          "type": "number",
+                          "example": 92
+                        }
+                      }
+                    },
+                    "economicImpact": {
+                      "type": "object",
+                      "properties": {
+                        "totalSharedCosts": {
+                          "type": "number",
+                          "example": 450.75
+                        },
+                        "totalSavedMoney": {
+                          "type": "number",
+                          "example": 320.5
+                        },
+                        "averageSavingsPerRide": {
+                          "type": "number",
+                          "example": 15.25
+                        },
+                        "costEfficiencyRate": {
+                          "type": "number",
+                          "example": 0.71
+                        }
+                      }
+                    },
+                    "environmentalImpact": {
+                      "type": "object",
+                      "properties": {
+                        "totalDistanceShared": {
+                          "type": "number",
+                          "example": 1250.5
+                        },
+                        "estimatedEmissionsSaved": {
+                          "type": "number",
+                          "example": 187.6
+                        },
+                        "equivalentTreesPlanted": {
+                          "type": "number",
+                          "example": 8.5
+                        }
+                      }
+                    },
+                    "communityImpact": {
+                      "type": "object",
+                      "properties": {
+                        "studentsHelped": {
+                          "type": "number",
+                          "example": 24
+                        },
+                        "ridesShared": {
+                          "type": "number",
+                          "example": 23
+                        },
+                        "averageOccupancyRate": {
+                          "type": "number",
+                          "example": 0.75
+                        },
+                        "communityConnectionScore": {
+                          "type": "number",
+                          "example": 8.2
+                        }
+                      }
+                    },
+                    "trends": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "month": {
+                            "type": "string",
+                            "example": "2025-05"
+                          },
+                          "sharedCosts": {
+                            "type": "number",
+                            "example": 158
+                          },
+                          "savedMoney": {
+                            "type": "number",
+                            "example": 105.5
+                          },
+                          "distanceShared": {
+                            "type": "number",
+                            "example": 448.5
+                          },
+                          "ridesCount": {
+                            "type": "number",
+                            "example": 10
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userId": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "period": {
+                      "type": "object",
+                      "properties": {
+                        "startDate": {
+                          "type": "string",
+                          "example": "2025-03-01T00:00:00Z"
+                        },
+                        "endDate": {
+                          "type": "string",
+                          "example": "2025-05-31T23:59:59Z"
+                        },
+                        "totalDays": {
+                          "type": "number",
+                          "example": 92
+                        }
+                      }
+                    },
+                    "economicImpact": {
+                      "type": "object",
+                      "properties": {
+                        "totalSharedCosts": {
+                          "type": "number",
+                          "example": 450.75
+                        },
+                        "totalSavedMoney": {
+                          "type": "number",
+                          "example": 320.5
+                        },
+                        "averageSavingsPerRide": {
+                          "type": "number",
+                          "example": 15.25
+                        },
+                        "costEfficiencyRate": {
+                          "type": "number",
+                          "example": 0.71
+                        }
+                      }
+                    },
+                    "environmentalImpact": {
+                      "type": "object",
+                      "properties": {
+                        "totalDistanceShared": {
+                          "type": "number",
+                          "example": 1250.5
+                        },
+                        "estimatedEmissionsSaved": {
+                          "type": "number",
+                          "example": 187.6
+                        },
+                        "equivalentTreesPlanted": {
+                          "type": "number",
+                          "example": 8.5
+                        }
+                      }
+                    },
+                    "communityImpact": {
+                      "type": "object",
+                      "properties": {
+                        "studentsHelped": {
+                          "type": "number",
+                          "example": 24
+                        },
+                        "ridesShared": {
+                          "type": "number",
+                          "example": 23
+                        },
+                        "averageOccupancyRate": {
+                          "type": "number",
+                          "example": 0.75
+                        },
+                        "communityConnectionScore": {
+                          "type": "number",
+                          "example": 8.2
+                        }
+                      }
+                    },
+                    "trends": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "month": {
+                            "type": "string",
+                            "example": "2025-05"
+                          },
+                          "sharedCosts": {
+                            "type": "number",
+                            "example": 158
+                          },
+                          "savedMoney": {
+                            "type": "number",
+                            "example": 105.5
+                          },
+                          "distanceShared": {
+                            "type": "number",
+                            "example": 448.5
+                          },
+                          "ridesCount": {
+                            "type": "number",
+                            "example": 10
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User ID is required"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/rides/{id}": {
+      "get": {
+        "tags": [
+          "Rides"
+        ],
+        "description": "Get a ride by ID with detailed information",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ride found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "startLocation": {
+                      "type": "string",
+                      "example": "Start Location"
+                    },
+                    "endLocation": {
+                      "type": "string",
+                      "example": "End Location"
+                    },
+                    "distance": {
+                      "type": "number",
+                      "example": 15.5
+                    },
+                    "departureTime": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "totalCost": {
+                      "type": "number",
+                      "example": 50
+                    },
+                    "fuelPrice": {
+                      "type": "number",
+                      "example": 5.5
+                    },
+                    "pricePerMember": {
+                      "type": "number",
+                      "example": 12.5
+                    },
+                    "totalSeats": {
+                      "type": "number",
+                      "example": 4
+                    },
+                    "availableSeats": {
+                      "type": "number",
+                      "example": 2
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "driverId": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "vehicleId": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "driver": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "cnh": {
+                          "type": "string",
+                          "example": "1234567890"
+                        },
+                        "cnhVerified": {
+                          "type": "boolean",
+                          "example": true
+                        },
+                        "userId": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "user": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "number",
+                              "example": 1
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "Driver Name"
+                            },
+                            "last_name": {
+                              "type": "string",
+                              "example": "Driver Lastname"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "vehicle": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "model": {
+                          "type": "string",
+                          "example": "Model S"
+                        },
+                        "brand": {
+                          "type": "string",
+                          "example": "Tesla"
+                        },
+                        "plate": {
+                          "type": "string",
+                          "example": "ABC1234"
+                        }
+                      }
+                    },
+                    "rideRequests": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number",
+                            "example": 1
+                          },
+                          "status": {
+                            "type": "string",
+                            "example": "PENDING"
+                          },
+                          "passengerShare": {
+                            "type": "number",
+                            "example": 25
+                          },
+                          "passengerId": {
+                            "type": "number",
+                            "example": 1
+                          },
+                          "passenger": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number",
+                                "example": 1
+                              },
+                              "userId": {
+                                "type": "number",
+                                "example": 1
+                              },
+                              "user": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "number",
+                                    "example": 1
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "example": "Passenger Name"
+                                  },
+                                  "last_name": {
+                                    "type": "string",
+                                    "example": "Passenger Lastname"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "startLocation": {
+                      "type": "string",
+                      "example": "Start Location"
+                    },
+                    "endLocation": {
+                      "type": "string",
+                      "example": "End Location"
+                    },
+                    "distance": {
+                      "type": "number",
+                      "example": 15.5
+                    },
+                    "departureTime": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "totalCost": {
+                      "type": "number",
+                      "example": 50
+                    },
+                    "fuelPrice": {
+                      "type": "number",
+                      "example": 5.5
+                    },
+                    "pricePerMember": {
+                      "type": "number",
+                      "example": 12.5
+                    },
+                    "totalSeats": {
+                      "type": "number",
+                      "example": 4
+                    },
+                    "availableSeats": {
+                      "type": "number",
+                      "example": 2
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "driverId": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "vehicleId": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "driver": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "cnh": {
+                          "type": "string",
+                          "example": "1234567890"
+                        },
+                        "cnhVerified": {
+                          "type": "boolean",
+                          "example": true
+                        },
+                        "userId": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "user": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "number",
+                              "example": 1
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "Driver Name"
+                            },
+                            "last_name": {
+                              "type": "string",
+                              "example": "Driver Lastname"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "vehicle": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "model": {
+                          "type": "string",
+                          "example": "Model S"
+                        },
+                        "brand": {
+                          "type": "string",
+                          "example": "Tesla"
+                        },
+                        "plate": {
+                          "type": "string",
+                          "example": "ABC1234"
+                        }
+                      }
+                    },
+                    "rideRequests": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number",
+                            "example": 1
+                          },
+                          "status": {
+                            "type": "string",
+                            "example": "PENDING"
+                          },
+                          "passengerShare": {
+                            "type": "number",
+                            "example": 25
+                          },
+                          "passengerId": {
+                            "type": "number",
+                            "example": 1
+                          },
+                          "passenger": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number",
+                                "example": 1
+                              },
+                              "userId": {
+                                "type": "number",
+                                "example": 1
+                              },
+                              "user": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "number",
+                                    "example": 1
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "example": "Passenger Name"
+                                  },
+                                  "last_name": {
+                                    "type": "string",
+                                    "example": "Passenger Lastname"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Ride not found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Rides"
+        ],
+        "description": "Update a ride",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ride updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "startLocation": {
+                      "type": "string",
+                      "example": "Updated Start Location"
+                    },
+                    "endLocation": {
+                      "type": "string",
+                      "example": "Updated End Location"
+                    },
+                    "distance": {
+                      "type": "number",
+                      "example": 20.5
+                    },
+                    "departureTime": {
+                      "type": "string",
+                      "example": "2025-06-18T12:00:00Z"
+                    },
+                    "totalCost": {
+                      "type": "number",
+                      "example": 60
+                    },
+                    "fuelPrice": {
+                      "type": "number",
+                      "example": 6.5
+                    },
+                    "pricePerMember": {
+                      "type": "number",
+                      "example": 15
+                    },
+                    "totalSeats": {
+                      "type": "number",
+                      "example": 4
+                    },
+                    "availableSeats": {
+                      "type": "number",
+                      "example": 2
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "driverId": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "vehicleId": {
+                      "type": "number",
+                      "example": 1
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "startLocation": {
+                      "type": "string",
+                      "example": "Updated Start Location"
+                    },
+                    "endLocation": {
+                      "type": "string",
+                      "example": "Updated End Location"
+                    },
+                    "distance": {
+                      "type": "number",
+                      "example": 20.5
+                    },
+                    "departureTime": {
+                      "type": "string",
+                      "example": "2025-06-18T12:00:00Z"
+                    },
+                    "totalCost": {
+                      "type": "number",
+                      "example": 60
+                    },
+                    "fuelPrice": {
+                      "type": "number",
+                      "example": 6.5
+                    },
+                    "pricePerMember": {
+                      "type": "number",
+                      "example": 15
+                    },
+                    "totalSeats": {
+                      "type": "number",
+                      "example": 4
+                    },
+                    "availableSeats": {
+                      "type": "number",
+                      "example": 2
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "driverId": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "vehicleId": {
+                      "type": "number",
+                      "example": 1
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Ride not found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RideCreate"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/RideCreate"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Rides"
+        ],
+        "description": "Delete a ride by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Ride deleted successfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Ride not found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/ride-requests/": {
+      "get": {
+        "tags": [
+          "Ride Requests"
+        ],
+        "description": "List ride requests with pagination",
+        "parameters": [
+          {
+            "name": "_page",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "_size",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "passengerId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "rideId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ride requests listed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "currentPage": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "totalPages": {
+                      "type": "number",
+                      "example": 3
+                    },
+                    "totalItems": {
+                      "type": "number",
+                      "example": 25
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number",
+                            "example": 1
+                          },
+                          "startLocation": {
+                            "type": "string",
+                            "example": "Start Location"
+                          },
+                          "endLocation": {
+                            "type": "string",
+                            "example": "End Location"
+                          },
+                          "status": {
+                            "type": "string",
+                            "example": "PENDING"
+                          },
+                          "passengerShare": {
+                            "type": "number",
+                            "example": 25.5
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "example": "2025-05-18T12:00:00Z"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "example": "2025-05-18T12:00:00Z"
+                          },
+                          "rideId": {
+                            "type": "number",
+                            "example": 1
+                          },
+                          "passengerId": {
+                            "type": "number",
+                            "example": 1
+                          },
+                          "passenger": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number",
+                                "example": 1
+                              },
+                              "active": {
+                                "type": "boolean",
+                                "example": true
+                              },
+                              "userId": {
+                                "type": "number",
+                                "example": 1
+                              }
+                            }
+                          },
+                          "ride": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number",
+                                "example": 1
+                              },
+                              "startLocation": {
+                                "type": "string",
+                                "example": "Start Location"
+                              },
+                              "endLocation": {
+                                "type": "string",
+                                "example": "End Location"
+                              },
+                              "distance": {
+                                "type": "number",
+                                "example": 15.5
+                              },
+                              "departureTime": {
+                                "type": "string",
+                                "example": "2025-05-18T12:00:00Z"
+                              },
+                              "totalCost": {
+                                "type": "number",
+                                "example": 50
+                              },
+                              "fuelPrice": {
+                                "type": "number",
+                                "example": 5.5
+                              },
+                              "vehicleId": {
+                                "type": "number",
+                                "example": 1
+                              },
+                              "vehicle": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "number",
+                                    "example": 1
+                                  },
+                                  "model": {
+                                    "type": "string",
+                                    "example": "Model S"
+                                  },
+                                  "brand": {
+                                    "type": "string",
+                                    "example": "Tesla"
+                                  },
+                                  "year": {
+                                    "type": "number",
+                                    "example": 2023
+                                  },
+                                  "plate": {
+                                    "type": "string",
+                                    "example": "ABC1234"
+                                  },
+                                  "fuelConsumption": {
+                                    "type": "number",
+                                    "example": 0
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "currentPage": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "totalPages": {
+                      "type": "number",
+                      "example": 3
+                    },
+                    "totalItems": {
+                      "type": "number",
+                      "example": 25
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number",
+                            "example": 1
+                          },
+                          "startLocation": {
+                            "type": "string",
+                            "example": "Start Location"
+                          },
+                          "endLocation": {
+                            "type": "string",
+                            "example": "End Location"
+                          },
+                          "status": {
+                            "type": "string",
+                            "example": "PENDING"
+                          },
+                          "passengerShare": {
+                            "type": "number",
+                            "example": 25.5
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "example": "2025-05-18T12:00:00Z"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "example": "2025-05-18T12:00:00Z"
+                          },
+                          "rideId": {
+                            "type": "number",
+                            "example": 1
+                          },
+                          "passengerId": {
+                            "type": "number",
+                            "example": 1
+                          },
+                          "passenger": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number",
+                                "example": 1
+                              },
+                              "active": {
+                                "type": "boolean",
+                                "example": true
+                              },
+                              "userId": {
+                                "type": "number",
+                                "example": 1
+                              }
+                            }
+                          },
+                          "ride": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "number",
+                                "example": 1
+                              },
+                              "startLocation": {
+                                "type": "string",
+                                "example": "Start Location"
+                              },
+                              "endLocation": {
+                                "type": "string",
+                                "example": "End Location"
+                              },
+                              "distance": {
+                                "type": "number",
+                                "example": 15.5
+                              },
+                              "departureTime": {
+                                "type": "string",
+                                "example": "2025-05-18T12:00:00Z"
+                              },
+                              "totalCost": {
+                                "type": "number",
+                                "example": 50
+                              },
+                              "fuelPrice": {
+                                "type": "number",
+                                "example": 5.5
+                              },
+                              "vehicleId": {
+                                "type": "number",
+                                "example": 1
+                              },
+                              "vehicle": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "number",
+                                    "example": 1
+                                  },
+                                  "model": {
+                                    "type": "string",
+                                    "example": "Model S"
+                                  },
+                                  "brand": {
+                                    "type": "string",
+                                    "example": "Tesla"
+                                  },
+                                  "year": {
+                                    "type": "number",
+                                    "example": 2023
+                                  },
+                                  "plate": {
+                                    "type": "string",
+                                    "example": "ABC1234"
+                                  },
+                                  "fuelConsumption": {
+                                    "type": "number",
+                                    "example": 0
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Ride Requests"
+        ],
+        "description": "Create a new ride request",
+        "responses": {
+          "201": {
+            "description": "Ride request created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "startLocation": {
+                      "type": "string",
+                      "example": "Start Location"
+                    },
+                    "endLocation": {
+                      "type": "string",
+                      "example": "End Location"
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "PENDING"
+                    },
+                    "passengerShare": {
+                      "type": "number",
+                      "example": 25.5
+                    },
+                    "rideId": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "passengerId": {
+                      "type": "number",
+                      "example": 1
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "startLocation": {
+                      "type": "string",
+                      "example": "Start Location"
+                    },
+                    "endLocation": {
+                      "type": "string",
+                      "example": "End Location"
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "PENDING"
+                    },
+                    "passengerShare": {
+                      "type": "number",
+                      "example": 25.5
+                    },
+                    "rideId": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "passengerId": {
+                      "type": "number",
+                      "example": 1
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RideRequestCreate"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/RideRequestCreate"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ride-requests/{id}": {
+      "get": {
+        "tags": [
+          "Ride Requests"
+        ],
+        "description": "Get a ride request by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ride request found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "startLocation": {
+                      "type": "string",
+                      "example": "Start Location"
+                    },
+                    "endLocation": {
+                      "type": "string",
+                      "example": "End Location"
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "PENDING"
+                    },
+                    "passengerShare": {
+                      "type": "number",
+                      "example": 25.5
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "rideId": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "passengerId": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "passenger": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "active": {
+                          "type": "boolean",
+                          "example": true
+                        },
+                        "userId": {
+                          "type": "number",
+                          "example": 1
+                        }
+                      }
+                    },
+                    "ride": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "startLocation": {
+                          "type": "string",
+                          "example": "Start Location"
+                        },
+                        "endLocation": {
+                          "type": "string",
+                          "example": "End Location"
+                        },
+                        "distance": {
+                          "type": "number",
+                          "example": 15.5
+                        },
+                        "departureTime": {
+                          "type": "string",
+                          "example": "2025-05-18T12:00:00Z"
+                        },
+                        "totalCost": {
+                          "type": "number",
+                          "example": 50
+                        },
+                        "fuelPrice": {
+                          "type": "number",
+                          "example": 5.5
+                        },
+                        "vehicleId": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "vehicle": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "number",
+                              "example": 1
+                            },
+                            "model": {
+                              "type": "string",
+                              "example": "Model S"
+                            },
+                            "brand": {
+                              "type": "string",
+                              "example": "Tesla"
+                            },
+                            "year": {
+                              "type": "number",
+                              "example": 2023
+                            },
+                            "plate": {
+                              "type": "string",
+                              "example": "ABC1234"
+                            },
+                            "fuelConsumption": {
+                              "type": "number",
+                              "example": 0
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "startLocation": {
+                      "type": "string",
+                      "example": "Start Location"
+                    },
+                    "endLocation": {
+                      "type": "string",
+                      "example": "End Location"
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "PENDING"
+                    },
+                    "passengerShare": {
+                      "type": "number",
+                      "example": 25.5
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "rideId": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "passengerId": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "passenger": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "active": {
+                          "type": "boolean",
+                          "example": true
+                        },
+                        "userId": {
+                          "type": "number",
+                          "example": 1
+                        }
+                      }
+                    },
+                    "ride": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "startLocation": {
+                          "type": "string",
+                          "example": "Start Location"
+                        },
+                        "endLocation": {
+                          "type": "string",
+                          "example": "End Location"
+                        },
+                        "distance": {
+                          "type": "number",
+                          "example": 15.5
+                        },
+                        "departureTime": {
+                          "type": "string",
+                          "example": "2025-05-18T12:00:00Z"
+                        },
+                        "totalCost": {
+                          "type": "number",
+                          "example": 50
+                        },
+                        "fuelPrice": {
+                          "type": "number",
+                          "example": 5.5
+                        },
+                        "vehicleId": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "vehicle": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "number",
+                              "example": 1
+                            },
+                            "model": {
+                              "type": "string",
+                              "example": "Model S"
+                            },
+                            "brand": {
+                              "type": "string",
+                              "example": "Tesla"
+                            },
+                            "year": {
+                              "type": "number",
+                              "example": 2023
+                            },
+                            "plate": {
+                              "type": "string",
+                              "example": "ABC1234"
+                            },
+                            "fuelConsumption": {
+                              "type": "number",
+                              "example": 0
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Ride request not found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Ride Requests"
+        ],
+        "description": "Update a ride request",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ride request updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "startLocation": {
+                      "type": "string",
+                      "example": "Updated Start Location"
+                    },
+                    "endLocation": {
+                      "type": "string",
+                      "example": "Updated End Location"
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "APPROVED"
+                    },
+                    "passengerShare": {
+                      "type": "number",
+                      "example": 25.5
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "rideId": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "passengerId": {
+                      "type": "number",
+                      "example": 1
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "startLocation": {
+                      "type": "string",
+                      "example": "Updated Start Location"
+                    },
+                    "endLocation": {
+                      "type": "string",
+                      "example": "Updated End Location"
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "APPROVED"
+                    },
+                    "passengerShare": {
+                      "type": "number",
+                      "example": 25.5
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "rideId": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "passengerId": {
+                      "type": "number",
+                      "example": 1
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Ride request not found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RideRequestUpdate"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/RideRequestUpdate"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Ride Requests"
+        ],
+        "description": "Delete a ride request by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Ride request deleted successfully"
+          },
+          "404": {
+            "description": "Ride request not found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/ride-requests/{id}/status": {
+      "patch": {
+        "tags": [
+          "Ride Requests"
+        ],
+        "description": "Update ride request status (approve/reject/cancel)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ride request status updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "startLocation": {
+                      "type": "string",
+                      "example": "Start Location"
+                    },
+                    "endLocation": {
+                      "type": "string",
+                      "example": "End Location"
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "APPROVED"
+                    },
+                    "passengerShare": {
+                      "type": "number",
+                      "example": 12.5
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "rideId": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "passengerId": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Status da solicitação atualizado com sucesso"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "startLocation": {
+                      "type": "string",
+                      "example": "Start Location"
+                    },
+                    "endLocation": {
+                      "type": "string",
+                      "example": "End Location"
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "APPROVED"
+                    },
+                    "passengerShare": {
+                      "type": "number",
+                      "example": 12.5
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2025-05-18T12:00:00Z"
+                    },
+                    "rideId": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "passengerId": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Status da solicitação atualizado com sucesso"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No available seats, invalid status transition, or bad request"
+          },
+          "404": {
+            "description": "Ride request not found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RideRequestStatusUpdate"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/RideRequestStatusUpdate"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/groups/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "example": "any"
+                  },
+                  "description": {
+                    "example": "any"
+                  },
+                  "driverId": {
+                    "example": "any"
+                  },
+                  "members": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/groups/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/groups/{id}/users": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/groups/{id}/members": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userIds": {
+                    "example": "any"
+                  },
+                  "action": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2741,10 +6691,6 @@
       "User": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "number",
-            "example": 1
-          },
           "name": {
             "type": "string",
             "example": "Djanathan"
@@ -2771,7 +6717,7 @@
           },
           "street": {
             "type": "string",
-            "example": "Main Avenue"
+            "example": "Av. Maripa"
           },
           "number": {
             "type": "number",
@@ -2804,6 +6750,22 @@
           "verified": {
             "type": "boolean",
             "example": true
+          },
+          "cnh": {
+            "type": "string",
+            "example": "1234567890"
+          },
+          "cnh_front": {
+            "type": "string",
+            "example": "https://example.com/cnh_front.jpg"
+          },
+          "cnh_back": {
+            "type": "string",
+            "example": "https://example.com/cnh_back.jpg"
+          },
+          "bpk_link": {
+            "type": "string",
+            "example": "https://example.com/bpk_link"
           }
         },
         "xml": {
@@ -2893,10 +6855,6 @@
       "Vehicle": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "number",
-            "example": 1
-          },
           "model": {
             "type": "string",
             "example": "Civic"
@@ -3018,36 +6976,384 @@
           "cnhStatus": {
             "type": "string",
             "example": "VERIFIED"
+          }
+        },
+        "xml": {
+          "name": "VehicleVerification"
+        }
+      },
+      "RideRequestCreate": {
+        "type": "object",
+        "properties": {
+          "startLocation": {
+            "type": "string",
+            "example": "Origin Location"
           },
-          "cnhData": {
+          "endLocation": {
+            "type": "string",
+            "example": "Destination Location"
+          },
+          "rideId": {
+            "type": "number",
+            "example": 1
+          },
+          "passengerId": {
+            "type": "number",
+            "example": 1
+          }
+        },
+        "xml": {
+          "name": "RideRequestCreate"
+        }
+      },
+      "RideRequestUpdate": {
+        "type": "object",
+        "properties": {
+          "startLocation": {
+            "type": "string",
+            "example": "Origin Location"
+          },
+          "endLocation": {
+            "type": "string",
+            "example": "Destination Location"
+          },
+          "status": {
+            "type": "string",
+            "example": "APPROVED"
+          },
+          "rideId": {
+            "type": "number",
+            "example": 1
+          },
+          "passengerId": {
+            "type": "number",
+            "example": 1
+          }
+        },
+        "xml": {
+          "name": "RideRequestUpdate"
+        }
+      },
+      "RideRequestStatusUpdate": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "APPROVED"
+          }
+        },
+        "xml": {
+          "name": "RideRequestStatusUpdate"
+        }
+      },
+      "RideRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "startLocation": {
+            "type": "string",
+            "example": "Origin Location"
+          },
+          "endLocation": {
+            "type": "string",
+            "example": "Destination Location"
+          },
+          "status": {
+            "type": "string",
+            "example": "PENDING"
+          },
+          "passengerShare": {
+            "type": "number",
+            "example": 25.5
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2025-05-18T12:00:00Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2025-05-18T12:00:00Z"
+          },
+          "rideId": {
+            "type": "number",
+            "example": 1
+          },
+          "passengerId": {
+            "type": "number",
+            "example": 1
+          },
+          "ride": {
             "type": "object",
             "properties": {
-              "numero": {
-                "type": "string",
-                "example": "01234567890"
+              "id": {
+                "type": "number",
+                "example": 1
               },
-              "categoria": {
+              "startLocation": {
                 "type": "string",
-                "example": "B"
+                "example": "Start Location"
               },
-              "validade": {
+              "endLocation": {
                 "type": "string",
-                "example": "2030-12-31"
+                "example": "End Location"
               },
-              "situacao": {
+              "distance": {
+                "type": "number",
+                "example": 15.5
+              },
+              "departureTime": {
                 "type": "string",
-                "example": "REGULAR"
+                "example": "2025-05-18T12:00:00Z"
               },
-              "restricoes": {
-                "type": "array",
-                "example": [],
-                "items": {}
+              "totalCost": {
+                "type": "number",
+                "example": 50
+              },
+              "fuelPrice": {
+                "type": "number",
+                "example": 5.5
+              },
+              "pricePerMember": {
+                "type": "number",
+                "example": 12.5
+              },
+              "totalSeats": {
+                "type": "number",
+                "example": 4
+              },
+              "availableSeats": {
+                "type": "number",
+                "example": 2
+              },
+              "vehicleId": {
+                "type": "number",
+                "example": 1
+              },
+              "vehicle": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "model": {
+                    "type": "string",
+                    "example": "Civic"
+                  },
+                  "brand": {
+                    "type": "string",
+                    "example": "Honda"
+                  },
+                  "plate": {
+                    "type": "string",
+                    "example": "ABC1234"
+                  }
+                }
+              }
+            }
+          },
+          "passenger": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number",
+                "example": 1
+              },
+              "active": {
+                "type": "boolean",
+                "example": true
+              },
+              "userId": {
+                "type": "number",
+                "example": 1
               }
             }
           }
         },
         "xml": {
-          "name": "VehicleVerification"
+          "name": "RideRequest"
+        }
+      },
+      "RideCreate": {
+        "type": "object",
+        "properties": {
+          "startLocation": {
+            "type": "string",
+            "example": "Start Location"
+          },
+          "endLocation": {
+            "type": "string",
+            "example": "End Location"
+          },
+          "distance": {
+            "type": "number",
+            "example": 15.5
+          },
+          "departureTime": {
+            "type": "string",
+            "example": "2025-05-18T12:00:00Z"
+          },
+          "fuelPrice": {
+            "type": "number",
+            "example": 5.5
+          },
+          "totalSeats": {
+            "type": "number",
+            "example": 4
+          },
+          "driverId": {
+            "type": "number",
+            "example": 1
+          },
+          "vehicleId": {
+            "type": "number",
+            "example": 1
+          }
+        },
+        "xml": {
+          "name": "RideCreate"
+        }
+      },
+      "Ride": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "startLocation": {
+            "type": "string",
+            "example": "Start Location"
+          },
+          "endLocation": {
+            "type": "string",
+            "example": "End Location"
+          },
+          "distance": {
+            "type": "number",
+            "example": 15.5
+          },
+          "departureTime": {
+            "type": "string",
+            "example": "2025-05-18T12:00:00Z"
+          },
+          "totalCost": {
+            "type": "number",
+            "example": 50
+          },
+          "fuelPrice": {
+            "type": "number",
+            "example": 5.5
+          },
+          "pricePerMember": {
+            "type": "number",
+            "example": 12.5
+          },
+          "totalSeats": {
+            "type": "number",
+            "example": 4
+          },
+          "availableSeats": {
+            "type": "number",
+            "example": 2
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2025-05-18T12:00:00Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2025-05-18T12:00:00Z"
+          },
+          "driverId": {
+            "type": "number",
+            "example": 1
+          },
+          "vehicleId": {
+            "type": "number",
+            "example": 1
+          },
+          "driver": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number",
+                "example": 1
+              },
+              "cnh": {
+                "type": "string",
+                "example": "1234567890"
+              },
+              "cnhVerified": {
+                "type": "boolean",
+                "example": true
+              },
+              "userId": {
+                "type": "number",
+                "example": 1
+              },
+              "user": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "Driver Name"
+                  }
+                }
+              }
+            }
+          },
+          "vehicle": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number",
+                "example": 1
+              },
+              "model": {
+                "type": "string",
+                "example": "Civic"
+              },
+              "brand": {
+                "type": "string",
+                "example": "Honda"
+              },
+              "plate": {
+                "type": "string",
+                "example": "ABC1234"
+              }
+            }
+          },
+          "rideRequests": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "status": {
+                  "type": "string",
+                  "example": "PENDING"
+                },
+                "passengerShare": {
+                  "type": "number",
+                  "example": 12.5
+                }
+              }
+            }
+          }
+        },
+        "xml": {
+          "name": "Ride"
         }
       }
     },
