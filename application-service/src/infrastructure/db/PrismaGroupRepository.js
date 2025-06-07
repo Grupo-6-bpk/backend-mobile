@@ -209,9 +209,7 @@ export class PrismaGroupRepository {
       if (!group) {
         const err = new Error(`Grupo com ID ${numericGroupId} não encontrado.`);
         throw err;
-      }
-
-      await prisma.rideGroup.update({
+      }      await prisma.rideGroup.update({
           where: { id: numericGroupId },
           data: {
               members: {
@@ -222,12 +220,12 @@ export class PrismaGroupRepository {
           }
       });
 
-      return this.findById(numericGroupId);
+      return this.findGroupWithMembers(numericGroupId);
 
     } catch (error) {
        if (error.code === 'P2025' && error.meta?.cause?.includes("Record to delete does not exist")) {
         console.warn(`Tentativa de remover membros não encontrados do grupo ${numericGroupId} ou o grupo não existe.`);
-        return this.findById(numericGroupId);
+        return this.findGroupWithMembers(numericGroupId);
       }
       console.error(`Erro em PrismaGroupRepository.removeMembersFromGroup para grupo ${numericGroupId}:`, error);
       throw new Error(error.message || `Erro no banco de dados ao remover membros do grupo ${numericGroupId}.`);
@@ -259,4 +257,59 @@ async deleteById(id) {
       throw new Error(error.message || `Erro no banco de dados ao deletar o grupo ${numericId}.`);
     }
 }
+
+async findByDriverOrPassengerId(userId, role) {
+    const numericUserId = parseInt(userId);
+    if (isNaN(numericUserId)) {
+      throw new Error("ID do usuário inválido. Deve ser um número.");
+    }
+    if (!role || !['driver', 'passenger'].includes(role)) {
+      throw new Error("Role inválido. Deve ser 'driver' ou 'passenger'.");
+    }
+
+    console.log(`PrismaGroupRepository: Executando findByDriverOrPassengerId para ID: ${numericUserId} e role: ${role}`);
+    
+    try {
+      let whereCondition = {};
+      
+      if (role === 'driver') {
+        whereCondition = { driverId: numericUserId };
+      } else if (role === 'passenger') {
+        whereCondition = {
+          members: {
+            some: {
+              passengerId: numericUserId
+            }
+          }
+        };
+      }
+
+      return await prisma.rideGroup.findMany({
+        where: whereCondition,
+        include: {
+          driver: { include: { user: true } },
+          members: {
+            select: {
+              id: true,
+              passenger: {
+                select: {
+                  id: true,
+                  user: { select: { id: true, name: true } }
+                }
+              }
+            }
+          },
+          _count: {
+            select: { members: true }
+          }
+        },
+        orderBy: {
+          createdAt: 'desc',
+        }
+      });
+    } catch (error) {
+      console.error(`Erro em PrismaGroupRepository.findByDriverOrPassengerId para ID ${numericUserId} e role ${role}:`, error);
+      throw new Error(`Erro no banco de dados ao buscar grupos por ${role} ID ${numericUserId}: ${error.message}`);
+    }
+  }
 }

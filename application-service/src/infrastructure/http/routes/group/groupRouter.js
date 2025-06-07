@@ -6,12 +6,14 @@ import {
   getGroupById, 
   listUsersByGroup, 
   updateGroupMembers,
-  deleteGroup
+  deleteGroup,
+  getGroupsByUserRole
 } from '../../../../presentation/controllers/GroupController.js';
 
 const router = Router();
 
 router.get('/', listGroups);
+router.get('/by-user', getGroupsByUserRole);
 router.post('/', createGroup);
 router.get('/:id', getGroupById);
 router.get('/:id/users', listUsersByGroup);
