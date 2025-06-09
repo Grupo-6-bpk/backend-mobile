@@ -48,35 +48,52 @@ export default yup
         isDriver: yup
           .boolean(),
         isPassenger: yup
-          .boolean(),
-       
-        cnh: yup
+          .boolean(),         cnh: yup
           .string()
           .max(10, "CNH deve ter no máximo 10 caracteres")
           .when('isDriver', {
-            is: true,
-            then: (schema) => schema.required('CNH é obrigatória quando o usuário é motorista')
+            is: (val) => val === true || val === 1,
+            then: (schema) => schema.required('CNH é obrigatória quando o usuário é motorista'),
+            otherwise: (schema) => schema.notRequired()
           }),
         cnh_front: yup
           .string()
           .max(90, "Imagem da frente da CNH deve ter no máximo 90 caracteres")
           .when('isDriver', {
-            is: true,
-            then: (schema) => schema.required('Imagem da frente da CNH é obrigatória quando o usuário é motorista')
+            is: (val) => val === true || val === 1,
+            then: (schema) => schema.required('Imagem da frente da CNH é obrigatória quando o usuário é motorista'),
+            otherwise: (schema) => schema.notRequired()
           }),
         cnh_back: yup
           .string()
           .max(90, "Imagem do verso da CNH deve ter no máximo 90 caracteres")
           .when('isDriver', {
-            is: true,
-            then: (schema) => schema.required('Imagem do verso da CNH é obrigatória quando o usuário é motorista')
-          }),
-        bpk_link: yup
+            is: (val) => val === true || val === 1,
+            then: (schema) => schema.required('Imagem do verso da CNH é obrigatória quando o usuário é motorista'),
+            otherwise: (schema) => schema.notRequired()
+          }),        bpk_link: yup
           .string()
           .max(90, "Link BPK deve ter no máximo 90 caracteres")
-          .when('isDriver', {
-            is: true,
-            then: (schema) => schema.required('Link BPK é obrigatório quando o usuário é motorista')
+          .when(['isDriver', 'isPassenger'], {
+            is: (isDriver, isPassenger) => (isDriver === true || isDriver === 1) || (isPassenger === true || isPassenger === 1),
+            then: (schema) => schema.required('Link BPK é obrigatório quando o usuário é motorista ou passageiro'),
+            otherwise: (schema) => schema.notRequired()
+          }),        // Passenger-specific fields
+        rg_front: yup
+          .string()
+          .max(90, "Imagem da frente do RG deve ter no máximo 90 caracteres")
+          .when('isPassenger', {
+            is: (val) => val === true || val === 1,
+            then: (schema) => schema.required('Imagem da frente do RG é obrigatória quando o usuário é passageiro'),
+            otherwise: (schema) => schema.notRequired()
+          }),
+        rg_back: yup
+          .string()
+          .max(90, "Imagem do verso do RG deve ter no máximo 90 caracteres")
+          .when('isPassenger', {
+            is: (val) => val === true || val === 1,
+            then: (schema) => schema.required('Imagem do verso do RG é obrigatória quando o usuário é passageiro'),
+            otherwise: (schema) => schema.notRequired()
           })
   }).noUnknown(false);
 

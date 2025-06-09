@@ -1,5 +1,4 @@
 import prisma from "../../infrastructure/config/prismaClient.js";
-import axios from "axios";
 
 /**
  * Cria um novo veículo
@@ -496,6 +495,113 @@ export const verifyVehicle = async (req, res, next) => {
     });
   } catch (err) {
     console.error("Erro geral na verificação:", err);
+    next(err);
+  }
+}
+
+/**
+ * Busca veículos por ID do motorista
+ */
+export const getVehiclesByDriverId = async (req, res, next) => {
+  /*
+  #swagger.tags = ["Vehicles"]
+  #swagger.description = 'Busca veículos por ID do motorista'
+  #swagger.responses[200] = { 
+    description: 'Veículos encontrados',
+    schema: {
+      currentPage: 1,
+      totalPages: 1,
+      totalItems: 2,
+      items: [
+        {
+          id: 1,
+          model: "Civic",
+          brand: "Honda",
+          year: 2023,
+          color: "Prata",
+          plate: "ABC1234",
+          renavam: "12345678901",
+          fuelConsumption: 12.5,
+          carImageUrl: "https://example.com/car.jpg",
+          createdAt: "2025-05-18T12:00:00Z",
+          updatedAt: "2025-05-18T12:00:00Z",
+          driverId: 1,
+          driver: {
+            id: 1,
+            userId: 1,
+            name: "John Doe"
+          }
+        }
+      ]
+    }
+  }
+  #swagger.responses[400] = { description: 'Driver ID é obrigatório' }
+  #swagger.responses[404] = { description: 'Motorista não encontrado' }
+  */
+  try {
+    const driverId = parseInt(req.params.driverId);
+    
+    if (!driverId || isNaN(driverId)) {
+      return res.status(400).json({ message: "ID do motorista é obrigatório e deve ser um número válido" });
+    }
+
+    // Verificar se o motorista existe
+    const driverExists = await prisma.driver.findUnique({
+      where: { id: driverId }
+    });
+
+    if (!driverExists) {
+      return res.status(404).json({ message: "Motorista não encontrado" });
+    }
+
+    // Parâmetros de paginação
+    const page = parseInt(req.query._page) || 1;
+    const size = parseInt(req.query._size) || 10;
+    const offset = (page - 1) * size;
+
+    // Buscar veículos do motorista
+    const vehicles = await prisma.vehicle.findMany({
+      where: { driverId },
+      skip: offset,
+      take: size,
+      orderBy: {
+        createdAt: 'desc',
+        ...req.order
+      },
+      include: {
+        driver: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                last_name: true
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // Formatar os dados dos veículos
+    const formattedVehicles = vehicles.map(vehicle => ({
+      ...vehicle,
+      driver: {
+        id: vehicle.driver.id,
+        userId: vehicle.driver.userId,
+        name: `${vehicle.driver.user.name} ${vehicle.driver.user.last_name}`
+      }
+    }));
+
+    // Contar total de registros
+    const totalData = await prisma.vehicle.count({ 
+      where: { driverId } 
+    });
+    const totalPages = Math.ceil(totalData / size);
+
+    const data = res.hateos_list("vehicles", formattedVehicles, totalPages);
+    res.ok(data);
+  } catch (err) {
     next(err);
   }
 }

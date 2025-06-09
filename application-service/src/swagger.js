@@ -43,6 +43,8 @@ const doc = {
         isPassenger: true,
         verified: true,
         // Driver specific fields (required when isDriver is true)
+        rg_front: "https://example.com/rg_front.jpg",
+        rg_back: "https://example.com/rg_back.jpg",
         cnh: "1234567890",
         cnh_front: "https://example.com/cnh_front.jpg",
         cnh_back: "https://example.com/cnh_back.jpg",
@@ -55,17 +57,15 @@ const doc = {
       UserRoles: {
         isDriver: true,
         isPassenger: true
-      },
-      VehicleCreate: {
+      },      VehicleCreate: {
         model: "Civic",
         brand: "Honda",
         year: 2023,
-        phone: "(11) 98765-4321",
-        street: "Main Avenue",
-        number: 123,
+        color: "Prata",
         renavam: "12345678901",
         plate: "ABC1234",
         fuelConsumption: 12.5,
+        carImageUrl: "https://example.com/car-image.jpg",
         driverId: 1
       },
       Vehicle: {
@@ -73,13 +73,12 @@ const doc = {
         model: "Civic",
         brand: "Honda",
         year: 2023,
-        phone: "(11) 98765-4321",
-        street: "Main Avenue",
-        number: 123,
+        color: "Prata",
         renavam: "12345678901",        
         plate: "ABC1234",
         fuelConsumption: 12.5,
-        createAt: "2025-05-18T12:00:00Z",
+        carImageUrl: "https://example.com/car-image.jpg",
+        createdAt: "2025-05-18T12:00:00Z",
         updatedAt: "2025-05-18T12:00:00Z",
         driverId: 1,
         driver: {
@@ -87,8 +86,7 @@ const doc = {
           name: "John Doe",
           userId: 1
         }
-      },
-      VehicleVerification: {
+      },      VehicleVerification: {
         vehicleStatus: "VERIFIED",
         vehicleData: {
           modelo: "Civic",
@@ -142,7 +140,52 @@ const doc = {
           cor: "Prata",
           potencia: "106cv"
         },
-        cnhStatus: "VERIFIED", 
+        cnhStatus: "VERIFIED",      },
+      GroupCreate: {
+        name: "Grupo Campus - Shopping",
+        description: "Grupo para caronas entre o campus e o shopping",
+        driverId: 1,
+        members: [2, 3, 4]
+      },
+      Group: {
+        id: 1,
+        name: "Grupo Campus - Shopping",
+        description: "Grupo para caronas entre o campus e o shopping",
+        createdAt: "2025-05-18T12:00:00Z",
+        updatedAt: "2025-05-18T12:00:00Z",
+        driverId: 1,
+        driver: {
+          id: 1,
+          userId: 1,
+          user: {
+            id: 1,
+            name: "João",
+            last_name: "Silva"
+          }
+        },
+        members: [
+          {
+            id: 2,
+            userId: 2,
+            user: {
+              id: 2,
+              name: "Maria",
+              last_name: "Santos"
+            }
+          },
+          {
+            id: 3,
+            userId: 3,
+            user: {
+              id: 3,
+              name: "Pedro",
+              last_name: "Oliveira"
+            }
+          }
+        ]
+      },      GroupMembersUpdate: {
+        passengerIds: [5],
+        action: "add"
       },
       RideRequestCreate: {
         startLocation: "Origin Location",

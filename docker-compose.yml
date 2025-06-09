@@ -83,8 +83,6 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: bpkar_db
-    ports:
-      - 3307:3306
     volumes:
       - application-db:/var/lib/mysql
     healthcheck:
@@ -94,7 +92,6 @@ services:
       retries: 10
     networks:
       - application-network
-      - public
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -112,6 +109,15 @@ services:
     networks:
       - internal
       - public
+
+  adminer:
+    image: adminer:5.3.0
+    ports:
+      - 8081:8080
+    networks:
+      - public
+      - application-network
+      - notification-network
 
 networks:
   internal:

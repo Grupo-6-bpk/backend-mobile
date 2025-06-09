@@ -10,12 +10,14 @@ import {
   getVehicle,
   updateVehicle,
   deleteVehicle,
-  verifyVehicle
+  verifyVehicle,
+  getVehiclesByDriverId
 } from "../../../../presentation/controllers/VehicleController.js";
 
 const router = Router();
 router.post("/", validator(vehicleValidator), createVehicle);
 router.get("/", listVehicles);
+router.get("/driver/:driverId", getVehiclesByDriverId);
 router.get("/:id", getVehicle);
 router.patch("/:id", validator(vehiclePatchValidator), updateVehicle);
 router.delete("/:id", deleteVehicle);
