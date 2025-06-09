@@ -5,7 +5,8 @@ import compression from "compression";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
-import * as swaggerDocument from "./swagger.json" assert { type: "json" };
+import routes from "./infrastructure/http/routes/routes.js";
+// import swaggerFile from "./infrastructure/config/swagger.json" with { type: "json" };
 
 dotenv.config();
 
@@ -18,16 +19,11 @@ app.use(cors());
 app.use(helmet());
 app.use(compression());
 app.use(morgan("dev"));
+app.use(routes);
 
 // Swagger UI
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
-// Routes
-import documentValidationRoutes from "./presentation/routes/documentValidationRoutes.js";
-
-app.use("/api/document-validation", documentValidationRoutes);
-
-// Health check endpoint
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "UP", service: "document-validation-service" });
 });
@@ -39,13 +35,6 @@ app.use((err, req, res, next) => {
     message: "An unexpected error occurred",
     error: process.env.NODE_ENV === "development" ? err.message : undefined,
   });
-});
-
-// Initialize message broker connections
-import { initializeMessageConsumer } from "./infrastructure/messaging/consumer.js";
-initializeMessageConsumer().catch(error => {
-  console.error("Failed to initialize message consumer:", error);
-  process.exit(1);
 });
 
 export default app;

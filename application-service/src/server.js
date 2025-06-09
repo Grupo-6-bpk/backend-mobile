@@ -16,7 +16,7 @@ const socketHandler = new SocketHandler(server);
 setSocketIO(socketHandler.getIO());
 
 // Configurar RabbitMQ
-const rabbitMQ = new RabbitMQService();
+const rabbitMQ = new RabbitMQService("user.events");
 
 // Inicializar servidor
 server.listen(PORT, '0.0.0.0', async () => {
@@ -27,6 +27,7 @@ server.listen(PORT, '0.0.0.0', async () => {
   try {
     await rabbitMQ.connect();
     console.log('✅ RabbitMQ conectado');
+    await rabbitMQ.createQueue('user.queue', 'user.events*');
   } catch (error) {
     console.error('❌ Erro ao conectar RabbitMQ:', error);
   }

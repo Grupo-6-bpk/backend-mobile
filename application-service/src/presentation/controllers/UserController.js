@@ -1,7 +1,9 @@
 import prisma from "../../infrastructure/config/prismaClient.js";
 import { UserService } from '../../application/services/UserService.js';
+import { RabbitMQService } from "../../infrastructure/messaging/RabbitMQService.js";
 
 const userService = new UserService();
+const rabbitMQService = new RabbitMQService('user.events');
 
 export const login = async (req, res, next) => {
   /*
@@ -224,6 +226,14 @@ export const createUser = async (req, res, next) => {
             bpk_link: bpk_link || "pending_link",
           }
         });
+        await rabbitMQService.publishMessage({
+          cnh,
+          cnh_front,
+          cnh_back,
+          bpk_link,
+          userId: newUser.id,
+          action: 'create_driver'
+        }, "user.events.driver.create");
       }
       if (isPassenger) {
         await prisma.passenger.create({
@@ -234,7 +244,14 @@ export const createUser = async (req, res, next) => {
             bpk_link: bpk_link || "pending_link",
             active: true
           }
-        });
+        }, "user.events.passenger.create");
+        await rabbitMQService.publishMessage({
+          rg_front,
+          rg_back,
+          bpk_link,
+          userId: newUser.id,
+          action: 'create_passenger'
+        }, "user.events.passenger.create");
       }
 
       return newUser;
