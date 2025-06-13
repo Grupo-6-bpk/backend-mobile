@@ -1,4 +1,6 @@
 import swaggerAutogen from 'swagger-autogen';
+import fs from 'fs/promises';
+import path from 'path';
 
 const doc = {
   info: {
@@ -14,51 +16,6 @@ const doc = {
   ],
   components: {
     schemas: {
-      Document: {
-        id: '550e8400-e29b-41d4-a716-446655440000',
-        userId: '123',
-        type: 'driver_license',
-        documentId: 'AB123456',
-        status: 'pending',
-        fileUrl: 'https://storage.example.com/documents/abc123.pdf',
-        rejectionReason: null,
-        createdAt: '2025-05-18T12:00:00Z',
-        updatedAt: '2025-05-18T12:00:00Z',
-        validatedAt: null,
-        validatedBy: null
-      },
-      DocumentCreate: {
-        userId: '123',
-        type: 'driver_license',
-        documentId: 'AB123456',
-        fileUrl: 'https://storage.example.com/documents/abc123.pdf'
-      },
-      DocumentUpdate: {
-        status: 'approved',
-        rejectionReason: null,
-        validatedAt: '2025-05-18T12:00:00Z',
-        validatedBy: '456'
-      },
-      ValidationRequest: {
-        documentId: '550e8400-e29b-41d4-a716-446655440000',
-        validatorId: '456'
-      },
-      ValidationResult: {
-        valid: true,
-        message: 'Document successfully validated',
-        documentId: '550e8400-e29b-41d4-a716-446655440000',
-        validatedBy: '456',
-        validatedAt: '2025-05-18T12:00:00Z'
-      },
-      ServiceHealth: {
-        status: 'UP',
-        service: 'validation-service',
-        timestamp: '2025-05-18T12:00:00Z'
-      },
-      ErrorResponse: {
-        code: 500,
-        message: 'Internal Server Error'
-      }
     }
   },
   tags: [
@@ -84,12 +41,43 @@ const doc = {
   }
 };
 
-const outputFile = './src/swagger.json';
-const endpointsFiles = ['./src/presentation/routes/*.js'];
+async function cleanupSwaggerFile(filePath) {
+  try {
+    const fullPath = path.resolve(process.cwd(), filePath);
+    console.log('Cleaning swagger file at:', fullPath);
+    const data = await fs.readFile(fullPath, 'utf8');
+    const swaggerData = JSON.parse(data);
+    const pathsToRemove = [];
+
+    for (const path in swaggerData.paths) {
+      if (path.includes('{{') ||
+        path.includes('}}') ||
+        path.includes('catch(err)') ||
+        path.includes('next(err)') ||
+        path.includes('res.no_content()') ||
+        (path !== '/login/' && path.startsWith('/login/'))) {
+        pathsToRemove.push(path);
+      }
+    }
+
+    for (const path of pathsToRemove) {
+      delete swaggerData.paths[path];
+    }
+    await fs.writeFile(fullPath, JSON.stringify(swaggerData, null, 2), 'utf8');
+    console.log('Swagger file cleaned successfully!');
+  } catch (err) {
+    console.error('Error cleaning swagger file:', err);
+  }
+}
+
+const outputFile = './infrastructure/config/swagger.json';
+const endpointsFiles = ['./infrastructure/http/routes/routes.js',];
 
 swaggerAutogen({ openapi: '3.0.0' })(outputFile, endpointsFiles, doc)
-  .then(() => {
+  .then(async () => {
+    // await cleanupSwaggerFile(outputFile);
     console.log('Swagger documentation generated successfully');
+    await import('./server.js');
   })
   .catch(error => {
     console.error('Error generating Swagger documentation:', error);

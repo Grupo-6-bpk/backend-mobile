@@ -8,17 +8,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Document entity
-model Document {
-  id          String   @id @default(uuid())
-  userId      String
-  type        String   // identity, driver's license, etc.
-  documentId  String   // document identification number
-  status      String   @default("pending") // pending, approved, rejected
-  fileUrl     String?  // URL to the document file
-  rejectionReason String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  validatedAt DateTime?
-  validatedBy String?  // ID of admin/system that validated the document
+model DriverValidation {
+  id            Int       @id @default(autoincrement())
+  user_id       Int       
+  cnh           String    @db.VarChar(10)
+  cnh_front     String    @db.VarChar(90)
+  cnh_back      String    @db.VarChar(90)
+  bpk_link      String    @db.VarChar(90)
+  is_validated  Boolean   @default(false)
+}
+
+model PassengerValidation {
+  id            Int       @id @default(autoincrement())
+  user_id       Int
+  rg_front      String    @db.VarChar(90)
+  rg_back       String    @db.VarChar(90)
+  bpk_link      String    @db.VarChar(90)
+  is_validated  Boolean   @default(false)
 }
