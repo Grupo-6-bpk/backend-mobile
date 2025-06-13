@@ -25,6 +25,25 @@ export class RabbitMQService {
     }
   }
 
+  async createQueue(queueName, routingKey) {
+    try {
+      if (!this.channel) {
+        await this.connect();
+      }
+
+      const queue = await this.channel.assertQueue(queueName, {
+        durable: true
+      });
+
+      await this.channel.bindQueue(queue.queue, this.exchangeName, routingKey);
+      console.log(`Fila "${queueName}" criada e vinculada ao exchange "${this.exchangeName}" com routingKey "${routingKey}"`);
+      return queue;
+    } catch (error) {
+      console.error('Erro ao criar fila no RabbitMQ:', error);
+      throw error;
+    }
+  }
+
   async publishMessage(messageData, routingKey) {
     try {
       if (!this.channel) {

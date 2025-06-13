@@ -17,7 +17,8 @@ server.listen(PORT, HOST, async () => {
     await rabbitMQ.connect();
     console.log('RabbitMQ conectado com sucesso');
 
-    await rabbitMQ.channel.assertExchange('user.events', 'topic', { durable: true });
+    await rabbitMQ.createQueue('monolith.user.queue', 'user.validation.*');
+
     await rabbitMQ.channel.assertQueue('user.queue', { durable: true });
 
     await rabbitMQ.channel.bindQueue('user.queue', 'user.events', 'user.events.driver.create');
