@@ -13,6 +13,15 @@ export class RabbitMQService {
       this.connection = await amqp.connect(rabbitMQUrl);
       this.channel = await this.connection.createChannel();
 
+      // Add error handler to prevent unhandled channel errors
+      this.channel.on('error', (error) => {
+        console.error('Canal RabbitMQ erro:', error);
+      });
+
+      this.connection.on('error', (error) => {
+        console.error('Conexão RabbitMQ erro:', error);
+      });
+
       await this.channel.assertExchange(this.exchangeName, 'topic', {
         durable: true
       });

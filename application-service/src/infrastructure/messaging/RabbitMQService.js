@@ -6,12 +6,19 @@ export class RabbitMQService {
     this.channel = null;
     this.exchangeName = exchangeName; 
   }
-
   async connect() {
     try {
       const rabbitMQUrl = process.env.RABBITMQ_URL || 'amqp://localhost:5672';
       this.connection = await amqp.connect(rabbitMQUrl);
       this.channel = await this.connection.createChannel();
+
+      this.channel.on('error', (error) => {
+        console.error('Canal RabbitMQ erro:', error);
+      });
+
+      this.connection.on('error', (error) => {
+        console.error('Conexão RabbitMQ erro:', error);
+      });
 
       await this.channel.assertExchange(this.exchangeName, 'topic', {
         durable: true
@@ -51,18 +58,26 @@ export class RabbitMQService {
     }
   }
 
-  async createQueue(queueName, routingKey) {
+  async createQueue(queueName, routingKey, exchangeName = null) {
     try {
       if (!this.channel) {
         await this.connect();
       }
 
+      // Use the provided exchange name or fall back to the instance exchange
+      const targetExchange = exchangeName || this.exchangeName;
+      
+      // Ensure the exchange exists before binding
+      await this.channel.assertExchange(targetExchange, 'topic', {
+        durable: true
+      });
+
       const queue = await this.channel.assertQueue(queueName, {
         durable: true
       });
 
-      await this.channel.bindQueue(queue.queue, this.exchangeName, routingKey);
-      console.log(`Fila "${queueName}" criada e vinculada ao exchange "${this.exchangeName}" com routingKey "${routingKey}"`);
+      await this.channel.bindQueue(queue.queue, targetExchange, routingKey);
+      console.log(`Fila "${queueName}" criada e vinculada ao exchange "${targetExchange}" com routingKey "${routingKey}"`);
       return queue;
     } catch (error) {
       console.error('Erro ao criar fila no RabbitMQ:', error);

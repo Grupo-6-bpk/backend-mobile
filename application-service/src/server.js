@@ -31,6 +31,7 @@ server.listen(PORT, '0.0.0.0', async () => {
     await rabbitMQ.createQueue('user.queue', 'user.events*');
     console.log('✅ Filas criadas: user.queue');
 
+    await rabbitMQ.channel.assertExchange('user.validation.events', 'topic', { durable: true });
     await rabbitMQ.channel.assertQueue('monolith.user.queue', { durable: true });
     await rabbitMQ.channel.bindQueue('monolith.user.queue', 'user.validation.events', 'user.validation.events.driver.validation.accepted');
     await rabbitMQ.channel.bindQueue('monolith.user.queue', 'user.validation.events', 'user.validation.events.passenger.validation.accepted');
