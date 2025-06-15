@@ -10,6 +10,6 @@ COPY . .
 
 RUN npx prisma generate
 
-EXPOSE 4040
+EXPOSE 4042
 
-ENTRYPOINT ["sh", "-c", "npx prisma migrate deploy  && npm run swagger:watch"]
+ENTRYPOINT ["sh", "-c", "npx prisma migrate deploy  && npm run start:watch"]

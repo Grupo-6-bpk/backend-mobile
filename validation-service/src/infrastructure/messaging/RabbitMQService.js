@@ -6,12 +6,14 @@ export class RabbitMQService {
     this.channel = null;
     this.exchangeName = exchangeName; 
   }
+
   async connect() {
     try {
       const rabbitMQUrl = process.env.RABBITMQ_URL || 'amqp://localhost:5672';
       this.connection = await amqp.connect(rabbitMQUrl);
       this.channel = await this.connection.createChannel();
 
+      // Add error handler to prevent unhandled channel errors
       this.channel.on('error', (error) => {
         console.error('Canal RabbitMQ erro:', error);
       });
@@ -29,6 +31,25 @@ export class RabbitMQService {
     } catch (error) {
       console.error('Erro ao conectar com RabbitMQ:', error);
       return false;
+    }
+  }
+
+  async createQueue(queueName, routingKey) {
+    try {
+      if (!this.channel) {
+        await this.connect();
+      }
+
+      const queue = await this.channel.assertQueue(queueName, {
+        durable: true
+      });
+
+      await this.channel.bindQueue(queue.queue, this.exchangeName, routingKey);
+      console.log(`Fila "${queueName}" criada e vinculada ao exchange "${this.exchangeName}" com routingKey "${routingKey}"`);
+      return queue;
+    } catch (error) {
+      console.error('Erro ao criar fila no RabbitMQ:', error);
+      throw error;
     }
   }
 
@@ -55,33 +76,6 @@ export class RabbitMQService {
     } catch (error) {
       console.error('Erro ao publicar mensagem no RabbitMQ:', error);
       return false;
-    }
-  }
-
-  async createQueue(queueName, routingKey, exchangeName = null) {
-    try {
-      if (!this.channel) {
-        await this.connect();
-      }
-
-      // Use the provided exchange name or fall back to the instance exchange
-      const targetExchange = exchangeName || this.exchangeName;
-      
-      // Ensure the exchange exists before binding
-      await this.channel.assertExchange(targetExchange, 'topic', {
-        durable: true
-      });
-
-      const queue = await this.channel.assertQueue(queueName, {
-        durable: true
-      });
-
-      await this.channel.bindQueue(queue.queue, targetExchange, routingKey);
-      console.log(`Fila "${queueName}" criada e vinculada ao exchange "${targetExchange}" com routingKey "${routingKey}"`);
-      return queue;
-    } catch (error) {
-      console.error('Erro ao criar fila no RabbitMQ:', error);
-      throw error;
     }
   }
 
