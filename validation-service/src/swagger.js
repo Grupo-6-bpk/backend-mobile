@@ -10,22 +10,68 @@ const doc = {
   },
   servers: [
     {
-      url: 'http://localhost:4043',
+      url: 'http://localhost:4042',
       description: 'Development server'
     }
-  ],
-  components: {
+  ],  components: {
     schemas: {
+      DriverValidation: {
+        id: 1,
+        cnh: "12345678901",
+        cnh_front: "https://example.com/cnh_front.jpg",
+        cnh_back: "https://example.com/cnh_back.jpg",
+        bpk_link: "https://example.com/bpk_document.pdf",
+        user_id: 123,
+        is_validated: false,
+        createdAt: "2025-06-13T10:00:00Z",
+        updatedAt: "2025-06-13T10:00:00Z"
+      },
+      PassengerValidation: {
+        id: 1,
+        rg_front: "https://example.com/rg_front.jpg",
+        rg_back: "https://example.com/rg_back.jpg",
+        bpk_link: "https://example.com/bpk_document.pdf",
+        user_id: 456,
+        is_validated: false,
+        createdAt: "2025-06-13T10:00:00Z",
+        updatedAt: "2025-06-13T10:00:00Z"
+      },
+      ValidationResponse: {
+        message: "Driver validation accepted successfully"
+      },
+      ValidationListResponse: {
+        data: [
+          {
+            id: 1,
+            cnh: "12345678901",
+            cnh_front: "https://example.com/cnh_front.jpg",
+            cnh_back: "https://example.com/cnh_back.jpg",
+            bpk_link: "https://example.com/bpk_document.pdf",
+            user_id: 123,
+            is_validated: false,
+            createdAt: "2025-06-13T10:00:00Z",
+            updatedAt: "2025-06-13T10:00:00Z"
+          }
+        ],
+        meta: {
+          totalData: 15,
+          totalPages: 2,
+          currentPage: 1,
+          pageSize: 10
+        }
+      },
+      ErrorResponse: {
+        message: "Validation not found"
+      }
     }
-  },
-  tags: [
+  },  tags: [
     {
-      name: 'Documents',
-      description: 'Document management endpoints'
+      name: 'Driver Validations',
+      description: 'Driver document validation endpoints'
     },
     {
-      name: 'Validation',
-      description: 'Document validation endpoints'
+      name: 'Passenger Validations',
+      description: 'Passenger document validation endpoints'
     },
     {
       name: 'Health',
@@ -40,35 +86,6 @@ const doc = {
     }
   }
 };
-
-async function cleanupSwaggerFile(filePath) {
-  try {
-    const fullPath = path.resolve(process.cwd(), filePath);
-    console.log('Cleaning swagger file at:', fullPath);
-    const data = await fs.readFile(fullPath, 'utf8');
-    const swaggerData = JSON.parse(data);
-    const pathsToRemove = [];
-
-    for (const path in swaggerData.paths) {
-      if (path.includes('{{') ||
-        path.includes('}}') ||
-        path.includes('catch(err)') ||
-        path.includes('next(err)') ||
-        path.includes('res.no_content()') ||
-        (path !== '/login/' && path.startsWith('/login/'))) {
-        pathsToRemove.push(path);
-      }
-    }
-
-    for (const path of pathsToRemove) {
-      delete swaggerData.paths[path];
-    }
-    await fs.writeFile(fullPath, JSON.stringify(swaggerData, null, 2), 'utf8');
-    console.log('Swagger file cleaned successfully!');
-  } catch (err) {
-    console.error('Error cleaning swagger file:', err);
-  }
-}
 
 const outputFile = './infrastructure/config/swagger.json';
 const endpointsFiles = ['./infrastructure/http/routes/routes.js',];

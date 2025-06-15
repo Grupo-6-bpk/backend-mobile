@@ -3,7 +3,7 @@ import app from './app.js';
 import { RabbitMQService } from './infrastructure/messaging/RabbitMQService.js';
 import prisma from './infrastructure/config/prismaClient.js';
 
-const PORT = process.env.PORT || 4040;
+const PORT = process.env.PORT || 4042;
 const HOST = '0.0.0.0'; 
 
 const server = http.createServer(app);
@@ -65,16 +65,16 @@ server.listen(PORT, HOST, async () => {
 
 
 const gracefulShutdown = async (signal) => {
-  console.log(`📤 ${signal} received, shutting down gracefully`)
+  console.log(` ${signal} received, shutting down gracefully`)
   try {
     await rabbitMQ.disconnect();
-    console.log('✅ RabbitMQ desconectado');
+    console.log(' RabbitMQ desconectado');
   } catch (error) {
-    console.error('❌ Erro ao desconectar RabbitMQ:', error);
+    console.error(' Erro ao desconectar RabbitMQ:', error);
   }
 
   server.close(() => {
-    console.log('✅ Server closed');
+    console.log(' Server closed');
     process.exit(0);
   });
 };
@@ -83,7 +83,7 @@ process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
 process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
 server.on('error', (err) => {
-  console.error('❌ Failed to start server:', err.message);
+  console.error(' Failed to start server:', err.message);
   process.exit(1);
 });
 

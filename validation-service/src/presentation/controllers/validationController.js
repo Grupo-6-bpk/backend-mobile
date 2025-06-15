@@ -5,13 +5,30 @@ const rabbitMQ = new RabbitMQService("user.validation.events");
 
 export const getNeededDriverValidations = async (req, res, next) => {
     /*
-    #swagger.tags: ['Validations']
-    #swagger.summary: 'Get needed validations for a user'
-    #swagger.description: 'Retrieve the list of validations that a user needs to complete.'
+    #swagger.tags = ['Driver Validations']
+    #swagger.description = 'Retrieve the list of driver validations that need to be reviewed and validated.'
+    #swagger.parameters['_page'] = {
+        in: 'query',
+        description: 'Page number for pagination',
+        required: false,
+        type: 'integer',
+        example: 1
+    }
+    #swagger.parameters['_limit'] = {
+        in: 'query',
+        description: 'Number of items per page',
+        required: false,
+        type: 'integer',
+        example: 10
+    }
     #swagger.responses[200] = {
-        description: 'List of needed validations',
-        content: {
-        }
+        description: 'List of pending driver validations',
+        schema: { $ref: "#/components/schemas/ValidationListResponse" }
+    }
+    #swagger.responses[500] = {
+        description: 'Internal server error',
+        schema: { $ref: "#/components/schemas/ErrorResponse" }
+    }
     */
     try {
         const page = parseInt(req.query._page) || 1;
@@ -46,13 +63,30 @@ export const getNeededDriverValidations = async (req, res, next) => {
 
 export const getNeededPassengerValidations = async (req, res, next) => {
     /*
-    #swagger.tags: ['Validations']
-    #swagger.summary: 'Get needed validations for a user'
-    #swagger.description: 'Retrieve the list of validations that a user needs to complete.'
+    #swagger.tags = ['Passenger Validations']
+    #swagger.description = 'Retrieve the list of passenger validations that need to be reviewed and validated.'
+    #swagger.parameters['_page'] = {
+        in: 'query',
+        description: 'Page number for pagination',
+        required: false,
+        type: 'integer',
+        example: 1
+    }
+    #swagger.parameters['_limit'] = {
+        in: 'query',
+        description: 'Number of items per page',
+        required: false,
+        type: 'integer',
+        example: 10
+    }
     #swagger.responses[200] = {
-        description: 'List of needed validations',
-        content: {
-        }
+        description: 'List of pending passenger validations',
+        schema: { $ref: "#/components/schemas/ValidationListResponse" }
+    }
+    #swagger.responses[500] = {
+        description: 'Internal server error',
+        schema: { $ref: "#/components/schemas/ErrorResponse" }
+    }
     */
     try {
         const page = parseInt(req.query._page) || 1;
@@ -86,6 +120,29 @@ export const getNeededPassengerValidations = async (req, res, next) => {
 }
 
 export const acceptDriverValidation = async (req, res, next) => {
+    /*
+    #swagger.tags = ['Driver Validations']
+    #swagger.description = 'Accept and approve a driver document validation request.'
+    #swagger.parameters['id'] = {
+        in: 'path',
+        description: 'Driver validation ID',
+        required: true,
+        type: 'integer',
+        example: 1
+    }
+    #swagger.responses[200] = {
+        description: 'Driver validation accepted successfully',
+        schema: { $ref: "#/components/schemas/ValidationResponse" }
+    }
+    #swagger.responses[404] = {
+        description: 'Validation not found',
+        schema: { $ref: "#/components/schemas/ErrorResponse" }
+    }
+    #swagger.responses[500] = {
+        description: 'Internal server error',
+        schema: { $ref: "#/components/schemas/ErrorResponse" }
+    }
+    */
     try {
         const { id } = req.params;
 
@@ -118,6 +175,29 @@ export const acceptDriverValidation = async (req, res, next) => {
 }
 
 export const acceptPassengerValidation = async (req, res, next) => {
+    /*
+    #swagger.tags = ['Passenger Validations']
+    #swagger.description = 'Accept and approve a passenger document validation request.'
+    #swagger.parameters['id'] = {
+        in: 'path',
+        description: 'Passenger validation ID',
+        required: true,
+        type: 'integer',
+        example: 1
+    }
+    #swagger.responses[200] = {
+        description: 'Passenger validation accepted successfully',
+        schema: { $ref: "#/components/schemas/ValidationResponse" }
+    }
+    #swagger.responses[404] = {
+        description: 'Validation not found',
+        schema: { $ref: "#/components/schemas/ErrorResponse" }
+    }
+    #swagger.responses[500] = {
+        description: 'Internal server error',
+        schema: { $ref: "#/components/schemas/ErrorResponse" }
+    }
+    */
     try {
         const { id } = req.params;
 
@@ -150,6 +230,29 @@ export const acceptPassengerValidation = async (req, res, next) => {
 }
 
 export const rejectDriverValidation = async (req, res, next) => {
+    /*
+    #swagger.tags = ['Driver Validations']
+    #swagger.description = 'Reject and decline a driver document validation request.'
+    #swagger.parameters['id'] = {
+        in: 'path',
+        description: 'Driver validation ID',
+        required: true,
+        type: 'integer',
+        example: 1
+    }
+    #swagger.responses[200] = {
+        description: 'Driver validation rejected successfully',
+        schema: { $ref: "#/components/schemas/ValidationResponse" }
+    }
+    #swagger.responses[404] = {
+        description: 'Validation not found',
+        schema: { $ref: "#/components/schemas/ErrorResponse" }
+    }
+    #swagger.responses[500] = {
+        description: 'Internal server error',
+        schema: { $ref: "#/components/schemas/ErrorResponse" }
+    }
+    */
     try {
         const { id } = req.params;
 
@@ -182,6 +285,29 @@ export const rejectDriverValidation = async (req, res, next) => {
 }
 
 export const rejectPassengerValidation = async (req, res, next) => {
+    /*
+    #swagger.tags = ['Passenger Validations']
+    #swagger.description = 'Reject and decline a passenger document validation request.'
+    #swagger.parameters['id'] = {
+        in: 'path',
+        description: 'Passenger validation ID',
+        required: true,
+        type: 'integer',
+        example: 1
+    }
+    #swagger.responses[200] = {
+        description: 'Passenger validation rejected successfully',
+        schema: { $ref: "#/components/schemas/ValidationResponse" }
+    }
+    #swagger.responses[404] = {
+        description: 'Validation not found',
+        schema: { $ref: "#/components/schemas/ErrorResponse" }
+    }
+    #swagger.responses[500] = {
+        description: 'Internal server error',
+        schema: { $ref: "#/components/schemas/ErrorResponse" }
+    }
+    */
     try {
         const { id } = req.params;
 

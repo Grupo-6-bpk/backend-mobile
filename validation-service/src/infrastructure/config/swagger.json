@@ -1,0 +1,620 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Document Validation Service",
+    "description": "Service for validating user documents"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:4042",
+      "description": "Development server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Driver Validations",
+      "description": "Driver document validation endpoints"
+    },
+    {
+      "name": "Passenger Validations",
+      "description": "Passenger document validation endpoints"
+    },
+    {
+      "name": "Health",
+      "description": "Service health check endpoints"
+    }
+  ],
+  "paths": {
+    "/api/validations/driver": {
+      "get": {
+        "tags": [
+          "Driver Validations"
+        ],
+        "summary": "Get pending driver validations",
+        "description": "Retrieve the list of driver validations that need to be reviewed and validated.",
+        "parameters": [
+          {
+            "name": "_page",
+            "in": "query",
+            "description": "Page number for pagination",
+            "required": false,
+            "example": 1,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "_limit",
+            "in": "query",
+            "description": "Number of items per page",
+            "required": false,
+            "example": 10,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of pending driver validations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationListResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationListResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/validations/passenger": {
+      "get": {
+        "tags": [
+          "Passenger Validations"
+        ],
+        "summary": "Get pending passenger validations",
+        "description": "Retrieve the list of passenger validations that need to be reviewed and validated.",
+        "parameters": [
+          {
+            "name": "_page",
+            "in": "query",
+            "description": "Page number for pagination",
+            "required": false,
+            "example": 1,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "_limit",
+            "in": "query",
+            "description": "Number of items per page",
+            "required": false,
+            "example": 10,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of pending passenger validations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationListResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationListResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/validations/driver/{id}/accept": {
+      "put": {
+        "tags": [
+          "Driver Validations"
+        ],
+        "summary": "Accept driver validation",
+        "description": "Accept and approve a driver document validation request.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Driver validation ID",
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Driver validation accepted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Validation not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/validations/passenger/{id}/accept": {
+      "put": {
+        "tags": [
+          "Passenger Validations"
+        ],
+        "summary": "Accept passenger validation",
+        "description": "Accept and approve a passenger document validation request.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Passenger validation ID",
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Passenger validation accepted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Validation not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/validations/driver/{id}/reject": {
+      "put": {
+        "tags": [
+          "Driver Validations"
+        ],
+        "summary": "Reject driver validation",
+        "description": "Reject and decline a driver document validation request.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Driver validation ID",
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Driver validation rejected successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Validation not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/validations/passenger/{id}/reject": {
+      "put": {
+        "tags": [
+          "Passenger Validations"
+        ],
+        "summary": "Reject passenger validation",
+        "description": "Reject and decline a passenger document validation request.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Passenger validation ID",
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Passenger validation rejected successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Validation not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "DriverValidation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "cnh": {
+            "type": "string",
+            "example": "12345678901"
+          },
+          "cnh_front": {
+            "type": "string",
+            "example": "https://example.com/cnh_front.jpg"
+          },
+          "cnh_back": {
+            "type": "string",
+            "example": "https://example.com/cnh_back.jpg"
+          },
+          "bpk_link": {
+            "type": "string",
+            "example": "https://example.com/bpk_document.pdf"
+          },
+          "user_id": {
+            "type": "number",
+            "example": 123
+          },
+          "is_validated": {
+            "type": "boolean",
+            "example": false
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2025-06-13T10:00:00Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2025-06-13T10:00:00Z"
+          }
+        },
+        "xml": {
+          "name": "DriverValidation"
+        }
+      },
+      "PassengerValidation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "rg_front": {
+            "type": "string",
+            "example": "https://example.com/rg_front.jpg"
+          },
+          "rg_back": {
+            "type": "string",
+            "example": "https://example.com/rg_back.jpg"
+          },
+          "bpk_link": {
+            "type": "string",
+            "example": "https://example.com/bpk_document.pdf"
+          },
+          "user_id": {
+            "type": "number",
+            "example": 456
+          },
+          "is_validated": {
+            "type": "boolean",
+            "example": false
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2025-06-13T10:00:00Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2025-06-13T10:00:00Z"
+          }
+        },
+        "xml": {
+          "name": "PassengerValidation"
+        }
+      },
+      "ValidationResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Driver validation accepted successfully"
+          }
+        },
+        "xml": {
+          "name": "ValidationResponse"
+        }
+      },
+      "ValidationListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number",
+                  "example": 1
+                },
+                "cnh": {
+                  "type": "string",
+                  "example": "12345678901"
+                },
+                "cnh_front": {
+                  "type": "string",
+                  "example": "https://example.com/cnh_front.jpg"
+                },
+                "cnh_back": {
+                  "type": "string",
+                  "example": "https://example.com/cnh_back.jpg"
+                },
+                "bpk_link": {
+                  "type": "string",
+                  "example": "https://example.com/bpk_document.pdf"
+                },
+                "user_id": {
+                  "type": "number",
+                  "example": 123
+                },
+                "is_validated": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "createdAt": {
+                  "type": "string",
+                  "example": "2025-06-13T10:00:00Z"
+                },
+                "updatedAt": {
+                  "type": "string",
+                  "example": "2025-06-13T10:00:00Z"
+                }
+              }
+            }
+          },
+          "meta": {
+            "type": "object",
+            "properties": {
+              "totalData": {
+                "type": "number",
+                "example": 15
+              },
+              "totalPages": {
+                "type": "number",
+                "example": 2
+              },
+              "currentPage": {
+                "type": "number",
+                "example": 1
+              },
+              "pageSize": {
+                "type": "number",
+                "example": 10
+              }
+            }
+          }
+        },
+        "xml": {
+          "name": "ValidationListResponse"
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Validation not found"
+          }
+        },
+        "xml": {
+          "name": "ErrorResponse"
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

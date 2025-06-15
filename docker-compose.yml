@@ -108,6 +108,7 @@ services:
       retries: 10
     networks:
       - internal
+      - public
 
   adminer:
     image: adminer:5.3.0

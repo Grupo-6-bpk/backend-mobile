@@ -6,7 +6,7 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
 import routes from "./infrastructure/http/routes/routes.js";
-// import swaggerFile from "./infrastructure/config/swagger.json" with { type: "json" };
+import swaggerFile from "./infrastructure/config/swagger.json" with { type: "json" };
 
 dotenv.config();
 
@@ -22,7 +22,7 @@ app.use(morgan("dev"));
 app.use(routes);
 
 // Swagger UI
-// app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "UP", service: "document-validation-service" });
