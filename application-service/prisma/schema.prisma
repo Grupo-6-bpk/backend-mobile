@@ -91,11 +91,9 @@ model Driver {
   isVerified  Boolean? 
   userId      Int      @unique @map("user_id")
   user        User     @relation(fields: [userId], references: [id])
-
   // Relacionamentos
   rideGroups     RideGroup[]
   rides          Ride[]
-  scheduledRides ScheduledRide[]
   vehicles       Vehicle[]
 
   @@map("driver")
@@ -128,10 +126,9 @@ model RideGroup {
   createdAt   DateTime? @map("created_at")
   updatedAt   DateTime? @map("updated_at")
   driver      Driver    @relation(fields: [driverId], references: [id])
-
   // Relacionamentos
   members        RideGroupMember[]
-  scheduledRides ScheduledRide[]
+  rides          Ride[]
 
   @@map("RideGroup")
 }
@@ -151,29 +148,6 @@ model RideGroupMember {
   @@map("RideGroupMember")
 }
 
-// ScheduledRide entity
-model ScheduledRide {
-  id             Int       @id @default(autoincrement())
-  scheduledDate  DateTime? @map("scheduled_date")
-  estimatedCost  Float?    @map("estimated_cost")
-  availableSeats Int?      @map("available_seats")
-  totalSeats     Int?      @map("total_seats")
-  startLocation  String?   @map("start_location") @db.VarChar(255)
-  endLocation    String?   @map("end_location") @db.VarChar(255)
-  distance       Float?
-  createdAt      DateTime? @map("created_at")
-  updatedAt      DateTime? @map("updated_at")
-  groupId        Int       @map("group_id")
-  driverId       Int       @map("driver_id")
-  vehicleId      Int?      @map("vehicle_id")
-
-  group   RideGroup @relation(fields: [groupId], references: [id])
-  driver  Driver    @relation(fields: [driverId], references: [id])
-  vehicle Vehicle?  @relation(fields: [vehicleId], references: [id])
-
-  @@map("ScheduledRide")
-}
-
 // Ride entity
 model Ride {
   id             Int       @id @default(autoincrement())
@@ -190,9 +164,11 @@ model Ride {
   updatedAt      DateTime? @map("updated_at")
   driverId       Int       @map("driver_id")
   vehicleId      Int?      @map("vehicle_id")
+  groupId        Int?      @map("group_id")
 
   driver       Driver        @relation(fields: [driverId], references: [id])
   vehicle      Vehicle?      @relation(fields: [vehicleId], references: [id])
+  group        RideGroup?    @relation(fields: [groupId], references: [id])
   rideRequests RideRequest[]
 
   @@map("ride")
@@ -230,10 +206,8 @@ model Vehicle {
   createdAt       DateTime? @default(now()) @map("created_at")
   updatedAt       DateTime? @updatedAt @map("updated_at")
   driverId        Int       @map("driver_id")
-
   driver         Driver          @relation(fields: [driverId], references: [id])
   rides          Ride[]
-  scheduledRides ScheduledRide[]
 
   @@map("vehicle")
 }

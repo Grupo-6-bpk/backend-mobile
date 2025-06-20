@@ -14,6 +14,7 @@ import {
   getDashboardData,
   getUserRideHistory,
   getCostSharingStats,
+  getGroupRides,
 } from "../../../../presentation/controllers/RideController.js";
 
 const router = Router();
@@ -22,6 +23,7 @@ router.get("/available", listAvailableRides);
 router.get("/dashboard", getDashboardData);
 router.get("/history", getUserRideHistory);
 router.get("/stats", getCostSharingStats);
+router.get("/group/:groupId", getGroupRides);
 router.get("/:id", getRide);
 router.post("/", validator(rideValidator), createRide);
 router.put("/:id", validator(ridePatchValidator), updateRide);
