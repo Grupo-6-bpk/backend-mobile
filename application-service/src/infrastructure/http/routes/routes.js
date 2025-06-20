@@ -17,6 +17,7 @@ import vehicleRouter from './vehicle/vehicleRouter.js';
 import chatRouter from './chat/chatRouter.js';
 import rideRequestRouter from './rideRequest/rideRequestRouter.js';
 import rideRouter from './ride/rideRouter.js';
+import ratingRouter from './rating/ratingRouter.js';
 import groupRouter from './group/groupRouter.js';
 
 const routes = Router();
@@ -34,6 +35,7 @@ routes.use('/api/chats', verify, chatRouter);
 
 routes.use('/api/rides', verify, rideRouter);
 routes.use('/api/ride-requests', verify, rideRequestRouter);
+routes.use('/api/ratings', verify, ratingRouter);
 
 routes.use(InternalServerError);
 routes.use(NotFound);
