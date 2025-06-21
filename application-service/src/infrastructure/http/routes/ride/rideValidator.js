@@ -38,11 +38,16 @@ export default yup
       .typeError("ID do motorista deve ser um número")
       .positive("ID do motorista deve ser positivo")
       .integer("ID do motorista deve ser um inteiro")
-      .required("ID do motorista é obrigatório"),
-    vehicleId: yup
+      .required("ID do motorista é obrigatório"),    vehicleId: yup
       .number()
       .typeError("ID do veículo deve ser um número")
       .positive("ID do veículo deve ser positivo")
       .integer("ID do veículo deve ser um inteiro")
-      .required("ID do veículo é obrigatório")
+      .required("ID do veículo é obrigatório"),
+    groupId: yup
+      .number()
+      .typeError("ID do grupo deve ser um número")
+      .positive("ID do grupo deve ser positivo")
+      .integer("ID do grupo deve ser um inteiro")
+      .optional()
   }).noUnknown(false);

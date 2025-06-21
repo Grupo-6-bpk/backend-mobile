@@ -4,7 +4,75 @@ import { recalculateRideCosts } from "../../domain/ride/rideCalculations.js";
 export const listRides = async (req, res, next) => {
   /*
   #swagger.tags = ["Rides"]
-  #swagger.description = 'List rides with pagination'  #swagger.responses[200] = {
+  #swagger.description = 'List rides with pagination'
+  #swagger.parameters[0] = {
+    name: '_page',
+    in: 'query',
+    description: 'Page number',
+    required: false,
+    type: 'integer',
+    example: 1
+  }
+  #swagger.parameters[1] = {
+    name: '_size',
+    in: 'query',
+    description: 'Page size',
+    required: false,
+    type: 'integer',
+    example: 10
+  }
+  #swagger.parameters[2] = {
+    name: 'driverId',
+    in: 'query',
+    description: 'Filter by driver ID',
+    required: false,
+    type: 'integer',
+    example: 1
+  }
+  #swagger.parameters[3] = {
+    name: 'groupId',
+    in: 'query',
+    description: 'Filter by group ID',
+    required: false,
+    type: 'integer',
+    example: 1
+  }
+  #swagger.parameters[4] = {
+    name: 'type',
+    in: 'query',
+    description: 'Filter by ride type',
+    required: false,
+    type: 'string',
+    enum: ['group', 'individual'],
+    example: 'group'
+  }
+  #swagger.parameters[5] = {
+    name: 'fromDate',
+    in: 'query',
+    description: 'Filter rides from this date',
+    required: false,
+    type: 'string',
+    format: 'date-time',
+    example: '2025-06-20T00:00:00Z'
+  }
+  #swagger.parameters[6] = {
+    name: 'toDate',
+    in: 'query',
+    description: 'Filter rides until this date',
+    required: false,
+    type: 'string',
+    format: 'date-time',
+    example: '2025-06-30T23:59:59Z'
+  }
+  #swagger.parameters[7] = {
+    name: 'hasAvailableSeats',
+    in: 'query',
+    description: 'Filter rides with available seats',
+    required: false,
+    type: 'boolean',
+    example: true
+  }
+  #swagger.responses[200] = {
     description: 'Rides listed successfully',
     schema: {
       currentPage: 1,
@@ -23,7 +91,9 @@ export const listRides = async (req, res, next) => {
           availableSeats: 2,
           createdAt: "2025-05-18T12:00:00Z",
           updatedAt: "2025-05-18T12:00:00Z",          driverId: 1,
-          vehicleId: 1,          driver: {
+          vehicleId: 1,
+          groupId: 1,
+          driver: {
             id: 1,
             userId: 1
           },
@@ -32,6 +102,11 @@ export const listRides = async (req, res, next) => {
             model: "Model S",
             brand: "Tesla",
             plate: "ABC1234"
+          },
+          group: {
+            id: 1,
+            name: "Campus to Downtown",
+            description: "Regular rides from university campus to downtown area"
           },
           _count: {
             rideRequests: 2
@@ -58,6 +133,20 @@ export const listRides = async (req, res, next) => {
         gte: new Date(req.query.fromDate),
         lte: new Date(req.query.toDate)
       };
+    }
+    
+    // Filter by group if query param exists
+    if (req.query.groupId) {
+      where.groupId = parseInt(req.query.groupId);
+    }
+
+    // Filter by ride type if query param exists
+    if (req.query.type) {
+      if (req.query.type === 'group') {
+        where.groupId = { not: null };
+      } else if (req.query.type === 'individual') {
+        where.groupId = null;
+      }
     }
     
     // Filter by rides with available seats if query param exists
@@ -87,6 +176,13 @@ export const listRides = async (req, res, next) => {
             plate: true
           }
         },
+        group: {
+          select: {
+            id: true,
+            name: true,
+            description: true
+          }
+        },
         _count: {
           select: {
             rideRequests: true
@@ -108,8 +204,18 @@ export const listRides = async (req, res, next) => {
 export const getRide = async (req, res, next) => {
   /*
   #swagger.tags = ["Rides"]
-  #swagger.description = 'Get a ride by ID with detailed information'  #swagger.responses[200] = { 
-    description: 'Ride found',    schema: {
+  #swagger.description = 'Get a ride by ID with detailed information'  
+  #swagger.parameters[0] = {
+    name: 'id',
+    in: 'path',
+    description: 'Ride ID',
+    required: true,
+    type: 'integer',
+    example: 1
+  }
+  #swagger.responses[200] = { 
+    description: 'Ride found',    
+    schema: {
       id: 1,
       startLocation: "Start Location",
       endLocation: "End Location",
@@ -121,23 +227,29 @@ export const getRide = async (req, res, next) => {
       totalSeats: 4,
       availableSeats: 2,
       createdAt: "2025-05-18T12:00:00Z",
-      updatedAt: "2025-05-18T12:00:00Z",      driverId: 1,
+      updatedAt: "2025-05-18T12:00:00Z",      
+      driverId: 1,
       vehicleId: 1,
+      groupId: 1,
       driver: {
         id: 1,
-        cnh: "1234567890",
-        cnhVerified: true,
         userId: 1,
         user: {
           id: 1,
           name: "Driver Name",
           last_name: "Driver Lastname"
         }
-      },      vehicle: {
+      },      
+      vehicle: {
         id: 1,
         model: "Model S",
         brand: "Tesla",
         plate: "ABC1234"
+      },
+      group: {
+        id: 1,
+        name: "Campus to Downtown",
+        description: "Regular rides from university campus to downtown area"
       },
       rideRequests: [
         {
@@ -161,7 +273,7 @@ export const getRide = async (req, res, next) => {
   #swagger.responses[404] = { description: 'Ride not found' }
   */
   try {
-    const rideId = Number(req.params.id) || 0;      const ride = await prisma.ride.findUnique({
+    const rideId = Number(req.params.id) || 0;    const ride = await prisma.ride.findUnique({
       where: { id: rideId },
       include: {
       driver: {
@@ -177,6 +289,13 @@ export const getRide = async (req, res, next) => {
         }
       },
       vehicle: true,
+      group: {
+        select: {
+          id: true,
+          name: true,
+          description: true
+        }
+      },
       rideRequests: {
         include: {
         passenger: {
@@ -200,36 +319,88 @@ export const getRide = async (req, res, next) => {
   }
 };
 
-export const createRide = async (req, res, next) => {  /*
+export const createRide = async (req, res, next) => {
+  /*
   #swagger.tags = ["Rides"]
-  #swagger.description = 'Create a new ride'
+  #swagger.description = 'Create a new ride. If groupId is provided, all group members will be automatically confirmed for this ride.'
   #swagger.requestBody = {
     required: true,
-    schema: { $ref: "#/components/schemas/RideCreate" }
-  }  #swagger.responses[201] = { 
+    content: {
+      "application/json": {
+        schema: {
+          type: "object",
+          properties: {
+            startLocation: {
+              type: "string",
+              example: "Start Location"
+            },
+            endLocation: {
+              type: "string", 
+              example: "End Location"
+            },
+            distance: {
+              type: "number",
+              example: 15.5
+            },
+            departureTime: {
+              type: "string",
+              format: "date-time",
+              example: "2025-06-25T14:30:00Z"
+            },
+            fuelPrice: {
+              type: "number",
+              example: 5.5
+            },
+            totalSeats: {
+              type: "number",
+              example: 4
+            },
+            driverId: {
+              type: "number",
+              example: 1
+            },
+            vehicleId: {
+              type: "number",
+              example: 1
+            },
+            groupId: {
+              type: "number",
+              example: 1,
+              description: "Optional. If provided, all group members will be automatically confirmed"
+            }
+          },
+          required: ["startLocation", "endLocation", "distance", "departureTime", "fuelPrice", "totalSeats", "driverId"]
+        }
+      }
+    }
+  }  
+  #swagger.responses[201] = { 
     description: 'Ride created successfully',
     schema: { 
       id: 1,
       startLocation: "Start Location",
       endLocation: "End Location",
       distance: 15.5,
-      departureTime: "2025-05-18T12:00:00Z",
+      departureTime: "2025-06-25T14:30:00Z",
       totalCost: 50.00,
       fuelPrice: 5.50,
       pricePerMember: 12.50,
       totalSeats: 4,
-      availableSeats: 4,
+      availableSeats: 2,
       driverId: 1,
-      vehicleId: 1
+      vehicleId: 1,
+      groupId: 1,
+      createdAt: "2025-06-20T12:00:00Z",
+      updatedAt: "2025-06-20T12:00:00Z"
     } 
   }
   #swagger.responses[400] = {
-    description: "Bad Request"
+    description: "Bad Request - Driver not found, vehicle not found, vehicle doesn't belong to driver, or group validation failed"
   }
-  */  try {
+  */try {
     const { 
       id, createdAt, updatedAt, 
-      driver, vehicle, rideRequests, 
+      driver, vehicle, rideRequests, group,
       ...rideData 
     } = req.body;
 
@@ -255,10 +426,48 @@ export const createRide = async (req, res, next) => {  /*
       if (vehicleExists.driverId !== rideData.driverId) {
         return res.status(400).json({ message: "Este veículo não pertence ao motorista informado" });
       }
-    }    // Set timestamps and available seats
+    }
+
+    // Check if group exists and driver is the group owner (if groupId is provided)
+    let groupMembers = [];
+    if (rideData.groupId) {
+      const groupExists = await prisma.rideGroup.findUnique({
+        where: { id: rideData.groupId },
+        include: {
+          members: {
+            include: {
+              passenger: {
+                include: {
+                  user: true
+                }
+              }
+            }
+          }
+        }
+      });
+
+      if (!groupExists) {
+        return res.status(400).json({ message: "Grupo não encontrado" });
+      }
+
+      if (groupExists.driverId !== rideData.driverId) {
+        return res.status(400).json({ message: "Apenas o motorista do grupo pode criar caronas para este grupo" });
+      }
+
+      groupMembers = groupExists.members;
+      
+      // Ajustar availableSeats baseado no número de membros do grupo
+      if (groupMembers.length > rideData.totalSeats) {
+        return res.status(400).json({ 
+          message: `O grupo possui ${groupMembers.length} membros, mas a carona tem apenas ${rideData.totalSeats} vagas disponíveis` 
+        });
+      }
+    }
+
+    // Set timestamps and available seats
     rideData.createdAt = new Date();
     rideData.updatedAt = new Date();
-    rideData.availableSeats = rideData.totalSeats; // Initially all seats are available
+    rideData.availableSeats = rideData.totalSeats - groupMembers.length; // Subtrair membros do grupo das vagas disponíveis
 
     // Calculate costs automatically
     const calculatedCosts = recalculateRideCosts(rideData);
@@ -280,13 +489,41 @@ export const createRide = async (req, res, next) => {  /*
       };
     }
 
+    // Add group connection if groupId is provided
+    if (rideData.groupId) {
+      createData.group = {
+        connect: { id: rideData.groupId }
+      };
+    }
+
     // Remove the raw IDs since we're now using connect syntax
     delete createData.driverId;
     delete createData.vehicleId;
+    delete createData.groupId;
 
     const newRide = await prisma.ride.create({
       data: createData
-    });    res.created(newRide);
+    });
+
+    // If this is a group ride, automatically create approved ride requests for all group members
+    if (rideData.groupId && groupMembers.length > 0) {
+      const groupRideRequests = groupMembers.map(member => ({
+        rideId: newRide.id,
+        passengerId: member.passengerId,
+        status: "APPROVED",
+        passengerShare: newRide.pricePerMember,
+        startLocation: newRide.startLocation,
+        endLocation: newRide.endLocation,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }));
+
+      await prisma.rideRequest.createMany({
+        data: groupRideRequests
+      });
+    }
+
+    res.created(newRide);
   } catch (err) {
     next(err);
   }
@@ -526,6 +763,73 @@ export const listAvailableRides = async (req, res, next) => {
   /*
   #swagger.tags = ["Rides"]
   #swagger.description = 'List rides with available seats'
+  #swagger.parameters[0] = {
+    name: '_page',
+    in: 'query',
+    description: 'Page number',
+    required: false,
+    type: 'integer',
+    example: 1
+  }
+  #swagger.parameters[1] = {
+    name: '_size',
+    in: 'query',
+    description: 'Page size',
+    required: false,
+    type: 'integer',
+    example: 10
+  }
+  #swagger.parameters[2] = {
+    name: 'driverId',
+    in: 'query',
+    description: 'Filter by driver ID',
+    required: false,
+    type: 'integer',
+    example: 1
+  }
+  #swagger.parameters[3] = {
+    name: 'groupId',
+    in: 'query',
+    description: 'Filter by group ID',
+    required: false,
+    type: 'integer',
+    example: 1
+  }
+  #swagger.parameters[4] = {
+    name: 'type',
+    in: 'query',
+    description: 'Filter by ride type',
+    required: false,
+    type: 'string',
+    enum: ['group', 'individual'],
+    example: 'group'
+  }
+  #swagger.parameters[5] = {
+    name: 'fromDate',
+    in: 'query',
+    description: 'Filter rides from this date',
+    required: false,
+    type: 'string',
+    format: 'date-time',
+    example: '2025-06-20T00:00:00Z'
+  }
+  #swagger.parameters[6] = {
+    name: 'toDate',
+    in: 'query',
+    description: 'Filter rides until this date',
+    required: false,
+    type: 'string',
+    format: 'date-time',
+    example: '2025-06-30T23:59:59Z'
+  }
+  #swagger.parameters[7] = {
+    name: 'includeExpired',
+    in: 'query',
+    description: 'Include rides with past departure time',
+    required: false,
+    type: 'boolean',
+    example: false
+  }
   #swagger.responses[200] = {
     description: 'Available rides listed successfully',
     schema: {
@@ -538,16 +842,17 @@ export const listAvailableRides = async (req, res, next) => {
           startLocation: "Start Location",
           endLocation: "End Location", 
           distance: 15.5,
-          departureTime: "2025-05-18T12:00:00Z",
+          departureTime: "2025-06-25T14:30:00Z",
           totalCost: 50.00,
           fuelPrice: 5.50,
           pricePerMember: 12.50,
           totalSeats: 4,
           availableSeats: 2,
-          createdAt: "2025-05-18T12:00:00Z",
-          updatedAt: "2025-05-18T12:00:00Z",
+          createdAt: "2025-06-20T12:00:00Z",
+          updatedAt: "2025-06-20T12:00:00Z",
           driverId: 1,
           vehicleId: 1,
+          groupId: 1,
           driver: {
             id: 1,
             userId: 1
@@ -557,6 +862,11 @@ export const listAvailableRides = async (req, res, next) => {
             model: "Model S",
             brand: "Tesla",
             plate: "ABC1234"
+          },
+          group: {
+            id: 1,
+            name: "Campus to Downtown",
+            description: "Regular rides from university campus to downtown area"
           }
         }
       ]
@@ -580,10 +890,23 @@ export const listAvailableRides = async (req, res, next) => {
         gte: new Date()
       };
     }
-    
-    // Filter by driver if query param exists
+      // Filter by driver if query param exists
     if (req.query.driverId) {
       where.driverId = parseInt(req.query.driverId);
+    }
+
+    // Filter by group if query param exists
+    if (req.query.groupId) {
+      where.groupId = parseInt(req.query.groupId);
+    }
+
+    // Filter by ride type if query param exists  
+    if (req.query.type) {
+      if (req.query.type === 'group') {
+        where.groupId = { not: null };
+      } else if (req.query.type === 'individual') {
+        where.groupId = null;
+      }
     }
     
     // Filter by departure time range if query params exist
@@ -609,8 +932,7 @@ export const listAvailableRides = async (req, res, next) => {
       orderBy: {
         departureTime: 'asc',
         ...(req.order || {})
-      },
-      include: {
+      },      include: {
         driver: {
           select: {
             id: true,
@@ -623,6 +945,13 @@ export const listAvailableRides = async (req, res, next) => {
             model: true,
             brand: true,
             plate: true
+          }
+        },
+        group: {
+          select: {
+            id: true,
+            name: true,
+            description: true
           }
         }
       }
@@ -1485,121 +1814,6 @@ export const getCostSharingStats = async (req, res, next) => {
       });
 
       passengerRequests.forEach(request => {
-        const fullTripCost = request.ride.totalCost || 0;
-        const userPaid = request.passengerShare || 0;
-        const savings = Math.max(0, fullTripCost - userPaid);
-        
-        stats.economicImpact.totalSavedMoney += savings;
-        stats.environmentalImpact.totalDistanceShared += request.ride.distance || 0;
-        totalRidesCount++;
-      });
-    }
-
-    // Calcular métricas derivadas
-    if (totalRidesCount > 0) {
-      stats.economicImpact.averageSavingsPerRide = 
-        (stats.economicImpact.totalSharedCosts + stats.economicImpact.totalSavedMoney) / totalRidesCount;
-      
-      const totalCostImpact = stats.economicImpact.totalSharedCosts + stats.economicImpact.totalSavedMoney;
-      const estimatedOriginalCost = totalCostImpact * 1.5; // Estimativa de custo sem compartilhamento
-      stats.economicImpact.costEfficiencyRate = totalCostImpact / estimatedOriginalCost;
-      
-      stats.communityImpact.averageOccupancyRate = totalOccupancySum / totalRidesCount;
-    }
-
-    // Cálculos ambientais (estimativas)
-    if (stats.environmentalImpact.totalDistanceShared > 0) {
-      // Estimativa: 0.15 kg CO2 por km economizado
-      stats.environmentalImpact.estimatedEmissionsSaved = 
-        stats.environmentalImpact.totalDistanceShared * 0.15;
-      
-      // Estimativa: 1 árvore absorve ~22 kg CO2 por ano
-      stats.environmentalImpact.equivalentTreesPlanted = 
-        stats.environmentalImpact.estimatedEmissionsSaved / 22;
-    }
-
-    // Métricas da comunidade
-    stats.communityImpact.studentsHelped = uniqueStudentsHelped.size;
-    stats.communityImpact.ridesShared = totalRidesCount;
-    
-    // Score de conexão da comunidade (0-10) baseado em atividade e ajuda mútua
-    const activityScore = Math.min(totalRidesCount / 10, 1) * 5; // Max 5 pontos por atividade
-    const helpScore = Math.min(uniqueStudentsHelped.size / 20, 1) * 3; // Max 3 pontos por ajuda
-    const efficiencyScore = stats.communityImpact.averageOccupancyRate * 2; // Max 2 pontos por eficiência
-    stats.communityImpact.communityConnectionScore = activityScore + helpScore + efficiencyScore;
-
-    // Análise de tendências mensais
-    const trendsMap = new Map();
-    
-    // Inicializar meses
-    for (let i = 0; i < months; i++) {
-      const date = new Date();
-      date.setMonth(currentDate.getMonth() - i);
-      const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-      trendsMap.set(monthKey, {
-        month: monthKey,
-        sharedCosts: 0,
-        savedMoney: 0,
-        distanceShared: 0,
-        ridesCount: 0
-      });
-    }
-
-    // Processar tendências como motorista
-    if (user.driver) {
-      const monthlyDriverRides = await prisma.ride.findMany({
-        where: {
-          driverId: user.driver.id,
-          departureTime: {
-            gte: startDate,
-            lte: endDate
-          }
-        },
-        include: {
-          rideRequests: {
-            where: { status: "APPROVED" }
-          }
-        }
-      });
-
-      monthlyDriverRides.forEach(ride => {
-        const rideDate = new Date(ride.departureTime);
-        const monthKey = `${rideDate.getFullYear()}-${String(rideDate.getMonth() + 1).padStart(2, '0')}`;
-        
-        if (trendsMap.has(monthKey)) {
-          const trend = trendsMap.get(monthKey);
-          const passengersCount = ride.rideRequests.length;
-          
-          if (passengersCount > 0) {
-            trend.sharedCosts += passengersCount * ride.pricePerMember;
-            trend.distanceShared += ride.distance || 0;
-            trend.ridesCount++;
-          }
-          
-          trendsMap.set(monthKey, trend);
-        }
-      });
-    }
-
-    // Processar tendências como passageiro
-    if (user.passenger) {
-      const monthlyPassengerRides = await prisma.rideRequest.findMany({
-        where: {
-          passengerId: user.passenger.id,
-          status: "APPROVED",
-          ride: {
-            departureTime: {
-              gte: startDate,
-              lte: endDate
-            }
-          }
-        },
-        include: {
-          ride: true
-        }
-      });
-
-      monthlyPassengerRides.forEach(request => {
         const rideDate = new Date(request.ride.departureTime);
         const monthKey = `${rideDate.getFullYear()}-${String(rideDate.getMonth() + 1).padStart(2, '0')}`;
         
@@ -1622,6 +1836,224 @@ export const getCostSharingStats = async (req, res, next) => {
     stats.trends = Array.from(trendsMap.values()).reverse();
 
     const data = res.hateos_item(stats);
+    res.ok(data);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getGroupRides = async (req, res, next) => {
+  /*
+  #swagger.tags = ["Rides"]
+  #swagger.description = 'List rides for a specific group'
+  #swagger.parameters[0] = {
+    name: 'groupId',
+    in: 'path',
+    description: 'Group ID',
+    required: true,
+    type: 'integer',
+    example: 1
+  }
+  #swagger.parameters[1] = {
+    name: '_page',
+    in: 'query',
+    description: 'Page number',
+    required: false,
+    type: 'integer',
+    example: 1
+  }
+  #swagger.parameters[2] = {
+    name: '_size',
+    in: 'query',
+    description: 'Page size',
+    required: false,
+    type: 'integer',
+    example: 10
+  }
+  #swagger.parameters[3] = {
+    name: 'fromDate',
+    in: 'query',
+    description: 'Filter rides from this date',
+    required: false,
+    type: 'string',
+    format: 'date-time',
+    example: '2025-06-20T00:00:00Z'
+  }
+  #swagger.parameters[4] = {
+    name: 'toDate',
+    in: 'query',
+    description: 'Filter rides until this date',
+    required: false,
+    type: 'string',
+    format: 'date-time',
+    example: '2025-06-30T23:59:59Z'
+  }
+  #swagger.parameters[5] = {
+    name: 'includeExpired',
+    in: 'query',
+    description: 'Include rides with past departure time',
+    required: false,
+    type: 'boolean',
+    example: false
+  }
+  #swagger.responses[200] = {
+    description: 'Group rides listed successfully',
+    schema: {
+      currentPage: 1,
+      totalPages: 2,
+      totalItems: 12,
+      groupInfo: {
+        id: 1,
+        name: "Campus to Downtown",
+        description: "Regular rides from university campus to downtown area",
+        driverId: 1
+      },
+      items: [
+        {
+          id: 1,
+          startLocation: "Campus A",
+          endLocation: "Downtown",
+          distance: 15.5,
+          departureTime: "2025-06-25T14:30:00Z",
+          totalCost: 45.00,
+          pricePerMember: 11.25,
+          totalSeats: 4,
+          availableSeats: 0,
+          groupId: 1,
+          driver: {
+            id: 1,
+            userId: 1
+          },
+          vehicle: {
+            id: 1,
+            model: "Civic",
+            brand: "Honda",
+            plate: "ABC1234"
+          },
+          confirmedMembers: [
+            {
+              name: "João Silva",
+              userId: 2
+            },
+            {
+              name: "Maria Santos", 
+              userId: 3
+            }
+          ]
+        }
+      ]
+    }
+  }
+  #swagger.responses[404] = { description: 'Group not found' }
+  */
+  try {
+    const groupId = Number(req.params.groupId) || 0;
+    const page = parseInt(req.query._page) || 1;
+    const size = parseInt(req.query._size) || 10;
+    const offset = (page - 1) * size;
+
+    // Verificar se o grupo existe
+    const group = await prisma.rideGroup.findUnique({
+      where: { id: groupId },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        driverId: true
+      }
+    });
+
+    if (!group) {
+      return res.status(404).json({ message: "Grupo não encontrado" });
+    }
+
+    let where = {
+      groupId: groupId
+    };
+
+    // Filtros adicionais
+    if (req.query.fromDate && req.query.toDate) {
+      where.departureTime = {
+        gte: new Date(req.query.fromDate),
+        lte: new Date(req.query.toDate)
+      };
+    }
+
+    // Mostrar apenas rides futuras por padrão
+    if (!req.query.includeExpired || req.query.includeExpired !== 'true') {
+      where.departureTime = {
+        gte: new Date()
+      };
+    }
+
+    const rides = await prisma.ride.findMany({
+      where,
+      skip: offset,
+      take: size,
+      orderBy: {
+        departureTime: 'asc'
+      },
+      include: {
+        driver: {
+          select: {
+            id: true,
+            userId: true
+          }
+        },
+        vehicle: {
+          select: {
+            id: true,
+            model: true,
+            brand: true,
+            plate: true
+          }
+        },
+        rideRequests: {
+          where: {
+            status: "APPROVED"
+          },
+          include: {
+            passenger: {
+              include: {
+                user: {
+                  select: {
+                    id: true,
+                    name: true,
+                    last_name: true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // Formatar os dados das rides incluindo membros confirmados
+    const formattedRides = rides.map(ride => ({
+      ...ride,
+      confirmedMembers: ride.rideRequests.map(request => ({
+        name: `${request.passenger.user.name} ${request.passenger.user.last_name}`,
+        userId: request.passenger.user.id
+      }))
+    }));
+
+    const totalData = await prisma.ride.count({ where });
+    const totalPages = Math.ceil(totalData / size);
+
+    const response = {
+      currentPage: page,
+      totalPages,
+      totalItems: totalData,
+      groupInfo: group,
+      items: formattedRides
+    };
+
+    const data = res.hateos_list(`groups/${groupId}/rides`, response.items, totalPages);
+    data.groupInfo = group;
+    data.currentPage = page;
+    data.totalItems = totalData;
+    
     res.ok(data);
   } catch (err) {
     next(err);
