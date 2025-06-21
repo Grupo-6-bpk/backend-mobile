@@ -30,10 +30,13 @@ model User {
   // Relacionamentos
   driver    Driver?
   passenger Passenger?
-
   // Chat relacionamentos
   chats    ChatParticipant[]
   messages ChatMessage[]     @relation("sender_messages")
+
+  // Rating relacionamentos
+  ratingsGiven    Rating[] @relation("reviewer_ratings")
+  ratingsReceived Rating[] @relation("reviewee_ratings")
 
   @@map("user")
 }
@@ -165,11 +168,11 @@ model Ride {
   driverId       Int       @map("driver_id")
   vehicleId      Int?      @map("vehicle_id")
   groupId        Int?      @map("group_id")
-
   driver       Driver        @relation(fields: [driverId], references: [id])
   vehicle      Vehicle?      @relation(fields: [vehicleId], references: [id])
   group        RideGroup?    @relation(fields: [groupId], references: [id])
   rideRequests RideRequest[]
+  ratings      Rating[]
 
   @@map("ride")
 }
@@ -210,4 +213,27 @@ model Vehicle {
   rides          Ride[]
 
   @@map("vehicle")
+}
+
+// Rating entity
+model Rating {
+  id        Int       @id @default(autoincrement())
+  stars     Int       // Rating from 1 to 5 stars
+  comment   String?   @db.Text
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  
+  // Foreign keys
+  rideId      Int @map("ride_id")
+  reviewerId  Int @map("reviewer_id") // User who is giving the rating
+  revieweeId  Int @map("reviewee_id") // User who is being rated
+  
+  // Relationships
+  ride     Ride @relation(fields: [rideId], references: [id], onDelete: Cascade)
+  reviewer User @relation("reviewer_ratings", fields: [reviewerId], references: [id])
+  reviewee User @relation("reviewee_ratings", fields: [revieweeId], references: [id])
+  
+  // Ensure one rating per ride per reviewer
+  @@unique([rideId, reviewerId])
+  @@map("rating")
 }

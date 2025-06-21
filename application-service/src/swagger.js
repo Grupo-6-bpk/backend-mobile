@@ -278,8 +278,46 @@ const doc = {
             id: 1,
             status: "PENDING",
             passengerShare: 12.50
-          }
-        ]
+          }        ]
+      },
+      RatingCreate: {
+        stars: 5,
+        comment: "Excelente motorista, muito pontual!",
+        rideId: 1,
+        reviewerId: 2,
+        revieweeId: 1
+      },
+      RatingUpdate: {
+        stars: 4,
+        comment: "Bom motorista, chegou pontual."
+      },
+      Rating: {
+        id: 1,
+        stars: 5,
+        comment: "Excelente motorista, muito pontual!",
+        createdAt: "2025-06-20T12:00:00Z",
+        updatedAt: "2025-06-20T12:00:00Z",
+        rideId: 1,
+        reviewerId: 2,
+        revieweeId: 1,
+        reviewer: {
+          id: 2,
+          name: "Maria",
+          last_name: "Silva",
+          avatarUrl: "https://example.com/avatar2.jpg"
+        },
+        reviewee: {
+          id: 1,
+          name: "João",
+          last_name: "Santos",
+          avatarUrl: "https://example.com/avatar1.jpg"
+        },
+        ride: {
+          id: 1,
+          startLocation: "Campus A",
+          endLocation: "Shopping Center",
+          departureTime: "2025-06-20T14:30:00Z"
+        }
       },
     },
     securitySchemes: {
