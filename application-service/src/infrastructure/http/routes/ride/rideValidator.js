@@ -49,5 +49,10 @@ export default yup
       .typeError("ID do grupo deve ser um número")
       .positive("ID do grupo deve ser positivo")
       .integer("ID do grupo deve ser um inteiro")
+      .optional(),
+    status: yup
+      .string()
+      .max(50, "Status deve ter no máximo 50 caracteres")
+      .oneOf(["pending", "in_progress", "completed", "canceled"], "Status inválido")
       .optional()
   }).noUnknown(false);

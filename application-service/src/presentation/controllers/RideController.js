@@ -63,14 +63,22 @@ export const listRides = async (req, res, next) => {
     type: 'string',
     format: 'date-time',
     example: '2025-06-30T23:59:59Z'
-  }
-  #swagger.parameters[7] = {
+  }  #swagger.parameters[7] = {
     name: 'hasAvailableSeats',
     in: 'query',
     description: 'Filter rides with available seats',
     required: false,
     type: 'boolean',
     example: true
+  }
+  #swagger.parameters[8] = {
+    name: 'status',
+    in: 'query',
+    description: 'Filter by ride status',
+    required: false,
+    type: 'string',
+    enum: ['pending', 'in_progress', 'completed', 'canceled'],
+    example: 'pending'
   }
   #swagger.responses[200] = {
     description: 'Rides listed successfully',
@@ -148,12 +156,16 @@ export const listRides = async (req, res, next) => {
         where.groupId = null;
       }
     }
-    
-    // Filter by rides with available seats if query param exists
+      // Filter by rides with available seats if query param exists
     if (req.query.hasAvailableSeats === "true") {
       where.availableSeats = {
         gt: 0
       };
+    }
+
+    // Filter by status if query param exists
+    if (req.query.status) {
+      where.status = req.query.status;
     }
   const rides = await prisma.ride.findMany({
       where,
@@ -362,11 +374,16 @@ export const createRide = async (req, res, next) => {
             vehicleId: {
               type: "number",
               example: 1
-            },
-            groupId: {
+            },            groupId: {
               type: "number",
               example: 1,
               description: "Optional. If provided, all group members will be automatically confirmed"
+            },
+            status: {
+              type: "string",
+              enum: ["pending", "in_progress", "completed", "canceled"],
+              example: "pending",
+              description: "Status of the ride. Defaults to 'pending' if not provided"
             }
           },
           required: ["startLocation", "endLocation", "distance", "departureTime", "fuelPrice", "totalSeats", "driverId"]
@@ -383,10 +400,10 @@ export const createRide = async (req, res, next) => {
       distance: 15.5,
       departureTime: "2025-06-25T14:30:00Z",
       totalCost: 50.00,
-      fuelPrice: 5.50,
-      pricePerMember: 12.50,
+      fuelPrice: 5.50,      pricePerMember: 12.50,
       totalSeats: 4,
       availableSeats: 2,
+      status: "pending",
       driverId: 1,
       vehicleId: 1,
       groupId: 1,
@@ -908,8 +925,7 @@ export const listAvailableRides = async (req, res, next) => {
         where.groupId = null;
       }
     }
-    
-    // Filter by departure time range if query params exist
+      // Filter by departure time range if query params exist
     if (req.query.fromDate && req.query.toDate) {
       where.departureTime = {
         gte: new Date(req.query.fromDate),
@@ -923,6 +939,11 @@ export const listAvailableRides = async (req, res, next) => {
       where.departureTime = {
         lte: new Date(req.query.toDate)
       };
+    }
+
+    // Filter by status if query param exists
+    if (req.query.status) {
+      where.status = req.query.status;
     }
 
     const rides = await prisma.ride.findMany({
@@ -1887,14 +1908,22 @@ export const getGroupRides = async (req, res, next) => {
     type: 'string',
     format: 'date-time',
     example: '2025-06-30T23:59:59Z'
-  }
-  #swagger.parameters[5] = {
+  }  #swagger.parameters[5] = {
     name: 'includeExpired',
     in: 'query',
     description: 'Include rides with past departure time',
     required: false,
     type: 'boolean',
     example: false
+  }
+  #swagger.parameters[6] = {
+    name: 'status',
+    in: 'query',
+    description: 'Filter by ride status',
+    required: false,
+    type: 'string',
+    enum: ['pending', 'in_progress', 'completed', 'canceled'],
+    example: 'pending'
   }
   #swagger.responses[200] = {
     description: 'Group rides listed successfully',
@@ -2055,6 +2084,240 @@ export const getGroupRides = async (req, res, next) => {
     data.totalItems = totalData;
     
     res.ok(data);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const updateRideStatus = async (req, res, next) => {
+  /*
+  #swagger.tags = ["Rides"]
+  #swagger.description = 'Update ride status (start, complete, cancel)'
+  #swagger.parameters[0] = {
+    name: 'id',
+    in: 'path',
+    description: 'Ride ID',
+    required: true,
+    type: 'integer',
+    example: 1
+  }
+  #swagger.requestBody = {
+    required: true,
+    content: {
+      "application/json": {
+        schema: {
+          type: "object",
+          properties: {
+            status: {
+              type: "string",
+              enum: ["pending", "in_progress", "completed", "canceled"],
+              example: "in_progress"
+            }
+          },
+          required: ["status"]
+        }
+      }
+    }
+  }
+  #swagger.responses[200] = { 
+    description: 'Ride status updated successfully',
+    schema: { 
+      id: 1,
+      status: "in_progress",
+      message: "Status da corrida atualizado com sucesso",
+      previousStatus: "pending",
+      newStatus: "in_progress",
+      updatedAt: "2025-06-22T12:00:00Z"
+    } 
+  }
+  #swagger.responses[404] = { description: 'Ride not found' }
+  #swagger.responses[400] = { description: 'Invalid status transition or validation error' }
+  */
+  try {
+    const rideId = Number(req.params.id) || 0;
+    const { status } = req.body;
+
+    // Check if ride exists
+    const rideExists = await prisma.ride.findUnique({
+      where: { id: rideId },
+      include: {
+        rideRequests: {
+          where: { status: "APPROVED" }
+        }
+      }
+    });
+
+    if (!rideExists) {
+      return res.status(404).json({ message: "Corrida não encontrada" });
+    }
+
+    const oldStatus = rideExists.status;
+
+    // Validate status transition
+    if (oldStatus === status) {
+      return res.status(400).json({ 
+        message: `O status já está definido como ${status}`,
+        currentStatus: oldStatus
+      });
+    }
+
+    // Business rules for status transitions
+    const validTransitions = {
+      "pending": ["in_progress", "canceled"],
+      "in_progress": ["completed", "canceled"],
+      "completed": [], // Cannot change from completed
+      "canceled": []   // Cannot change from canceled
+    };
+
+    if (!validTransitions[oldStatus]?.includes(status)) {
+      return res.status(400).json({ 
+        message: `Transição de status inválida: de '${oldStatus}' para '${status}'`,
+        allowedTransitions: validTransitions[oldStatus] || []
+      });
+    }
+
+    // Additional validations based on status
+    if (status === "in_progress") {
+      // Check if ride has at least one approved passenger (except for group rides)
+      if (!rideExists.groupId && rideExists.rideRequests.length === 0) {
+        return res.status(400).json({ 
+          message: "Não é possível iniciar uma corrida sem passageiros confirmados" 
+        });
+      }
+
+      // Check if departure time is in the future
+      if (rideExists.departureTime && new Date(rideExists.departureTime) > new Date()) {
+        return res.status(400).json({ 
+          message: "Não é possível iniciar uma corrida antes do horário de partida" 
+        });
+      }
+    }
+
+    if (status === "completed") {
+      // Check if ride was started
+      if (oldStatus !== "in_progress") {
+        return res.status(400).json({ 
+          message: "Só é possível finalizar corridas que estão em andamento" 
+        });
+      }
+    }
+
+    // Update ride status
+    const updatedRide = await prisma.ride.update({
+      where: { id: rideId },
+      data: {
+        status: status,
+        updatedAt: new Date()
+      }
+    });
+
+    const responseData = {
+      id: rideId,
+      status: status,
+      message: "Status da corrida atualizado com sucesso",
+      previousStatus: oldStatus,
+      newStatus: status,
+      updatedAt: updatedRide.updatedAt
+    };
+
+    const data = res.hateos_item(responseData);
+    res.ok(data);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const startRide = async (req, res, next) => {
+  /*
+  #swagger.tags = ["Rides"]
+  #swagger.description = 'Start a ride (change status to in_progress)'
+  #swagger.parameters[0] = {
+    name: 'id',
+    in: 'path',
+    description: 'Ride ID',
+    required: true,
+    type: 'integer',
+    example: 1
+  }
+  #swagger.responses[200] = { 
+    description: 'Ride started successfully',
+    schema: { 
+      id: 1,
+      status: "in_progress",
+      message: "Corrida iniciada com sucesso",
+      startedAt: "2025-06-22T12:00:00Z"
+    } 
+  }
+  #swagger.responses[404] = { description: 'Ride not found' }
+  #swagger.responses[400] = { description: 'Cannot start ride - invalid conditions' }
+  */
+  try {
+    req.body = { status: "in_progress" };
+    return updateRideStatus(req, res, next);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const completeRide = async (req, res, next) => {
+  /*
+  #swagger.tags = ["Rides"]
+  #swagger.description = 'Complete a ride (change status to completed)'
+  #swagger.parameters[0] = {
+    name: 'id',
+    in: 'path',
+    description: 'Ride ID',
+    required: true,
+    type: 'integer',
+    example: 1
+  }
+  #swagger.responses[200] = { 
+    description: 'Ride completed successfully',
+    schema: { 
+      id: 1,
+      status: "completed",
+      message: "Corrida finalizada com sucesso",
+      completedAt: "2025-06-22T15:30:00Z"
+    } 
+  }
+  #swagger.responses[404] = { description: 'Ride not found' }
+  #swagger.responses[400] = { description: 'Cannot complete ride - not in progress' }
+  */
+  try {
+    req.body = { status: "completed" };
+    return updateRideStatus(req, res, next);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const cancelRide = async (req, res, next) => {
+  /*
+  #swagger.tags = ["Rides"]
+  #swagger.description = 'Cancel a ride (change status to canceled)'
+  #swagger.parameters[0] = {
+    name: 'id',
+    in: 'path',
+    description: 'Ride ID',
+    required: true,
+    type: 'integer',
+    example: 1
+  }
+  #swagger.responses[200] = { 
+    description: 'Ride canceled successfully',
+    schema: { 
+      id: 1,
+      status: "canceled",
+      message: "Corrida cancelada com sucesso",
+      canceledAt: "2025-06-22T10:30:00Z"
+    } 
+  }
+  #swagger.responses[404] = { description: 'Ride not found' }
+  #swagger.responses[400] = { description: 'Cannot cancel ride - already completed' }
+  */
+  try {
+    req.body = { status: "canceled" };
+    return updateRideStatus(req, res, next);
   } catch (err) {
     next(err);
   }

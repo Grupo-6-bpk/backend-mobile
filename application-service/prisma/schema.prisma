@@ -163,6 +163,7 @@ model Ride {
   pricePerMember Float?    @map("price_per_member")
   totalSeats     Int?      @map("total_seats")
   availableSeats Int?      @map("available_seats")
+  status         String    @default("pending") @db.VarChar(50) // pending, in_progress, completed, canceled
   createdAt      DateTime? @map("created_at")
   updatedAt      DateTime? @map("updated_at")
   driverId       Int       @map("driver_id")

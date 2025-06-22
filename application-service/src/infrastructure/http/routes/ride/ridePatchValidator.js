@@ -31,5 +31,9 @@ export default yup
       .number()
       .typeError("ID do veículo deve ser um número")
       .positive("ID do veículo deve ser positivo")
-      .integer("ID do veículo deve ser um inteiro")
+      .integer("ID do veículo deve ser um inteiro"),
+    status: yup
+      .string()
+      .max(50, "Status deve ter no máximo 50 caracteres")
+      .oneOf(["pending", "in_progress", "completed", "canceled"], "Status inválido")
   }).noUnknown(false);
