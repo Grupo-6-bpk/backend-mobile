@@ -472,3 +472,95 @@ export const searchUsers = async (req, res, next) => {
     next(error);
   }
 };
+
+export const updateUserEmail = async (req, res, next) => {
+    /*
+    #swagger.tags = ["Users"]
+    #swagger.description = "Update the user's email address"
+    #swagger.parameters['id'] = {
+        in: 'path',
+        description: 'User ID',
+        required: true,
+        type: 'integer',
+        example: 1
+    }
+    #swagger.requestBody = {
+        required: true,
+        content: {
+            'application/json': {
+                schema: {
+                    type: 'object',
+                    properties: {
+                        email: {
+                            type: 'string',
+                            example: 'newemail@example.com'
+                        }
+                    },
+                    required: ['email']
+                }
+            }
+        }
+    }
+    #swagger.responses[200] = {
+        description: "Email updated successfully",
+        schema: {
+            message: "Email updated successfully",
+            user: {
+                id: 1,
+                email: "newemail@example.com"
+            }
+        }
+    }
+    #swagger.responses[400] = {
+        description: "Bad Request - Email is required or already in use",
+        schema: {
+            message: "Email is required"
+        }
+    }
+    #swagger.responses[404] = {
+        description: "User not found",
+        schema: {
+            message: "User not found"
+        }
+    }
+    #swagger.responses[500] = {
+        description: "Internal server error",
+        schema: {
+            message: "An unexpected error occurred"
+        }
+    }
+    */
+    try {
+        const { id } = req.params;
+        const { email } = req.body;
+
+        if (!email) {
+            return res.status(400).json({ message: "Email is required" });
+        }
+
+        const userExists = await prisma.user.findUnique({
+            where: { id: Number(id) || 0 }
+        });
+
+        if (!userExists) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const emailAlreadyExists = await prisma.user.findFirst({
+            where: { email }
+        });
+
+        if (emailAlreadyExists) {
+            return res.status(400).json({ message: "Email is already in use" });
+        }
+
+        const updatedUser = await prisma.user.update({
+            where: { id: Number(id) },
+            data: { email }
+        });
+
+        res.status(200).json({ message: "Email updated successfully", user: updatedUser });
+    } catch (error) {
+        next(error);
+    }
+};

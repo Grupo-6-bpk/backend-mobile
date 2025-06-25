@@ -9,6 +9,7 @@ import {
   getUser,
   editUser,
   deleteUser,
+  updateUserEmail,
   updateUserRoles,
   searchUsers,
 } from "../../../../presentation/controllers/UserController.js";
@@ -18,6 +19,7 @@ router.get("/", listUsers);
 router.get('/search', searchUsers);
 router.get("/:id", getUser);
 router.put("/:id", validator(userPatchValidator), editUser);
+router.patch("/:id/email", validator(userPatchValidator), updateUserEmail);
 router.patch("/:id/roles", validator(userRolesValidator), updateUserRoles);
 router.delete("/:id", deleteUser);
 
