@@ -533,7 +533,31 @@ export const createRide = async (req, res, next) => {
     delete createData.groupId;
 
     const newRide = await prisma.ride.create({
-      data: createData
+      data: createData,
+      include: {
+        driver: {
+          select: {
+            id: true,
+            userId: true
+          }
+        },
+        vehicle: {
+          select: {
+            id: true,
+            model: true,
+            brand: true,
+            plate: true
+          }
+        },
+        group: {
+          select: {
+            id: true,
+            name: true,
+            description: true
+          }
+        },
+        rideRequests: true
+      }
     });
 
     // If this is a group ride, automatically create approved ride requests for all group members
@@ -554,7 +578,7 @@ export const createRide = async (req, res, next) => {
       });
     }
 
-    res.created(newRide);
+    res.status(201).json(newRide);
   } catch (err) {
     next(err);
   }
