@@ -1,5 +1,5 @@
 import prisma from "../../infrastructure/config/prismaClient.js";
-import { recalculateRideCosts } from "../../domain/ride/rideCalculations.js";
+import { recalculateRideCosts, recalculateRideCostsWithVehicle } from "../../domain/ride/rideCalculations.js";
 
 export const listRides = async (req, res, next) => {
   /*
@@ -484,10 +484,24 @@ export const createRide = async (req, res, next) => {
     // Set timestamps and available seats
     rideData.createdAt = new Date();
     rideData.updatedAt = new Date();
-    rideData.availableSeats = rideData.totalSeats - groupMembers.length; // Subtrair membros do grupo das vagas disponíveis
-
-    // Calculate costs automatically
-    const calculatedCosts = recalculateRideCosts(rideData);
+    rideData.availableSeats = rideData.totalSeats - groupMembers.length; // Subtrair membros do grupo das vagas disponíveis    // Calculate costs automatically based on vehicle consumption
+    let calculatedCosts;
+    if (rideData.vehicleId) {
+      // Get vehicle data including fuel consumption
+      const vehicle = await prisma.vehicle.findUnique({
+        where: { id: rideData.vehicleId },
+        select: { fuelConsumption: true }
+      });
+      
+      // Use vehicle consumption for calculation
+      calculatedCosts = recalculateRideCostsWithVehicle(rideData, vehicle, 6.23);
+    } else {
+      // Fallback to old calculation if no vehicle is specified
+      // Assume a default consumption of 10 km/L
+      rideData.fuelConsumption = 10;
+      rideData.fuelPrice = 6.23;
+      calculatedCosts = recalculateRideCosts(rideData);
+    }
     rideData.totalCost = calculatedCosts.totalCost;
     rideData.pricePerMember = calculatedCosts.pricePerMember;
 
@@ -634,22 +648,43 @@ export const updateRide = async (req, res, next) => {  /*
     
     // Update the timestamp
     updateData.updatedAt = new Date();
-    
-    // Recalculate costs if relevant fields changed
-    const needsRecalculation = updateData.fuelPrice || updateData.distance || updateData.totalSeats;
+      // Recalculate costs if relevant fields changed
+    const needsRecalculation = updateData.distance || updateData.totalSeats || updateData.vehicleId;
     if (needsRecalculation) {
       // Get current ride data to merge with updates
       const currentRide = await prisma.ride.findUnique({
-        where: { id: rideId }
+        where: { id: rideId },
+        include: {
+          vehicle: {
+            select: { fuelConsumption: true }
+          }
+        }
       });
       
       const mergedData = {
-        fuelPrice: updateData.fuelPrice || currentRide.fuelPrice,
         distance: updateData.distance || currentRide.distance,
         totalSeats: updateData.totalSeats || currentRide.totalSeats
       };
       
-      const calculatedCosts = recalculateRideCosts(mergedData);
+      let calculatedCosts;
+      
+      // If vehicle is being updated, get the new vehicle's consumption
+      if (updateData.vehicleId) {
+        const newVehicle = await prisma.vehicle.findUnique({
+          where: { id: updateData.vehicleId },
+          select: { fuelConsumption: true }
+        });
+        calculatedCosts = recalculateRideCostsWithVehicle(mergedData, newVehicle, 6.23);
+      } else if (currentRide.vehicle) {
+        // Use current vehicle's consumption
+        calculatedCosts = recalculateRideCostsWithVehicle(mergedData, currentRide.vehicle, 6.23);
+      } else {
+        // Fallback calculation with default consumption
+        mergedData.fuelConsumption = 10;
+        mergedData.fuelPrice = 6.23;
+        calculatedCosts = recalculateRideCosts(mergedData);
+      }
+      
       updateData.totalCost = calculatedCosts.totalCost;
       updateData.pricePerMember = calculatedCosts.pricePerMember;
     }
