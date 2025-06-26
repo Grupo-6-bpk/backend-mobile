@@ -241,7 +241,8 @@ const doc = {
         fuelPrice: 5.50,
         totalSeats: 4,
         driverId: 1,
-        vehicleId: 1
+        vehicleId: 1,
+        status: "pending"
       },      Ride: {
         id: 1,
         startLocation: "Start Location",
@@ -253,6 +254,7 @@ const doc = {
         pricePerMember: 12.50,
         totalSeats: 4,
         availableSeats: 2,
+        status: "pending",
         createdAt: "2025-05-18T12:00:00Z",
         updatedAt: "2025-05-18T12:00:00Z",
         driverId: 1,

@@ -19,12 +19,10 @@ export default yup
     departureTime: yup
       .date()
       .typeError("Data de partida deve ser uma data válida")
-      .required("Data de partida é obrigatória"),
-    fuelPrice: yup
+      .required("Data de partida é obrigatória"),    fuelPrice: yup
       .number()
       .typeError("Preço do combustível deve ser um número")
-      .positive("Preço do combustível deve ser positivo")
-      .required("Preço do combustível é obrigatório"),
+      .positive("Preço do combustível deve ser positivo"),
     totalSeats: yup
       .number()
       .typeError("Número total de vagas deve ser um número")
@@ -49,5 +47,10 @@ export default yup
       .typeError("ID do grupo deve ser um número")
       .positive("ID do grupo deve ser positivo")
       .integer("ID do grupo deve ser um inteiro")
+      .optional(),
+    status: yup
+      .string()
+      .max(50, "Status deve ter no máximo 50 caracteres")
+      .oneOf(["pending", "in_progress", "completed", "canceled"], "Status inválido")
       .optional()
   }).noUnknown(false);
