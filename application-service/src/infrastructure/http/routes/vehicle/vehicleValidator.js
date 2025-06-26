@@ -26,11 +26,9 @@ export default yup
       .required("Cor é obrigatória"),
     renavam: yup
       .string()
-      .matches(/^[0-9]{11}$/, "RENAVAM inválido (deve conter 11 dígitos)")
       .required("RENAVAM é obrigatório"),
     plate: yup
       .string()
-      .matches(/^[A-Z]{3}[0-9]{4}$|^[A-Z]{3}[0-9]{1}[A-Z]{1}[0-9]{2}$/, "Placa inválida (formato: ABC1234 ou ABC1D23)")
       .required("Placa é obrigatória"),
     fuelConsumption: yup
       .number()
