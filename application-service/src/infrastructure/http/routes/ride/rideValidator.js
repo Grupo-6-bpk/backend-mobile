@@ -19,7 +19,8 @@ export default yup
     departureTime: yup
       .date()
       .typeError("Data de partida deve ser uma data válida")
-      .required("Data de partida é obrigatória"),    fuelPrice: yup
+      .required("Data de partida é obrigatória"),    
+      fuelPrice: yup
       .number()
       .typeError("Preço do combustível deve ser um número")
       .positive("Preço do combustível deve ser positivo"),
@@ -36,7 +37,8 @@ export default yup
       .typeError("ID do motorista deve ser um número")
       .positive("ID do motorista deve ser positivo")
       .integer("ID do motorista deve ser um inteiro")
-      .required("ID do motorista é obrigatório"),    vehicleId: yup
+      .required("ID do motorista é obrigatório"),    
+      vehicleId: yup
       .number()
       .typeError("ID do veículo deve ser um número")
       .positive("ID do veículo deve ser positivo")
